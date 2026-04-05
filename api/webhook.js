@@ -34,6 +34,8 @@ module.exports = async (req, res) => {
 
     await Promise.all(
       events.map(async (event) => {
+        console.log('LINE webhook event:', JSON.stringify(event, null, 2));
+
         if (event.type === 'message' && event.message.type === 'text') {
           await client.replyMessage({
             replyToken: event.replyToken,
@@ -50,7 +52,10 @@ module.exports = async (req, res) => {
           });
 
           console.log('客戶訊息已記錄:', {
-            userId: event.source.userId,
+            sourceType: event.source?.type,
+            userId: event.source?.userId || null,
+            groupId: event.source?.groupId || null,
+            roomId: event.source?.roomId || null,
             message: event.message.text,
             timestamp: new Date().toISOString()
           });
