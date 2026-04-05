@@ -43,33 +43,46 @@ module.exports = async (req, res) => {
 
         const text = event.message.text.trim();
 
-        // 只要同時包含這些欄位，就視為預約格式
-       const isBookingMessage =
-  text.includes('姓名：') &&
-  text.includes('電話：') &&
-  text.includes('日期：') &&
-  text.includes('時間：') &&
-  text.includes('服務項目：');
+        const isBookingMessage =
+          text.includes('姓名：') &&
+          text.includes('電話：') &&
+          text.includes('日期：') &&
+          text.includes('時間：') &&
+          text.includes('服務項目：');
 
-        let replyText = '';
+        const isSimpleGreeting =
+          ['哈囉', '你好', '您好', '嗨', '請問', '在嗎'].includes(text);
 
+        // 只有預約格式才回預約確認
         if (isBookingMessage) {
-          replyText =
-            '✅ 已收到您的預約資訊，我們會盡快為您確認。\n\n如需修改內容，也可以直接在此訊息告知我們。';
-        } else {
-          replyText =
-            '您好～已收到您的訊息，我們會盡快回覆您。';
+          await client.replyMessage({
+            replyToken: event.replyToken,
+            messages: [
+              {
+                type: 'text',
+                text: '✅ 已收到您的預約資訊，我們會盡快為您確認。\n\n如需修改內容，也可以直接在此訊息告知我們。'
+              }
+            ]
+          });
+          return;
         }
 
-        await client.replyMessage({
-          replyToken: event.replyToken,
-          messages: [
-            {
-              type: 'text',
-              text: replyText
-            }
-          ]
-        });
+        // 只有簡單招呼才回一次基本訊息
+        if (isSimpleGreeting) {
+          await client.replyMessage({
+            replyToken: event.replyToken,
+            messages: [
+              {
+                type: 'text',
+                text: '您好，已收到您的訊息，我們會盡快由人工為您回覆。'
+              }
+            ]
+          });
+          return;
+        }
+
+        // 其他內容一律不自動回
+        return;
       })
     );
 
