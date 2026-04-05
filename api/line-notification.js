@@ -10,17 +10,17 @@ const client = new line.messagingApi.MessagingApiClient({
 });
 
 module.exports = async (req, res) => {
-  // CORS
+  // ⭐ CORS（讓 Canva 可以呼叫）
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // 處理 Canva / 瀏覽器的預檢請求
+  // ⭐ 預檢請求（Canva會用）
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // 可選：如果有人直接開網址測試
+  // ⭐ 測試用（直接開網址）
   if (req.method === 'GET') {
     return res.status(200).json({
       ok: true,
@@ -28,11 +28,13 @@ module.exports = async (req, res) => {
     });
   }
 
+  // ⭐ 只允許 POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
+    // ⭐ 取得 Canva 傳來的資料
     const {
       customer_name,
       customer_phone,
@@ -41,6 +43,7 @@ module.exports = async (req, res) => {
       service_items
     } = req.body || {};
 
+    // ⭐ 組成 LINE 訊息
     const message =
 `🚗 新預約通知
 ────────────
@@ -50,6 +53,7 @@ module.exports = async (req, res) => {
 時間：${booking_time || '未填寫'}
 服務：${service_items || '未填寫'}`;
 
+    // ⭐ 傳送給你（或群組）
     await client.pushMessage({
       to: process.env.LINE_TARGET_ID,
       messages: [
@@ -60,12 +64,15 @@ module.exports = async (req, res) => {
       ]
     });
 
+    // ⭐ 回傳給 Canva（可顯示成功）
     return res.status(200).json({
       success: true,
-      message: '已送出 LINE 通知'
+      message: '預約已送出'
     });
+
   } catch (error) {
     console.error('line-notification error:', error);
+
     return res.status(500).json({
       success: false,
       error: error.message || 'Internal Server Error'

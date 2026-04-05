@@ -20,12 +20,15 @@ module.exports = async (req, res) => {
 
   try {
     const signature = req.headers['x-line-signature'];
-
-    // 驗證 LINE Webhook 簽章
     const body = req.body;
     const rawBody = JSON.stringify(body);
 
-    const isValid = line.validateSignature(rawBody, config.channelSecret, signature);
+    const isValid = line.validateSignature(
+      rawBody,
+      config.channelSecret,
+      signature
+    );
+
     if (!isValid) {
       return res.status(401).send('Invalid signature');
     }
@@ -34,38 +37,47 @@ module.exports = async (req, res) => {
 
     await Promise.all(
       events.map(async (event) => {
-        console.log('LINE webhook event:', JSON.stringify(event, null, 2));
-
-        if (event.type === 'message' && event.message.type === 'text') {
-          await client.replyMessage({
-            replyToken: event.replyToken,
-            messages: [
-              {
-                type: 'text',
-                text:
-                  `✅ 感謝您的訊息！\n\n` +
-                  `我們已收到您的預約申請，客服將盡快與您確認。\n\n` +
-                  `🕒 工作時間：09:00-18:00\n` +
-                  `☎️ 官方LINE：@190omvem`
-              }
-            ]
-          });
-
-          console.log('客戶訊息已記錄:', {
-            sourceType: event.source?.type,
-            userId: event.source?.userId || null,
-            groupId: event.source?.groupId || null,
-            roomId: event.source?.roomId || null,
-            message: event.message.text,
-            timestamp: new Date().toISOString()
-          });
+        if (event.type !== 'message' || event.message.type !== 'text') {
+          return;
         }
+
+        const text = event.message.text.trim();
+
+        // 只要同時包含這些欄位，就視為預約格式
+       const isBookingMessage =
+  text.includes('姓名：') &&
+  text.includes('電話：') &&
+  text.includes('日期：') &&
+  text.includes('時間：') &&
+  text.includes('服務項目：');
+
+        let replyText = '';
+
+        if (isBookingMessage) {
+          replyText =
+            '✅ 已收到您的預約資訊，我們會盡快為您確認。\n\n如需修改內容，也可以直接在此訊息告知我們。';
+        } else {
+          replyText =
+            '您好～已收到您的訊息，我們會盡快回覆您。';
+        }
+
+        await client.replyMessage({
+          replyToken: event.replyToken,
+          messages: [
+            {
+              type: 'text',
+              text: replyText
+            }
+          ]
+        });
       })
     );
 
     return res.status(200).json({ message: 'ok' });
   } catch (error) {
     console.error('Webhook error:', error);
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({
+      error: error.message || 'Internal Server Error'
+    });
   }
 };
