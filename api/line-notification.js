@@ -10,6 +10,24 @@ const client = new line.messagingApi.MessagingApiClient({
 });
 
 module.exports = async (req, res) => {
+  // CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // 處理 Canva / 瀏覽器的預檢請求
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // 可選：如果有人直接開網址測試
+  if (req.method === 'GET') {
+    return res.status(200).json({
+      ok: true,
+      message: 'line-notification API is running'
+    });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
@@ -21,7 +39,7 @@ module.exports = async (req, res) => {
       booking_date,
       booking_time,
       service_items
-    } = req.body;
+    } = req.body || {};
 
     const message =
 `🚗 新預約通知
@@ -32,7 +50,6 @@ module.exports = async (req, res) => {
 時間：${booking_time || '未填寫'}
 服務：${service_items || '未填寫'}`;
 
-    // 這裡先傳給你自己（或之後改成群組ID）
     await client.pushMessage({
       to: process.env.LINE_TARGET_ID,
       messages: [
@@ -43,12 +60,15 @@ module.exports = async (req, res) => {
       ]
     });
 
-    return res.status(200).json({ success: true, message: '已送出通知' });
+    return res.status(200).json({
+      success: true,
+      message: '已送出 LINE 通知'
+    });
   } catch (error) {
     console.error('line-notification error:', error);
     return res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message || 'Internal Server Error'
     });
   }
 };
