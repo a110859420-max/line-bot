@@ -96,18 +96,32 @@ export default async function handler(req, res) {
       .single();
 
     if (error) {
-      if (error.code === "23505") {
-        return res.status(400).json({
-          message: "此預約已使用過"
-        });
-      }
+  if (error.code === "23505") {
+    const errorText = `${error.message || ""} ${error.details || ""}`;
 
-      console.error("Supabase insert error:", error);
-      return res.status(500).json({
-        message: "寫入預約失敗",
-        error: error.message
+    if (errorText.includes("unique_booking_token")) {
+      return res.status(400).json({
+        message: "此預約連結已使用過"
       });
     }
+
+    if (errorText.includes("unique_booking_slot")) {
+      return res.status(400).json({
+        message: "這個時段已經被預約，請選擇其他時段"
+      });
+    }
+
+    return res.status(400).json({
+      message: "資料重複，請重新確認"
+    });
+  }
+
+  console.error("Supabase insert error:", error);
+  return res.status(500).json({
+    message: "寫入預約失敗",
+    error: error.message
+  });
+}
 
     const lineMessage = [
       "🔥 新預約通知",
