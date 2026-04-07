@@ -1,4 +1,6 @@
 const line = require('@line/bot-sdk');
+const crypto = require('crypto');
+const { supabase } = require('../lib/supabase');
 
 const config = {
   channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
@@ -9,10 +11,8 @@ const client = new line.messagingApi.MessagingApiClient({
   channelAccessToken: config.channelAccessToken
 });
 
-// 用來暫存「有按我要預約的客戶」
-// 結構：global.bookingUsers[userId] = { userId, requestedAt }
-if (!global.bookingUsers) {
-  global.bookingUsers = {};
+function generateBookingToken() {
+  return crypto.randomBytes(16).toString('hex');
 }
 
 module.exports = async (req, res) => {
@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
 
     await Promise.all(
       events.map(async (event) => {
-        if (event.type !== 'message' || event.message.type !== 'text') {
+        if (event.type !== 'message' || event.message?.type !== 'text') {
           return;
         }
 
@@ -59,15 +59,52 @@ module.exports = async (req, res) => {
 
         // 1. 客戶按圖文選單「我要預約」
         if (text === '我要預約！' || text === '我要預約') {
-          if (userId) {
-            global.bookingUsers[userId] = {
-              userId,
-              requestedAt: Date.now()
-            };
-            console.log('已記錄預約用戶:', userId);
-          } else {
+          if (!userId) {
             console.log('沒有抓到 userId');
+            await client.replyMessage({
+              replyToken: event.replyToken,
+              messages: [
+                {
+                  type: 'text',
+                  text: '目前無法取得您的 LINE 身分，請稍後再試一次。'
+                }
+              ]
+            });
+            return;
           }
+
+          const bookingToken = generateBookingToken();
+
+          const { error } = await supabase
+            .from('booking_sessions')
+            .insert([
+              {
+                booking_token: bookingToken,
+                line_user_id: userId,
+                status: 'pending'
+              }
+            ]);
+
+          if (error) {
+            console.error('Supabase insert error:', error);
+            await client.replyMessage({
+              replyToken: event.replyToken,
+              messages: [
+                {
+                  type: 'text',
+                  text: '預約系統暫時忙碌中，請稍後再試一次。'
+                }
+              ]
+            });
+            return;
+          }
+
+          console.log('已建立預約 session:', {
+            userId,
+            bookingToken
+          });
+
+          const formUrl = `${process.env.BOOKING_FORM_BASE_URL}?booking_token=${bookingToken}`;
 
           await client.replyMessage({
             replyToken: event.replyToken,
@@ -76,9 +113,8 @@ module.exports = async (req, res) => {
                 type: 'text',
                 text:
                   '請點擊下方連結填寫預約表單👇\n' +
-                  'https://fuxing-detailing.my.canva.site/\n\n' +
-                  '⚠️ 請務必填寫您目前這個 LINE 對應的電話號碼，' +
-                  '送出後我們才會自動回傳預約資訊給您。'
+                  `${formUrl}\n\n` +
+                  '⚠️ 請不要移除表單中的 booking_token / 預約代碼欄位，否則系統無法自動對應您的 LINE。'
               }
             ]
           });
