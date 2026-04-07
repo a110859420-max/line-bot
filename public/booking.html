@@ -51,7 +51,7 @@
     <input id="name" placeholder="姓名">
     <input id="phone" placeholder="電話">
 
-    <button onclick="submit()">送出預約</button>
+    <button onclick="sendBooking()">送出預約</button>
   </div>
 
   <script>
@@ -65,7 +65,7 @@
       statusEl.innerText = "✅ 已取得 token";
     }
 
-    async function submit() {
+    async function sendBooking() {
       const name = document.getElementById("name").value;
       const phone = document.getElementById("phone").value;
 
