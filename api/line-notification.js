@@ -6,6 +6,10 @@ const client = new line.messagingApi.MessagingApiClient({
 });
 
 module.exports = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -15,7 +19,10 @@ module.exports = async (req, res) => {
   }
 
   try {
-    console.log('line-notification raw body:', JSON.stringify(req.body, null, 2));
+    console.log(
+      'line-notification raw body:',
+      JSON.stringify(req.body, null, 2)
+    );
 
     const data = req.body || {};
 
@@ -56,7 +63,7 @@ module.exports = async (req, res) => {
       `📩 新預約通知\n` +
       `姓名：${customerName || '未填寫'}\n` +
       `電話：${customerPhone || '未填寫'}\n` +
-      `LINE：${customerLine || '未填寫'}\n` +
+      `LINE ID：${customerLine || '未填寫'}\n` +
       `日期：${bookingDate || '未填寫'}\n` +
       `時間：${bookingTime || '未填寫'}\n` +
       `服務：${serviceItems || '未填寫'}\n` +
