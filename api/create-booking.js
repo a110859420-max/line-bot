@@ -8,7 +8,6 @@ const supabase = createClient(
 async function sendLinePushMessage(messageText) {
   const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
 
-  // 你原本群組通知用的群組 ID
   const targetId =
     process.env.LINE_GROUP_ID ||
     process.env.LINE_TARGET_ID ||
@@ -96,17 +95,18 @@ export default async function handler(req, res) {
       .select()
       .single();
 
-  if (error) {
-  // 👇 這段是關鍵（防重複預約）
-  if (error.code === '23505') {
-    return res.status(400).json({
-      message: "此預約已使用過"
-    });
-  }
+    if (error) {
+      if (error.code === "23505") {
+        return res.status(400).json({
+          message: "此預約已使用過"
+        });
+      }
 
-  console.error("Supabase insert error:", error);
-  return res.status(500).json({ message: "寫入預約失敗" });
-}
+      console.error("Supabase insert error:", error);
+      return res.status(500).json({
+        message: "寫入預約失敗",
+        error: error.message
+      });
     }
 
     const lineMessage = [
@@ -121,7 +121,7 @@ export default async function handler(req, res) {
       `車色：${car_color || "未填寫"}`,
       `車牌：${vehicle_number || "未填寫"}`,
       `備註：${note || "無"}`
-    ].join("\n");
+    ].join("\\n");
 
     try {
       await sendLinePushMessage(lineMessage);
