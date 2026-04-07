@@ -96,12 +96,17 @@ export default async function handler(req, res) {
       .select()
       .single();
 
-    if (error) {
-      console.error("Supabase insert error:", error);
-      return res.status(500).json({
-        message: "寫入預約失敗",
-        error: error.message
-      });
+  if (error) {
+  // 👇 這段是關鍵（防重複預約）
+  if (error.code === '23505') {
+    return res.status(400).json({
+      message: "此預約已使用過"
+    });
+  }
+
+  console.error("Supabase insert error:", error);
+  return res.status(500).json({ message: "寫入預約失敗" });
+}
     }
 
     const lineMessage = [
