@@ -1,72 +1,424 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<title>預約系統</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body { background:#0d0d0d; color:#fff; font-family:sans-serif; text-align:center; padding:40px;}
-button { background:#ff6a00; color:#fff; border:none; padding:15px 25px; font-size:16px; border-radius:8px;}
-</style>
+  <meta charset="UTF-8">
+  <title>富星車美線上預約系統</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      color: #fff;
+      font-family: "Microsoft JhengHei", sans-serif;
+      padding: 20px;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,140,66,0.28);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      color: #ffaa66;
+      font-size: 28px;
+    }
+    .sub {
+      color: #ccc;
+      margin-bottom: 18px;
+      line-height: 1.7;
+    }
+    .section-title {
+      color: #ffaa66;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+    .date-grid, .time-grid, .service-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .date-grid { grid-template-columns: repeat(2, 1fr); }
+    .time-grid { grid-template-columns: repeat(3, 1fr); }
+    .service-grid { grid-template-columns: 1fr; }
+
+    .option-btn, .service-item {
+      width: 100%;
+      border: 2px solid #444;
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .option-btn:hover, .service-item:hover {
+      border-color: #ff8c42;
+      background: rgba(255,140,66,0.08);
+    }
+
+    .option-btn.selected, .service-item.selected {
+      border-color: #ff8c42;
+      background: linear-gradient(135deg, #ff8c42, #ff6b1a);
+    }
+
+    .service-item small {
+      display: block;
+      color: #ddd;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      color: #ffaa66;
+      font-weight: bold;
+    }
+
+    .field input, .field textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #444;
+      background: rgba(255,255,255,0.03);
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .field textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #ff8c42, #ff6b1a);
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status, .result {
+      margin-top: 12px;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+
+    .status { color: #ffd29c; }
+    .result { color: #fff; }
+
+    @media (max-width: 640px) {
+      .date-grid { grid-template-columns: 1fr; }
+      .time-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <div class="card">
+      <h1>富星車美線上預約系統</h1>
+      <div class="sub">
+        代客洗車・行動洗車<br>
+        請依序選擇日期、時段、填寫資料後送出。
+      </div>
+      <div id="status" class="status">讀取中...</div>
+    </div>
 
-<h1>預約系統</h1>
-<p id="status">讀取中...</p>
-<button onclick="submitBooking()">送出預約</button>
+    <div class="card">
+      <div class="section-title">1. 選擇日期</div>
+      <div id="dateGrid" class="date-grid"></div>
+    </div>
 
-<script>
-function getBookingToken() {
-  const url = new URL(window.location.href);
+    <div class="card">
+      <div class="section-title">2. 選擇時段</div>
+      <div id="timeGrid" class="time-grid"></div>
+    </div>
 
-  const queryToken = url.searchParams.get('booking_token');
+    <div class="card">
+      <div class="section-title">3. 選擇服務</div>
+      <div id="serviceGrid" class="service-grid"></div>
+    </div>
 
-  let hashToken = null;
-  if (window.location.hash) {
-    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-    hashToken = hashParams.get('booking_token');
-  }
+    <div class="card">
+      <div class="section-title">4. 填寫資料</div>
 
-  const token = queryToken || hashToken;
+      <div class="field">
+        <label for="name">姓名</label>
+        <input id="name" type="text" placeholder="請輸入姓名">
+      </div>
 
-  console.log('URL:', window.location.href);
-  console.log('query token:', queryToken);
-  console.log('hash token:', hashToken);
-  console.log('final token:', token);
+      <div class="field">
+        <label for="phone">電話</label>
+        <input id="phone" type="text" placeholder="請輸入電話">
+      </div>
 
-  return token || null;
-}
+      <div class="field">
+        <label for="lineId">LINE ID</label>
+        <input id="lineId" type="text" placeholder="請輸入 LINE ID">
+      </div>
 
-const bookingToken = getBookingToken();
+      <div class="field">
+        <label for="note">備註</label>
+        <textarea id="note" placeholder="如有特殊需求可填寫"></textarea>
+      </div>
 
-if (!bookingToken) {
-  document.getElementById("status").innerText = "⚠️ 未帶入 token（測試模式）";
-} else {
-  document.getElementById("status").innerText = "✅ Token 正常";
-}
+      <button id="submitBtn" class="submit-btn" type="button">送出預約</button>
+      <div id="result" class="result"></div>
+    </div>
+  </div>
 
-async function submitBooking() {
-  try {
-    const res = await fetch('/api/create-booking', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        booking_token: bookingToken || 'test_token',
-        customer_name: '測試用戶',
-        customer_phone: '0900000000'
-      })
-    });
+  <script>
+    let selectedDate = "";
+    let selectedTime = "";
+    let selectedService = "";
+    let bookingToken = "";
 
-    const data = await res.json();
-    alert(data.message);
+    const services = [
+      {
+        id: "s1",
+        label: "泡沫洗車",
+        detail: "外觀清洗・輪框清潔・擦乾玻璃"
+      },
+      {
+        id: "s2",
+        label: "精緻洗車",
+        detail: "細節刷洗・鐵粉去除・吸塵內裝"
+      },
+      {
+        id: "s3",
+        label: "基礎內裝",
+        detail: "全車吸塵・內裝擦拭・皮革保養"
+      },
+      {
+        id: "s4",
+        label: "深層內裝",
+        detail: "深層清潔・皮椅護理・異味去除"
+      }
+    ];
 
-  } catch (err) {
-    alert('送出失敗');
-    console.error(err);
-  }
-}
-</script>
+    const timeSlots = [
+      { label: "上午", value: "10:00" },
+      { label: "下午", value: "14:00" },
+      { label: "傍晚", value: "18:00" }
+    ];
 
+    function getBookingToken() {
+      const url = new URL(window.location.href);
+      const queryToken = url.searchParams.get("booking_token");
+
+      let hashToken = null;
+      if (window.location.hash) {
+        const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+        hashToken = hashParams.get("booking_token");
+      }
+
+      return queryToken || hashToken || "";
+    }
+
+    function renderDates() {
+      const dateGrid = document.getElementById("dateGrid");
+      dateGrid.innerHTML = "";
+
+      const today = new Date();
+
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        const dateValue = `${y}-${m}-${day}`;
+
+        const weekMap = ["日","一","二","三","四","五","六"];
+        const label = `${m}/${day}（${weekMap[d.getDay()]}）`;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.textContent = label;
+
+        btn.addEventListener("click", () => {
+          selectedDate = dateValue;
+          document.querySelectorAll("#dateGrid .option-btn").forEach(el => el.classList.remove("selected"));
+          btn.classList.add("selected");
+          updateResult(`已選日期：${selectedDate}`);
+        });
+
+        dateGrid.appendChild(btn);
+      }
+    }
+
+    function renderTimes() {
+      const timeGrid = document.getElementById("timeGrid");
+      timeGrid.innerHTML = "";
+
+      timeSlots.forEach(slot => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.textContent = `${slot.label} (${slot.value})`;
+
+        btn.addEventListener("click", () => {
+          selectedTime = slot.value;
+          document.querySelectorAll("#timeGrid .option-btn").forEach(el => el.classList.remove("selected"));
+          btn.classList.add("selected");
+          updateResult(`已選時段：${selectedTime}`);
+        });
+
+        timeGrid.appendChild(btn);
+      });
+    }
+
+    function renderServices() {
+      const serviceGrid = document.getElementById("serviceGrid");
+      serviceGrid.innerHTML = "";
+
+      services.forEach(service => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "service-item";
+        btn.innerHTML = `${service.label}<small>${service.detail}</small>`;
+
+        btn.addEventListener("click", () => {
+          selectedService = service.label;
+          document.querySelectorAll("#serviceGrid .service-item").forEach(el => el.classList.remove("selected"));
+          btn.classList.add("selected");
+          updateResult(`已選服務：${selectedService}`);
+        });
+
+        serviceGrid.appendChild(btn);
+      });
+    }
+
+    function updateResult(text) {
+      document.getElementById("result").textContent = text || "";
+    }
+
+    async function submitBooking() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const lineId = document.getElementById("lineId").value.trim();
+      const note = document.getElementById("note").value.trim();
+      const submitBtn = document.getElementById("submitBtn");
+
+      if (!bookingToken) {
+        updateResult("❌ 預約連結無效，請從 LINE 重新進入");
+        return;
+      }
+
+      if (!selectedDate) {
+        updateResult("❌ 請先選擇日期");
+        return;
+      }
+
+      if (!selectedTime) {
+        updateResult("❌ 請先選擇時段");
+        return;
+      }
+
+      if (!selectedService) {
+        updateResult("❌ 請先選擇服務");
+        return;
+      }
+
+      if (!name) {
+        updateResult("❌ 請輸入姓名");
+        return;
+      }
+
+      if (!phone) {
+        updateResult("❌ 請輸入電話");
+        return;
+      }
+
+      if (!lineId) {
+        updateResult("❌ 請輸入 LINE ID");
+        return;
+      }
+
+      const payload = {
+        booking_token: bookingToken,
+        customer_name: name,
+        customer_phone: phone,
+        customer_line: lineId,
+        booking_date: selectedDate,
+        booking_time: selectedTime,
+        service_name: selectedService,
+        service_items: selectedService,
+        note: note
+      };
+
+      console.log("送出預約資料：", payload);
+
+      submitBtn.disabled = true;
+      updateResult("送出中...");
+
+      try {
+        const response = await fetch("/api/create-booking", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          updateResult(`❌ ${data.message || "預約失敗"}`);
+          return;
+        }
+
+        updateResult(`✅ ${data.message || "預約成功"}`);
+      } catch (error) {
+        console.error(error);
+        updateResult("❌ 送出失敗，請稍後再試");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+
+    function init() {
+      bookingToken = getBookingToken();
+
+      if (!bookingToken) {
+        document.getElementById("status").textContent = "⚠️ 未帶入 booking_token，請從 LINE 預約連結進入";
+      } else {
+        document.getElementById("status").textContent = `✅ 預約連結有效`;
+      }
+
+      renderDates();
+      renderTimes();
+      renderServices();
+
+      document.getElementById("submitBtn").addEventListener("click", submitBooking);
+    }
+
+    init();
+  </script>
 </body>
 </html>
