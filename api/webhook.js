@@ -42,6 +42,7 @@ module.exports = async (req, res) => {
         }
 
         const text = event.message.text.trim();
+        const userId = event.source?.userId;
 
         const isBookingMessage =
           text.includes('姓名：') &&
@@ -50,38 +51,43 @@ module.exports = async (req, res) => {
           text.includes('時間：') &&
           text.includes('服務項目：');
 
-        const isSimpleGreeting =
-          ['哈囉', '你好', '您好', '嗨', '請問', '在嗎'].includes(text);
+        // 1. 客戶按圖文選單「我要預約！」
+        if (text === '我要預約！' || text === '我要預約') {
+          if (userId) {
+            global.lastUserId = userId;
+          }
 
-        // 只有預約格式才回預約確認
+          await client.replyMessage({
+            replyToken: event.replyToken,
+            messages: [
+              {
+                type: 'text',
+                text:
+                  '請點擊下方連結填寫預約表單👇\n' +
+                  'https://fuxing-detailing.my.canva.site/'
+              }
+            ]
+          });
+          return;
+        }
+
+        // 2. 客戶手動把預約格式貼進來
         if (isBookingMessage) {
           await client.replyMessage({
             replyToken: event.replyToken,
             messages: [
               {
                 type: 'text',
-                text: '✅ 已收到您的預約資訊，我們會盡快為您確認。\n\n如需修改內容，也可以直接在此訊息告知我們。'
+                text:
+                  '✅ 已收到您的預約資訊，我們會盡快為您確認。\n\n' +
+                  '如需修改內容，也可以直接在此訊息告知我們。'
               }
             ]
           });
           return;
         }
 
-        // 只有簡單招呼才回一次基本訊息
-        if (isSimpleGreeting) {
-          await client.replyMessage({
-            replyToken: event.replyToken,
-            messages: [
-              {
-                type: 'text',
-                text: '您好，已收到您的訊息，我們會盡快由人工為您回覆。'
-              }
-            ]
-          });
-          return;
-        }
-
-        // 其他內容一律不自動回
+        // 3. 其他訊息不自動回
         return;
       })
     );
