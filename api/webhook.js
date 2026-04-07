@@ -57,6 +57,7 @@ module.exports = async (req, res) => {
           text.includes('時間：') &&
           text.includes('服務項目：');
 
+        // 1. 客戶按圖文選單「我要預約」
         if (text === '我要預約！' || text === '我要預約') {
           if (!userId) {
             console.log('沒有抓到 userId');
@@ -88,8 +89,8 @@ module.exports = async (req, res) => {
           if (error) {
             console.error('Supabase insert error:', error);
 
-            await client.replyMessage({
-              replyToken: event.replyToken,
+            await client.pushMessage({
+              to: userId,
               messages: [
                 {
                   type: 'text',
@@ -113,8 +114,9 @@ module.exports = async (req, res) => {
     {
       type: 'text',
       text:
-        '請點擊下方連結填寫預約表單👇\n' +
-        `${formUrl}\n\n` +        
+        '📩 預約表單連結\n' +
+        `${formUrl}\n\n` +
+        '請填寫完整資料，我們會盡快與您確認預約時間 🙏'
     }
   ]
 });
@@ -122,6 +124,7 @@ module.exports = async (req, res) => {
           return;
         }
 
+        // 2. 客戶手動把預約格式貼進聊天室
         if (isBookingMessage) {
           await client.replyMessage({
             replyToken: event.replyToken,
@@ -137,6 +140,7 @@ module.exports = async (req, res) => {
           return;
         }
 
+        // 3. 其他訊息不自動回
         return;
       })
     );
