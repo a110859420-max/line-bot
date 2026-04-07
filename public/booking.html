@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-TW">
- <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:title" content="富星車美線上預約系統">
@@ -8,8 +8,6 @@
   <meta property="og:type" content="website">
   <title>富星車美線上預約系統</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="/_sdk/data_sdk.js"></script>
   <style>
     * {
       margin: 0;
@@ -20,7 +18,6 @@
     html, body {
       height: 100%;
       background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-      font-family: 'Orbitron', sans-serif;
       color: #e0e7ff;
       font-weight: 400;
       letter-spacing: 0.2px;
@@ -30,42 +27,9 @@
       font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
     }
 
-    .header h1,
-    .header-subtitle,
-    .header-btn,
-    .section-title,
-    .date-selector-header h3,
-    .time-btn,
-    .form-label,
-    .line-modal-header,
-    .line-btn,
-    .copy-summary-btn,
-    .toast,
-    .modal-header h2 {
-      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-    }
-
-    .philosophy-text {
-      font-family: 'Playfair Display', 'Noto Sans TC', serif;
-    }
-
-    .service-label,
-    .form-input,
-    .booking-summary-box,
-    .line-info-text,
-    .price-estimate,
-    .service-label-detail,
-    .service-label-price,
-    .sub,
-    .info-box p,
-    .booking-info p,
-    .empty-state {
-      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
-    }
-
     .app-wrapper {
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -97,7 +61,7 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
-      font-family: 'Playfair Display', serif;
+      font-family: 'Playfair Display', 'Noto Sans TC', serif;
       animation: colorFlow 3s ease-in-out infinite;
     }
 
@@ -118,7 +82,7 @@
       letter-spacing: 0.3px;
       white-space: nowrap;
       flex-shrink: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
       animation: colorFlow 3s ease-in-out infinite;
     }
 
@@ -146,8 +110,6 @@
       }
     }
 
-
-
     .header-buttons {
       display: flex;
       gap: 10px;
@@ -164,6 +126,7 @@
       font-size: 13px;
       transition: all 0.3s ease;
       white-space: nowrap;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
     }
 
     @media (min-width: 768px) {
@@ -242,7 +205,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: 0.5px;
-      font-family: 'Playfair Display', serif;
+      font-family: 'Playfair Display', 'Noto Sans TC', serif;
     }
 
     .philosophy-desc {
@@ -276,7 +239,7 @@
       align-items: center;
       gap: 12px;
       letter-spacing: 0.5px;
-      font-family: 'Playfair Display', serif;
+      font-family: 'Playfair Display', 'Noto Sans TC', serif;
     }
     
     @media (min-width: 768px) {
@@ -307,7 +270,6 @@
       to { opacity: 1; }
     }
 
-    /* STEP 1: DATE SELECTION */
     .date-selector-header {
       display: flex;
       justify-content: space-between;
@@ -324,7 +286,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: 0.5px;
-      font-family: 'Playfair Display', serif;
+      font-family: 'Playfair Display', 'Noto Sans TC', serif;
     }
 
     .date-nav {
@@ -401,7 +363,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
     }
 
     .date-card-title.today::before {
@@ -414,7 +376,7 @@
       flex-wrap: wrap;
       color: #ccc;
       font-size: 12px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
     }
 
     .time-slot-badge {
@@ -434,12 +396,11 @@
       text-decoration: line-through;
     }
 
-    /* STEP 2: TIME SELECTION */
     .time-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     .time-btn {
@@ -453,7 +414,7 @@
       font-weight: 700;
       transition: all 0.3s ease;
       text-align: center;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
     }
     
     @media (min-width: 768px) {
@@ -478,9 +439,17 @@
     .time-btn:disabled {
       opacity: 0.3;
       cursor: not-allowed;
+      text-decoration: line-through;
     }
 
-    /* STEP 3: FORM */
+    .full-day-msg {
+      margin-top: 10px;
+      color: #ff7d7d;
+      font-weight: 700;
+      text-align: center;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+
     .form-group {
       margin-bottom: 12px;
     }
@@ -493,7 +462,7 @@
       color: #ffffff;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
     }
 
     .form-input {
@@ -505,7 +474,7 @@
       border-radius: 8px;
       font-size: 16px;
       transition: all 0.3s ease;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
       font-weight: 500;
       letter-spacing: 0.3px;
     }
@@ -551,7 +520,7 @@
       transition: all 0.3s ease;
       width: 100%;
       gap: 6px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
       min-height: 68px;
       overflow: hidden;
     }
@@ -573,12 +542,6 @@
       max-height: 2.4em;
       overflow: hidden;
     }
-    
-    @media (min-width: 768px) {
-      .service-label-text {
-        font-size: 0.9em;
-      }
-    }
 
     .service-label-detail {
       color: #999;
@@ -594,7 +557,7 @@
       font-weight: 700;
       white-space: nowrap;
       font-size: 13px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
     }
 
     .price-estimate {
@@ -603,7 +566,7 @@
       margin-top: 2px;
       line-height: 1.2;
       font-weight: 500;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
     }
 
     .service-label:hover:not(.disabled) {
@@ -643,7 +606,6 @@
       color: #555 !important;
     }
 
-    /* BUTTONS */
     .button-group {
       display: flex;
       gap: 12px;
@@ -667,8 +629,6 @@
       margin-bottom: 90px;
     }
 
-
-
     .btn {
       padding: 14px 28px;
       border: none;
@@ -680,7 +640,7 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       flex: 1;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
     }
     
     @media (min-width: 768px) {
@@ -717,7 +677,6 @@
       color: #ff1a1a;
     }
 
-    /* MODALS */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -748,12 +707,6 @@
       overflow-y: auto;
       box-shadow: 0 20px 60px rgba(255, 140, 66, 0.2);
     }
-    
-    @media (min-width: 768px) {
-      .modal {
-        padding: 30px;
-      }
-    }
 
     .modal-header {
       display: flex;
@@ -769,6 +722,7 @@
       font-weight: 700;
       color: #ff8c42;
       letter-spacing: 0.5px;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
     }
 
     .modal-close {
@@ -784,47 +738,6 @@
       transform: rotate(90deg);
     }
 
-    .booking-record {
-      background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(236, 72, 153, 0.05));
-      border: 2px solid rgba(255, 140, 66, 0.3);
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .booking-info p {
-      font-size: 13px;
-      color: #ccc;
-      margin-bottom: 4px;
-    }
-
-    .delete-btn {
-      background: rgba(255, 82, 82, 0.15);
-      border: 2px solid #ff5252;
-      color: #ff5252;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 700;
-      transition: all 0.3s ease;
-      font-family: 'Orbitron', sans-serif;
-      letter-spacing: 0.3px;
-    }
-
-    .delete-btn:hover {
-      background: rgba(255, 82, 82, 0.3);
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px;
-      color: #888;
-    }
-
     .toast {
       position: fixed;
       bottom: 20px;
@@ -836,8 +749,9 @@
       font-weight: 700;
       z-index: 2000;
       animation: slideIn 0.3s ease;
-      font-family: 'Orbitron', sans-serif;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
       letter-spacing: 0.3px;
+      max-width: min(88vw, 420px);
     }
 
     @keyframes slideIn {
@@ -884,58 +798,7 @@
       font-weight: 900;
       margin-bottom: 12px;
       letter-spacing: 1.5px;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .line-modal-subheader {
-      color: #ffaa66;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 28px;
-      letter-spacing: 0.5px;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .booking-summary-box {
-      background: linear-gradient(135deg, rgba(0, 185, 0, 0.08), rgba(0, 185, 0, 0.03));
-      border: 2px solid rgba(0, 185, 0, 0.4);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 12px;
-      line-height: 2;
-      color: #e0e7ff;
-      white-space: pre-wrap;
-      word-break: break-all;
-      overflow-y: auto;
-      max-height: 350px;
-      text-align: left;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-    }
-
-    .copy-summary-btn {
-      background: linear-gradient(135deg, rgba(0, 185, 0, 0.3), rgba(0, 185, 0, 0.1));
-      border: 2px solid #00b900;
-      color: #00b900;
-      padding: 14px 24px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 700;
-      transition: all 0.3s ease;
-      margin-bottom: 18px;
-      font-family: 'Poppins', sans-serif;
-      width: 100%;
-      letter-spacing: 0.5px;
-    }
-
-    .copy-summary-btn:hover {
-      background: #00b900;
-      color: white;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 185, 0, 0.3);
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
     }
 
     .line-info-text {
@@ -945,11 +808,11 @@
       padding: 16px;
       margin-bottom: 26px;
       color: #ffaa66;
-      font-size: 13px;
-      line-height: 1.8;
+      font-size: 14px;
+      line-height: 1.9;
       text-align: center;
       font-weight: 600;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
       letter-spacing: 0.3px;
     }
 
@@ -969,7 +832,7 @@
       transition: all 0.3s ease;
       text-transform: uppercase;
       letter-spacing: 1px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
     }
 
     .line-btn-primary {
@@ -983,18 +846,6 @@
       transform: translateY(-2px);
     }
 
-    .line-btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      color: #ffaa66;
-      border: 2px solid #ffaa66;
-    }
-
-    .line-btn-secondary:hover {
-      background: rgba(255, 170, 102, 0.15);
-      border-color: #ffaa66;
-      color: #ffff99;
-    }
-
     @media (max-width: 767px) {
       .header {
         padding: 16px 14px;
@@ -1005,10 +856,6 @@
       .header h1 {
         font-size: 24px;
         line-height: 1.2;
-      }
-
-      .header-buttons {
-        gap: 8px;
       }
 
       .content {
@@ -1049,183 +896,99 @@
         padding: 22px 18px;
         border-radius: 14px;
       }
-
-      .booking-summary-box {
-        max-height: 240px;
-        font-size: 13px;
-      }
     }
-
-    @media (min-width: 768px) {
-      .content {
-        padding: 32px 24px 40px;
-      }
-
-      .container {
-        max-width: 920px;
-      }
-
-      .time-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .service-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
   </style>
-  <style>body { box-sizing: border-box; }</style>
-  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
- </head>
- <body>
+</head>
+<body>
   <div class="app-wrapper">
-   <div class="header">
-    <h1>富星車美 
-     <div class="header-subtitle">
-      代客洗車 行動洗車
-     </div></h1>
-    <div class="header-buttons"><button class="header-btn" id="priceBtn">💰 費用</button>
+    <div class="header">
+      <h1>富星車美 
+        <div class="header-subtitle">代客洗車 行動洗車</div>
+      </h1>
+      <div class="header-buttons">
+        <button class="header-btn" id="priceBtn">💰 費用</button>
+      </div>
     </div>
-   </div>
-   <div class="content">
-    <div class="container"><!-- Service Philosophy Section -->
-     <div class="service-philosophy">
-      <div class="philosophy-item">
-       <div class="philosophy-icon">
-        ⭐
-       </div>
-       <div class="philosophy-text">
-        專業技術
-       </div>
-       <div class="philosophy-desc">
-        經驗豐富的服務團隊
-       </div>
+
+    <div class="content">
+      <div class="container">
+        <div class="service-philosophy">
+          <div class="philosophy-item"><div class="philosophy-icon">⭐</div><div class="philosophy-text">專業技術</div></div>
+          <div class="philosophy-item"><div class="philosophy-icon">🎯</div><div class="philosophy-text">完美效果</div></div>
+          <div class="philosophy-item"><div class="philosophy-icon">⚡</div><div class="philosophy-text">快速有效</div></div>
+          <div class="philosophy-item"><div class="philosophy-icon">🤝</div><div class="philosophy-text">誠心服務</div></div>
+        </div>
+
+        <div id="step1" class="step-section active">
+          <div class="section-title">選擇日期</div>
+          <div class="date-selector-header">
+            <h3 id="dateMonthLabel"></h3>
+            <div class="date-nav">
+              <button id="prevMonth">←</button>
+              <button id="nextMonth">→</button>
+            </div>
+          </div>
+          <div class="date-list" id="dateList"></div>
+          <div class="button-group"><button class="btn btn-primary" id="nextFromStep1">下一步 →</button></div>
+        </div>
+
+        <div id="step2" class="step-section">
+          <div class="section-title">選擇時段</div>
+          <div class="time-grid" id="timeGrid"></div>
+          <div id="fullDayMsg" class="full-day-msg"></div>
+          <div class="info-box">
+            <p style="color: #ccc; font-size: 13px; line-height: 1.6;">💡 <strong>重要提醒：</strong>此為預約時段參考，具體的時間與地點會在預約完成後由真人與您做詳細確認。</p>
+          </div>
+          <div class="button-group"><button class="btn btn-secondary" id="backFrom2">← 上一步</button> <button class="btn btn-primary" id="nextFromStep2">下一步 →</button></div>
+        </div>
+
+        <div id="step3" class="step-section">
+          <div class="section-title">填寫資料</div>
+          <div class="form-group"><label class="form-label">姓名 *</label> <input class="form-input" id="name" type="text" placeholder="請輸入姓名" required></div>
+          <div class="form-group"><label class="form-label">電話 *</label> <input class="form-input" id="phone" type="tel" placeholder="請輸入電話" required></div>
+          <div class="form-group"><label class="form-label">LINE ID *</label> <input class="form-input" id="lineId" type="text" placeholder="請輸入 LINE ID" required></div>
+
+          <div class="section-title" style="margin-top: 30px;">選擇服務</div>
+          <div style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 66, 0.1)); border: 3px solid #ffaa00; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(255, 170, 0, 0.2);">
+            <div style="color: #ffaa66; font-weight: 800; font-size: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">🎁 優惠套餐 - 一次解決！</div>
+            <div class="service-grid" id="packageGrid"></div>
+          </div>
+          <div class="service-grid" id="serviceGrid"></div>
+          <div style="background: linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(236, 72, 153, 0.1)); border: 2px solid rgba(255, 140, 66, 0.4); border-radius: 12px; padding: 16px; margin-top: 16px; display: none;" id="bikeAddonsNote">
+            <div style="color: #ffaa66; font-weight: 700; font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">💡 機車加購項目提醒</div>
+            <div style="color: #ccc; font-size: 12px; line-height: 1.6;">機車的加購項目金額會依實際車況在後續洽詢時做詳細確認，歡迎詢問！</div>
+          </div>
+          <div style="background: linear-gradient(135deg, rgba(255, 170, 102, 0.12), rgba(255, 170, 102, 0.05)); border: 2px solid rgba(255, 170, 102, 0.35); border-radius: 12px; padding: 16px; margin-top: 16px; display: none;" id="priceDisplay">
+            <div style="color: #ffaa66; font-weight: 700; font-size: 13px; margin-bottom: 8px;">📊 預估金額</div>
+            <div style="color: #ff8c42; font-weight: 800; font-size: 18px; margin-bottom: 12px;" id="priceRange">$0 ~ $0</div>
+            <div style="color: #ccc; font-size: 12px; line-height: 1.6; margin-bottom: 8px;" id="priceNote"></div>
+            <div style="color: #ff8c42; font-size: 11px; font-weight: 600; border-top: 1px solid rgba(255, 170, 102, 0.3); padding-top: 8px; line-height: 1.6;" id="priceEstimateWarning"></div>
+          </div>
+          <div class="button-group"><button class="btn btn-secondary" id="backFrom3">← 上一步</button> <button class="btn btn-primary" id="submitBtn">確認預約 ✓</button></div>
+        </div>
       </div>
-      <div class="philosophy-item">
-       <div class="philosophy-icon">
-        🎯
-       </div>
-       <div class="philosophy-text">
-        完美效果
-       </div>
-       <div class="philosophy-desc">
-        用心呵護每一台車
-       </div>
-      </div>
-      <div class="philosophy-item">
-       <div class="philosophy-icon">
-        ⚡
-       </div>
-       <div class="philosophy-text">
-        快速有效
-       </div>
-       <div class="philosophy-desc">
-        高效率的專業服務
-       </div>
-      </div>
-      <div class="philosophy-item">
-       <div class="philosophy-icon">
-        🤝
-       </div>
-       <div class="philosophy-text">
-        誠心服務
-       </div>
-       <div class="philosophy-desc">
-        客戶滿意是我們的目標
-       </div>
-      </div>
-     </div><!-- STEP 1: SELECT DATE -->
-     <div id="step1" class="step-section active">
-      <div class="section-title">
-       選擇日期
-      </div>
-      <div class="date-selector-header">
-       <h3 id="dateMonthLabel"></h3>
-       <div class="date-nav"><button id="prevMonth">←</button> <button id="nextMonth">→</button>
-       </div>
-      </div>
-      <div class="date-list" id="dateList"></div>
-      <div class="button-group"><button class="btn btn-primary" id="nextFromStep1">下一步 →</button>
-      </div>
-     </div><!-- STEP 2: SELECT TIME -->
-     <div id="step2" class="step-section">
-      <div class="section-title">
-       選擇時段
-      </div>
-      <div class="time-grid" id="timeGrid"></div>
-      <div class="info-box">
-       <p style="color: #ccc; font-size: 13px; line-height: 1.6;">💡 <strong>重要提醒：</strong>此為預約時段參考，具體的時間與地點會在預約完成後與官方 LINE 做詳細確認。</p>
-      </div>
-      <div class="button-group"><button class="btn btn-secondary" id="backFrom2">← 上一步</button> <button class="btn btn-primary" id="nextFromStep2">下一步 →</button>
-      </div>
-     </div><!-- STEP 3: FORM & SERVICES -->
-     <div id="step3" class="step-section">
-      <div class="section-title">
-       填寫資料
-      </div>
-      <div class="form-group"><label class="form-label">姓名 *</label> <input class="form-input" id="name" type="text" placeholder="請輸入姓名" required>
-      </div>
-      <div class="form-group"><label class="form-label">電話 *</label> <input class="form-input" id="phone" type="tel" placeholder="請輸入電話" required>
-      </div>
-      <div class="form-group"><label class="form-label">LINE ID *</label> <input class="form-input" id="lineId" type="text" placeholder="請輸入 LINE ID" required>
-      </div>
-      <div class="section-title" style="margin-top: 30px;">
-       選擇服務
-      </div>
-      <div style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 66, 0.1)); border: 3px solid #ffaa00; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(255, 170, 0, 0.2);">
-       <div style="color: #ffaa66; font-weight: 800; font-size: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-        🎁 優惠套餐 - 一次解決！
-       </div>
-       <div class="service-grid" id="packageGrid"></div>
-      </div>
-      <div class="service-grid" id="serviceGrid"></div>
-      <div style="background: linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(236, 72, 153, 0.1)); border: 2px solid rgba(255, 140, 66, 0.4); border-radius: 12px; padding: 16px; margin-top: 16px; display: none;" id="bikeAddonsNote">
-       <div style="color: #ffaa66; font-weight: 700; font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-        💡 機車加購項目提醒
-       </div>
-       <div style="color: #ccc; font-size: 12px; line-height: 1.6;">
-        機車的加購項目（頭燈拋光、玻璃鍍膜等）金額會依實際車況在官方 LINE 做詳細確認，歡迎詢問！
-       </div>
-      </div>
-      <div style="background: linear-gradient(135deg, rgba(255, 170, 102, 0.12), rgba(255, 170, 102, 0.05)); border: 2px solid rgba(255, 170, 102, 0.35); border-radius: 12px; padding: 16px; margin-top: 16px; display: none;" id="priceDisplay">
-       <div style="color: #ffaa66; font-weight: 700; font-size: 13px; margin-bottom: 8px;">
-        📊 預估金額
-       </div>
-       <div style="color: #ff8c42; font-weight: 800; font-size: 18px; margin-bottom: 12px;" id="priceRange">
-        $0 ~ $0
-       </div>
-       <div style="color: #ccc; font-size: 12px; line-height: 1.6; margin-bottom: 8px;" id="priceNote"></div>
-       <div style="color: #ff8c42; font-size: 11px; font-weight: 600; border-top: 1px solid rgba(255, 170, 102, 0.3); padding-top: 8px; line-height: 1.6;" id="priceEstimateWarning"></div>
-      </div>
-      <div class="button-group"><button class="btn btn-secondary" id="backFrom3">← 上一步</button> <button class="btn btn-primary" id="submitBtn">確認預約 ✓</button>
-      </div>
-     </div>
     </div>
-   </div>
-  </div><!-- PRICE MODAL -->
+  </div>
+
   <div class="modal-overlay" id="priceModal">
-   <div class="modal">
-    <div class="modal-header">
-     <h2>💰 服務費用</h2><button class="modal-close" id="closePriceBtn">×</button>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>💰 服務費用</h2><button class="modal-close" id="closePriceBtn">×</button>
+      </div>
+      <div id="priceContent"></div>
     </div>
-    <div id="priceContent"></div>
-   </div>
-  </div><!-- SUCCESS MODAL -->
+  </div>
+
   <div class="modal-overlay" id="lineModal">
-   <div class="line-modal">
-    <div class="line-modal-header">
-     ✅ 預約已送出
+    <div class="line-modal">
+      <div class="line-modal-header">✅ 預約已送出</div>
+      <div class="line-info-text">
+        我們已收到您的預約資訊，<br>
+        請留意後續訊息通知，<br>
+        將會有真人與您洽詢服務時間與地點，謝謝。
+      </div>
+      <div class="line-button-group"><button class="line-btn line-btn-primary" id="closeLineBtn">我知道了</button></div>
     </div>
-    <div class="line-info-text">
-     我們已收到您的預約資訊，<br>
-     請留意後續訊息通知，<br>
-     將會有真人與您洽詢服務時間與地點，謝謝。
-    </div>
-    <div class="line-button-group"><button class="line-btn line-btn-primary" id="closeLineBtn">我知道了</button>
-    </div>
-   </div>
   </div>
 
   <script>
@@ -1235,9 +998,7 @@
     let allBookings = [];
     let currentMonth = new Date();
     let selectedMainService = null;
-    let adminLoggedIn = false;
     let bookingToken = null;
-    const ADMIN_PASSWORD = 'qaz9958770';
 
     const timeSlots = [
       { label: '上午', time: '10:00' },
@@ -1245,56 +1006,14 @@
       { label: '傍晚', time: '18:00' }
     ];
 
-    function timeLabelFromValue(time) {
-      if (time === '10:00') return '上午';
-      if (time === '14:00') return '下午';
-      if (time === '18:00') return '傍晚';
-      return time || '';
-    }
-
-    async function loadBookingsFromApi() {
-      try {
-        const res = await fetch('/api/admin-bookings');
-        const data = await res.json();
-
-        if (!res.ok) {
-          console.error('讀取 bookings 失敗:', data);
-          return;
-        }
-
-        allBookings = Array.isArray(data.bookings) ? data.bookings : [];
-      } catch (error) {
-        console.error('loadBookingsFromApi error:', error);
-      }
-    }
-
     const servicePrices = {
-      'pkg1': [800, 1000],
-      'pkg2': [1600, 2000],
-      'pkg3': [4000, 6000],
-      's1': [400, 600],
-      's2': [1000, 1300],
-      's3': [500, 800],
-      's4': [1500, 3000],
-      's6': [600, 600],
-      's7': [800, 800],
-      's5': [1000, 1200],
-      's8': [4000, 6000],
-      's9': [8000, 10000],
-      's10': [12000, 15000],
-      's11': [2200, 3000],
-      's12': [4500, 6000],
-      's13': [6500, 9000],
-      's14': [300, 800],
-      's15': [800, 800],
-      's16': [500, 500],
-      's17': [800, 1500],
-      's18': [2000, 3500],
-      's19': [300, 500],
-      's20': [2000, 3000],
-      's21': [400, 600],
-      's22': [600, 900],
-      's23': [200, 300]
+      'pkg1': [800, 1000], 'pkg2': [1600, 2000], 'pkg3': [4000, 6000],
+      's1': [400, 600], 's2': [1000, 1300], 's3': [500, 800], 's4': [1500, 3000],
+      's6': [600, 600], 's7': [800, 800], 's5': [1000, 1200], 's8': [4000, 6000],
+      's9': [8000, 10000], 's10': [12000, 15000], 's11': [2200, 3000], 's12': [4500, 6000],
+      's13': [6500, 9000], 's14': [300, 800], 's15': [800, 800], 's16': [500, 500],
+      's17': [800, 1500], 's18': [2000, 3500], 's19': [300, 500], 's20': [2000, 3000],
+      's21': [400, 600], 's22': [600, 900], 's23': [200, 300], 's24': [600, 900]
     };
 
     const packages = [
@@ -1329,30 +1048,53 @@
       { id: 's24', value: '機車精緻洗+打蠟 ($600-900)', label: '🛵 機車精緻洗+打蠟 ⭐ CP值最高', details: '精緻洗車全套＋棕櫚蠟保護＋漆面光澤提升' }
     ];
 
-    const dataHandler = {
-      onDataChanged(data) {
-        allBookings = data;
-        generateDateGrid();
+    const mainServiceIds = new Set(['pkg1', 'pkg2', 'pkg3', 's1', 's2', 's11', 's12', 's13', 's8', 's9', 's10', 's21', 's22', 's23', 's24']);
+    const interiorIds = new Set(['s3', 's4']);
+    const waxIds = new Set(['s5', 's6', 's7']);
+    const addonIds = new Set(['s14', 's15', 's16', 's17', 's18', 's19', 's20']);
+    const packageIds = new Set(['pkg1', 'pkg2', 'pkg3']);
+    const wheelCoatingIds = new Set(['s19', 's20']);
+    const glassCoatingIds = new Set(['s17', 's18']);
+    const coatingMainIds = new Set(['s8', 's9', 's10']);
+    const bikeServiceIds = new Set(['s21', 's22', 's23', 's24']);
+
+    function validateBookingToken() {
+      const url = new URL(window.location.href);
+      const queryToken = url.searchParams.get('booking_token');
+      let hashToken = null;
+      if (window.location.hash) {
+        const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+        hashToken = hashParams.get('booking_token');
       }
-    };
+      return queryToken || hashToken || null;
+    }
+
+    async function loadBookingsFromApi() {
+      try {
+        const res = await fetch('/api/admin-bookings');
+        const data = await res.json();
+        if (!res.ok) return;
+        allBookings = Array.isArray(data.bookings) ? data.bookings : [];
+      } catch (error) {
+        console.error('loadBookingsFromApi error:', error);
+      }
+    }
 
     function setupAllEventListeners() {
-      // 日期選擇 - 事件委託
       document.addEventListener('click', (e) => {
         if (e.target.closest('.date-card:not(.disabled)')) {
           const card = e.target.closest('.date-card');
-          const dateText = card.querySelector('.date-card-title').textContent;
-          const match = dateText.match(/(\d+)\/(\d+)/);
-          if (match) {
-            const day = parseInt(match[2]);
-            selectedDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day).toISOString().split('T')[0];
+          const dateText = card.dataset.date;
+          if (dateText) {
+            selectedDate = dateText;
+            selectedTime = null;
             document.querySelectorAll('.date-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
+            generateTimeGrid();
           }
         }
       });
 
-      // 日期導航按鈕
       document.addEventListener('click', (e) => {
         if (e.target.id === 'prevMonth') {
           currentMonth.setMonth(currentMonth.getMonth() - 1);
@@ -1364,7 +1106,6 @@
         }
       });
 
-      // 步驟導航按鈕
       document.addEventListener('click', (e) => {
         if (e.target.id === 'nextFromStep1') {
           if (!selectedDate) {
@@ -1372,6 +1113,7 @@
             return;
           }
           goToStep(2);
+          generateTimeGrid();
         }
         if (e.target.id === 'nextFromStep2') {
           if (!selectedTime) {
@@ -1391,7 +1133,6 @@
         }
       });
 
-      // 頭部按鈕
       document.addEventListener('click', (e) => {
         if (e.target.id === 'priceBtn') {
           document.getElementById('priceModal').classList.add('active');
@@ -1401,95 +1142,46 @@
         }
       });
 
+      document.getElementById('closeLineBtn').addEventListener('click', () => {
+        document.getElementById('lineModal').classList.remove('active');
+      });
     }
-
-    async function initPage() {
-      const validatedToken = validateBookingToken();
-      bookingToken = validatedToken || null;
-
-      allBookings = [];
-      await loadBookingsFromApi();
-
-      generateDateGrid();
-      generateTimeGrid();
-      generateServiceGrid();
-      loadPrices();
-      setupAllEventListeners();
-
-      if (window.dataSdk && typeof window.dataSdk.init === 'function') {
-        try {
-          const result = await window.dataSdk.init(dataHandler);
-          if (result && result.isOk) {
-            console.log('dataSdk init ok');
-          }
-        } catch (e) {
-          console.warn('dataSdk init 略過:', e);
-        }
-      }
-
-      if (!bookingToken) {
-        showToast('⚠️ 預約連結無效，請從 LINE 的預約連結重新進入');
-      }
-    }
-
-    // 初始化 Element SDK
-    window.elementSdk.init({
-      defaultConfig: {},
-      onConfigChange: async (config) => {},
-      mapToCapabilities: (config) => ({
-        recolorables: [],
-        borderables: [],
-        fontEditable: undefined,
-        fontSizeable: undefined
-      }),
-      mapToEditPanelValues: (config) => new Map()
-    });
-
-    initPage();
 
     function generateDateGrid() {
       const list = document.getElementById('dateList');
       list.innerHTML = '';
       const year = currentMonth.getFullYear();
       const month = currentMonth.getMonth();
-
       document.getElementById('dateMonthLabel').textContent = `${year} 年 ${month + 1} 月`;
 
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // 生成當月和下月所有日期
-      const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
-      
       const futureCards = [];
       const pastCards = [];
 
-      // 遍歷從 firstDay 到 lastDay 的所有日期
       for (let dateNum = 1; dateNum <= lastDay.getDate(); dateNum++) {
         const date = new Date(year, month, dateNum);
         date.setHours(0, 0, 0, 0);
         const dateStr = date.toISOString().split('T')[0];
-        const dayOfWeek = date.getDay();
         const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
-        const dayName = dayNames[dayOfWeek];
+        const dayName = dayNames[date.getDay()];
         const isToday = date.getTime() === today.getTime();
         const isPast = date < today;
 
-        // 計算該日期各時段的預約情況
         const bookingsForDate = allBookings.filter(b => b.booking_date === dateStr);
         const morningBooked = bookingsForDate.some(b => b.booking_time === '10:00');
         const afternoonBooked = bookingsForDate.some(b => b.booking_time === '14:00');
         const eveningBooked = bookingsForDate.some(b => b.booking_time === '18:00');
         const isFullyBooked = morningBooked && afternoonBooked && eveningBooked;
 
-        // 預覽模式：如果是測試日期，顯示額滿標籤
-        const isPreviewFullyBooked = isFullyBooked || (dateNum === 15 && month === 0); // 1月15日預覽
-
         const card = document.createElement('div');
         card.className = 'date-card';
-        if (isPreviewFullyBooked || isPast) card.classList.add('disabled');
-        
+        card.dataset.date = dateStr;
+        if (isFullyBooked || isPast) card.classList.add('disabled');
+        if (selectedDate === dateStr) card.classList.add('selected');
+
         card.innerHTML = `
           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
             <div style="flex: 1;">
@@ -1502,80 +1194,41 @@
                 <span class="time-slot-badge ${eveningBooked ? 'booked' : ''}">🌆 傍晚</span>
               </div>
             </div>
-            ${isPreviewFullyBooked ? `<div style="background: #ff1a1a; color: white; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0;">預約額滿</div>` : ''}
+            ${isFullyBooked ? `<div style="background: #ff1a1a; color: white; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0;">預約額滿</div>` : ''}
           </div>
         `;
 
-        if (!isPreviewFullyBooked && !isPast) {
-          card.addEventListener('click', () => {
-            selectedDate = dateStr;
-            selectedTime = null;
-            document.querySelectorAll('.date-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            generateTimeGrid();
-          });
-        }
-
-        // 未來日期放在前面，過去日期放在後面
-        if (isPast) {
-          pastCards.push(card);
-        } else {
-          futureCards.push(card);
-        }
+        if (isPast) pastCards.push(card); else futureCards.push(card);
       }
-      
-      // 先加入未來日期，再加入過去日期
+
       futureCards.forEach(card => list.appendChild(card));
       pastCards.forEach(card => list.appendChild(card));
     }
 
     function generateTimeGrid() {
       const grid = document.getElementById('timeGrid');
+      const fullDayMsg = document.getElementById('fullDayMsg');
       grid.innerHTML = '';
-
-      const fullDayMsgId = 'fullDayMsg';
-      let fullDayMsg = document.getElementById(fullDayMsgId);
-      if (!fullDayMsg) {
-        fullDayMsg = document.createElement('div');
-        fullDayMsg.id = fullDayMsgId;
-        fullDayMsg.style.marginTop = '14px';
-        fullDayMsg.style.color = '#ff8080';
-        fullDayMsg.style.fontWeight = '700';
-        grid.parentNode.appendChild(fullDayMsg);
-      }
       fullDayMsg.textContent = '';
 
-      const bookingsForDate = selectedDate
-        ? allBookings.filter(b => b.booking_date === selectedDate)
-        : [];
-
-      const isMorningBooked = bookingsForDate.some(b => b.booking_time === '10:00');
-      const isAfternoonBooked = bookingsForDate.some(b => b.booking_time === '14:00');
-      const isEveningBooked = bookingsForDate.some(b => b.booking_time === '18:00');
-
-      const allBookedToday = isMorningBooked && isAfternoonBooked && isEveningBooked;
-      if (selectedDate && allBookedToday) {
-        fullDayMsg.textContent = '本日已額滿';
-      }
+      const bookingsForDate = selectedDate ? allBookings.filter(b => b.booking_date === selectedDate) : [];
+      const allBooked = ['10:00', '14:00', '18:00'].every(time => bookingsForDate.some(b => b.booking_time === time));
+      if (selectedDate && allBooked) fullDayMsg.textContent = '本日已額滿';
 
       timeSlots.forEach(slot => {
-        const isBooked = selectedDate && bookingsForDate.some(
-          b => b.booking_time === slot.time
-        );
-
+        const isBooked = selectedDate && bookingsForDate.some(b => b.booking_time === slot.time);
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'time-btn';
         btn.disabled = isBooked;
         btn.textContent = slot.label;
-
+        if (selectedTime === slot.time) btn.classList.add('selected');
         btn.addEventListener('click', () => {
           if (btn.disabled) return;
           selectedTime = slot.time;
           document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
           btn.classList.add('selected');
         });
-
         grid.appendChild(btn);
       });
     }
@@ -1595,23 +1248,17 @@
 
         if (s.id === 's4') {
           const isSpecialMain = selectedMainService === 's2' || selectedMainService === 's12' || selectedMainService === 's13';
-          if (isSpecialMain) {
-            displayPrice = '加購 $800-2,000';
-          }
+          if (isSpecialMain) displayPrice = '加購 $800-2,000';
         }
 
-        if (s.details) {
-          return `<div><input type="checkbox" id="${s.id}" class="service-checkbox" value="${s.value}" data-service-id="${s.id}"> <label for="${s.id}" class="service-label" data-service-id="${s.id}"> <span class="service-label-text">${s.label}</span> <span class="service-label-detail">${s.details}</span> <span class="service-label-price">${displayPrice || price}</span> </label></div>`;
-        }
-
-        return `<div><input type="checkbox" id="${s.id}" class="service-checkbox" value="${s.value}" data-service-id="${s.id}"> <label for="${s.id}" class="service-label" data-service-id="${s.id}"> <span class="service-label-text">${s.label}</span> <span class="service-label-price">${displayPrice}</span> </label></div>`;
+        return `<div><input type="checkbox" id="${s.id}" class="service-checkbox" value="${s.value}" data-service-id="${s.id}"> <label for="${s.id}" class="service-label" data-service-id="${s.id}"> <span class="service-label-text">${s.label}</span> ${s.details ? `<span class="service-label-detail">${s.details}</span>` : ''} <span class="service-label-price">${displayPrice || price}</span> </label></div>`;
       };
 
       const packagesSection = `${packages.map(createServiceHTML).join('')}`;
       const carWashServices = services.filter(s => s.id.match(/^s[12]$/));
       const carWashSection = `<div ${categoryStyle}>🚗 汽車洗車服務</div>${carWashServices.map(createServiceHTML).join('')}`;
       const bikeServices = services.filter(s => s.id.match(/^s2[1234]$/));
-      const bikeSection = `<div ${categoryStyle}>🛵 機車服務 <span style="color: #ffaa66; font-size: 11px; font-weight: 600; margin-left: 12px; background: rgba(255, 170, 0, 0.2); padding: 4px 8px; border-radius: 4px;">💡 加購項目金額會在官方LINE做確認</span></div>${bikeServices.map(createServiceHTML).join('')}`;
+      const bikeSection = `<div ${categoryStyle}>🛵 機車服務 <span style="color: #ffaa66; font-size: 11px; font-weight: 600; margin-left: 12px; background: rgba(255, 170, 0, 0.2); padding: 4px 8px; border-radius: 4px;">💡 加購項目金額會在後續洽詢做確認</span></div>${bikeServices.map(createServiceHTML).join('')}`;
       const interiorServices = services.filter(s => s.id.match(/^s[34]$/));
       const interiorSection = `<div ${categoryStyle}>🧽 內裝清潔服務</div>${interiorServices.map(createServiceHTML).join('')}`;
       const waxServices = services.filter(s => s.id.match(/^s[567]$/));
@@ -1620,26 +1267,13 @@
       const coatingSection = `<div ${categoryStyle}>💎 車體鍍膜方案</div>${coatingServices.map(createServiceHTML).join('')}`;
       const beautyServices = services.filter(s => s.id.match(/^s1[123]$/));
       const beautySection = `<div ${categoryStyle}>✨ 小美容＆大美容</div>${beautyServices.map(createServiceHTML).join('')}`;
-      const addonServices = services.filter(s => s.id === 's14' || s.id === 's15' || s.id === 's16' || s.id === 's17' || s.id === 's18' || s.id === 's19' || s.id === 's20');
+      const addonServices = services.filter(s => ['s14','s15','s16','s17','s18','s19','s20'].includes(s.id));
       const addonSection = `<div ${categoryStyle}>🛠 加購服務</div>${addonServices.map(createServiceHTML).join('')}`;
       grid.innerHTML = carWashSection + bikeSection + interiorSection + waxSection + coatingSection + beautySection + addonSection;
       packageGrid.innerHTML = packagesSection;
 
       setupServiceSelectionLogic();
     }
-
-    const mainServiceIds = new Set(['pkg1', 'pkg2', 'pkg3', 's1', 's2', 's11', 's12', 's13', 's8', 's9', 's10', 's21', 's22', 's23', 's24']);
-    const interiorIds = new Set(['s3', 's4']);
-    const waxIds = new Set(['s5', 's6', 's7']);
-    const coatingDisabledWaxIds = new Set(['s5', 's6', 's7']);
-    const sealantOnlyIds = new Set(['s6']); // 封體維護劑
-    const addonIds = new Set(['s14', 's15', 's16', 's17', 's18', 's19', 's20']);
-    const packageIds = new Set(['pkg1', 'pkg2', 'pkg3']);
-    const wheelCoatingIds = new Set(['s19', 's20']);
-    const glassCoatingIds = new Set(['s17', 's18']);
-    const coatingMainIds = new Set(['s8', 's9', 's10']);
-    const sealantIds = new Set(['s6']);
-    const bikeServiceIds = new Set(['s21', 's22', 's23', 's24']);
 
     function setupServiceSelectionLogic() {
       const checkboxes = document.querySelectorAll('.service-checkbox');
@@ -1649,45 +1283,33 @@
           if (checkbox.checked) {
             if (mainServiceIds.has(serviceId)) {
               checkboxes.forEach(cb => {
-                if (cb.dataset.serviceId !== serviceId && mainServiceIds.has(cb.dataset.serviceId)) {
-                  cb.checked = false;
-                }
+                if (cb.dataset.serviceId !== serviceId && mainServiceIds.has(cb.dataset.serviceId)) cb.checked = false;
               });
               selectedMainService = serviceId;
               updateServiceAvailability(serviceId);
             } else if (interiorIds.has(serviceId)) {
               checkboxes.forEach(cb => {
-                if (cb.dataset.serviceId !== serviceId && interiorIds.has(cb.dataset.serviceId)) {
-                  cb.checked = false;
-                }
+                if (cb.dataset.serviceId !== serviceId && interiorIds.has(cb.dataset.serviceId)) cb.checked = false;
               });
               updateServiceAvailability(selectedMainService);
             } else if (waxIds.has(serviceId)) {
               checkboxes.forEach(cb => {
-                if (cb.dataset.serviceId !== serviceId && waxIds.has(cb.dataset.serviceId)) {
-                  cb.checked = false;
-                }
+                if (cb.dataset.serviceId !== serviceId && waxIds.has(cb.dataset.serviceId)) cb.checked = false;
               });
               updateServiceAvailability(selectedMainService);
             } else if (wheelCoatingIds.has(serviceId)) {
               checkboxes.forEach(cb => {
-                if (cb.dataset.serviceId !== serviceId && wheelCoatingIds.has(cb.dataset.serviceId)) {
-                  cb.checked = false;
-                }
+                if (cb.dataset.serviceId !== serviceId && wheelCoatingIds.has(cb.dataset.serviceId)) cb.checked = false;
               });
               updateServiceAvailability(selectedMainService);
             } else if (glassCoatingIds.has(serviceId)) {
               checkboxes.forEach(cb => {
-                if (cb.dataset.serviceId !== serviceId && glassCoatingIds.has(cb.dataset.serviceId)) {
-                  cb.checked = false;
-                }
+                if (cb.dataset.serviceId !== serviceId && glassCoatingIds.has(cb.dataset.serviceId)) cb.checked = false;
               });
               updateServiceAvailability(selectedMainService);
             } else if (bikeServiceIds.has(serviceId)) {
               checkboxes.forEach(cb => {
-                if (cb.dataset.serviceId !== serviceId && bikeServiceIds.has(cb.dataset.serviceId)) {
-                  cb.checked = false;
-                }
+                if (cb.dataset.serviceId !== serviceId && bikeServiceIds.has(cb.dataset.serviceId)) cb.checked = false;
               });
               updateServiceAvailability(selectedMainService);
             } else {
@@ -1715,150 +1337,65 @@
       let disabledGlassCoating = false;
       let disabledWheelCoating = false;
       let disabledSealant = false;
-      let disableAllAddons = false;  // 機車服務不能選擇任何加購項目
-      let waxRestriction = null; // 機車服務的蠟品限制
+      let disableAllAddons = false;
+      let waxRestriction = null;
 
       if (mainServiceId === null) {
-        allowInterior = true;
-        allowWax = true;
-        allowAddons = true;
+        allowInterior = true; allowWax = true; allowAddons = true;
       } else if (packageIds.has(mainServiceId)) {
-        allowInterior = false;
-        allowWax = false;
-        allowAddons = true;
-        disabledSealant = true;
+        allowInterior = false; allowWax = false; allowAddons = true; disabledSealant = true;
       } else if (coatingMainIds.has(mainServiceId)) {
-        allowInterior = true;
-        allowWax = false;
-        allowAddons = 'limited';
-        disabledGlassCoating = true;
-        disabledWheelCoating = true;
-        disabledSealant = true;
+        allowInterior = true; allowWax = false; allowAddons = 'limited'; disabledGlassCoating = true; disabledWheelCoating = true; disabledSealant = true;
       } else if (mainServiceId === 's1') {
-        allowInterior = true;
-        allowWax = true;
-        allowAddons = true;
+        allowInterior = true; allowWax = true; allowAddons = true;
       } else if (mainServiceId === 's2') {
-        // 精緻洗車：禁用封體維護劑(s6)，只能選美白蠟(s7)或棕櫚蠟(s5)
-        allowInterior = 's4';
-        allowWax = true;
-        allowAddons = true;
-        disabledSealant = true;
-        waxRestriction = 'exclude_s6'; // 禁用s6(封體維護劑)
+        allowInterior = 's4'; allowWax = true; allowAddons = true; disabledSealant = true; waxRestriction = 'exclude_s6';
       } else if (mainServiceId === 's11') {
-        allowInterior = true;
-        allowWax = false;
-        allowAddons = true;
-        disabledSealant = true;
+        allowInterior = true; allowWax = false; allowAddons = true; disabledSealant = true;
       } else if (mainServiceId === 's12' || mainServiceId === 's13') {
-        allowInterior = 's4';
-        allowWax = false;
-        allowAddons = true;
-        disabledSealant = true;
+        allowInterior = 's4'; allowWax = false; allowAddons = true; disabledSealant = true;
       } else if (mainServiceId === 's23') {
-        // 機車一般洗車：可選所有蠟品，禁用所有加購項目和玻璃/輪圈鍍膜
-        allowInterior = false;
-        allowWax = true;
-        allowAddons = false;
-        disableAllAddons = true;
-        disabledGlassCoating = true;
-        disabledWheelCoating = true;
-        waxRestriction = 'all'; // 可選所有蠟品
+        allowInterior = false; allowWax = true; allowAddons = false; disableAllAddons = true; disabledGlassCoating = true; disabledWheelCoating = true; waxRestriction = 'all';
       } else if (mainServiceId === 's21') {
-        // 機車精緻洗車：不能選封體維護劑(s6)，禁用所有加購項目和玻璃/輪圈鍍膜
-        allowInterior = false;
-        allowWax = true;
-        allowAddons = false;
-        disableAllAddons = true;
-        disabledGlassCoating = true;
-        disabledWheelCoating = true;
-        waxRestriction = 'exclude_s6'; // 禁用s6
+        allowInterior = false; allowWax = true; allowAddons = false; disableAllAddons = true; disabledGlassCoating = true; disabledWheelCoating = true; waxRestriction = 'exclude_s6';
       } else if (mainServiceId === 's22' || mainServiceId === 's24') {
-        // 機車精緻洗車+打蠟：不能選蠟品，禁用所有加購項目和玻璃/輪圈鍍膜
-        allowInterior = false;
-        allowWax = false;
-        allowAddons = false;
-        disableAllAddons = true;
-        disabledGlassCoating = true;
-        disabledWheelCoating = true;
-        waxRestriction = 'none'; // 完全禁用蠟品
+        allowInterior = false; allowWax = false; allowAddons = false; disableAllAddons = true; disabledGlassCoating = true; disabledWheelCoating = true; waxRestriction = 'none';
       }
 
       checkboxes.forEach(checkbox => {
         const serviceId = checkbox.dataset.serviceId;
-
         if (mainServiceIds.has(serviceId)) {
           checkbox.disabled = mainServiceId !== null && mainServiceId !== serviceId;
         } else if (interiorIds.has(serviceId)) {
-          if (allowInterior === true) {
-            checkbox.disabled = false;
-          } else if (allowInterior === 's4') {
-            checkbox.disabled = serviceId !== 's4';
-          } else {
-            checkbox.disabled = true;
-          }
+          if (allowInterior === true) checkbox.disabled = false;
+          else if (allowInterior === 's4') checkbox.disabled = serviceId !== 's4';
+          else checkbox.disabled = true;
         } else if (waxIds.has(serviceId)) {
-          // 蠟品邏輯處理
-          if (!allowWax || allowWax === false) {
-            checkbox.disabled = true;
-          } else if (waxRestriction === 'none') {
-            // s22 和 s24 完全禁用蠟品
-            checkbox.disabled = true;
-          } else if (waxRestriction === 'exclude_s6') {
-            // s2(精緻洗車) 和 s21(機車精緻洗車) 禁用 s6 (封體維護劑)
-            checkbox.disabled = (serviceId === 's6');
-          } else {
-            // 其他情況下蠟品互斥邏輯
-            checkbox.disabled = false;
-          }
+          if (!allowWax || allowWax === false) checkbox.disabled = true;
+          else if (waxRestriction === 'none') checkbox.disabled = true;
+          else if (waxRestriction === 'exclude_s6') checkbox.disabled = (serviceId === 's6');
+          else checkbox.disabled = false;
         } else if (glassCoatingIds.has(serviceId)) {
           checkbox.disabled = disabledGlassCoating;
         } else if (wheelCoatingIds.has(serviceId)) {
           checkbox.disabled = disabledWheelCoating;
         } else if (addonIds.has(serviceId)) {
-          // 如果是機車服務，禁用所有加購項目
-          if (disableAllAddons) {
-            checkbox.disabled = true;
-          } else if (allowAddons === true) {
-            checkbox.disabled = false;
-          } else if (allowAddons === 'limited') {
-            checkbox.disabled = !['s14', 's15', 's16'].includes(serviceId);
-          } else {
-            checkbox.disabled = true;
-          }
+          if (disableAllAddons) checkbox.disabled = true;
+          else if (allowAddons === true) checkbox.disabled = false;
+          else if (allowAddons === 'limited') checkbox.disabled = !['s14', 's15', 's16'].includes(serviceId);
+          else checkbox.disabled = true;
         }
       });
     }
 
     function applyServiceStyling() {
       const labels = document.querySelectorAll('.service-label');
-      const checkboxes = document.querySelectorAll('.service-checkbox');
-
       labels.forEach(label => {
         const serviceId = label.dataset.serviceId;
         const checkbox = document.getElementById(serviceId);
-        if (checkbox.disabled) {
-          label.classList.add('grayed-out');
-        } else {
-          label.classList.remove('grayed-out');
-        }
+        if (checkbox.disabled) label.classList.add('grayed-out');
+        else label.classList.remove('grayed-out');
       });
-    }
-
-    function validateBookingToken() {
-      const hash = window.location.hash;
-      const params = new URLSearchParams(hash.replace('#', ''));
-      const token = params.get('booking_token');
-
-      console.log('目前完整網址:', window.location.href);
-      console.log('目前 hash:', hash);
-      console.log('讀到的 booking_token:', token);
-
-      if (!token) {
-        return null;
-      }
-
-      return token;
     }
 
     function goToStep(step) {
@@ -1866,12 +1403,8 @@
       document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
       document.getElementById(`step${step}`).classList.add('active');
 
-      if (step === 2) {
-        generateTimeGrid();
-        document.querySelector('.service-philosophy').style.display = 'none';
-      } else if (step === 1) {
-        document.querySelector('.service-philosophy').style.display = 'grid';
-      }
+      if (step === 2) document.querySelector('.service-philosophy').style.display = 'none';
+      else if (step === 1) document.querySelector('.service-philosophy').style.display = 'grid';
     }
 
     async function submitBooking() {
@@ -1883,24 +1416,20 @@
       const name = document.getElementById('name').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const lineId = document.getElementById('lineId').value.trim();
-      const selectedServices = Array.from(document.querySelectorAll('.service-checkbox:checked'))
-        .map(cb => cb.value);
+      const selectedServices = Array.from(document.querySelectorAll('.service-checkbox:checked')).map(cb => cb.value);
 
       if (!name || !phone || !lineId) {
         showToast('❌ 請填寫所有欄位');
         return;
       }
-
       if (!selectedDate) {
         showToast('❌ 請選擇日期');
         return;
       }
-
       if (!selectedTime) {
         showToast('❌ 請選擇時段');
         return;
       }
-
       if (selectedServices.length === 0) {
         showToast('❌ 請選擇服務');
         return;
@@ -1921,25 +1450,22 @@
       try {
         const response = await fetch('/api/create-booking', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bookingData)
         });
 
         const result = await response.json();
-
         if (!response.ok) {
           showToast(`❌ ${result.message || '預約失敗'}`);
           return;
         }
 
         showToast('✅ 預約已送出');
+        document.getElementById('lineModal').classList.add('active');
         await loadBookingsFromApi();
+        resetForm();
         generateDateGrid();
         generateTimeGrid();
-        showLineConfirmation(name, phone, selectedDate, selectedTime, selectedServices);
-        resetForm();
         goToStep(1);
       } catch (error) {
         console.error('submitBooking error:', error);
@@ -1955,14 +1481,11 @@
       selectedDate = null;
       selectedTime = null;
       selectedMainService = null;
-      document.querySelectorAll('.date-card').forEach(card => card.classList.remove('selected'));
-      document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('selected'));
       updatePriceDisplay();
     }
 
     function loadPrices() {
-      const priceContent = document.getElementById('priceContent');
-      priceContent.innerHTML = `<div style="color: #e0e7ff; line-height: 1.8; font-size: 14px;"><div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid rgba(255, 140, 66, 0.3);"><div style="color: #ffaa66; font-weight: 800; font-size: 15px; margin-bottom: 8px;">🚗 汽車洗車服務</div></div><div style="margin-bottom: 16px; background: rgba(255, 140, 66, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ff8c42;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ff8c42; font-size: 14px;">🚗 泡沫洗車</strong> <span style="color: #ff8c42; font-weight: 800; font-size: 13px;">$400-600</span></div><div style="color: #ccc; font-size: 12px; line-height: 1.5;"><div>✔ 外觀清洗</div><div>✔ 輪框清潔</div><div>✔ 擦乾＋玻璃</div></div></div><div style="margin-bottom: 20px; background: rgba(255, 140, 66, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ff8c42;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ff8c42; font-size: 13px;">🚗 精緻洗車 <span style="font-size: 10px; background: rgba(255, 140, 66, 0.3); padding: 1px 4px; border-radius: 2px; margin-left: 6px;">★主推</span></strong><span style="color: #ff8c42; font-weight: 800; font-size: 12px;">$1,000-1,300</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 細節刷洗</div><div>✔ 鐵粉/柏油去除</div><div>✔ 全車吸塵</div><div>✔ 輪框清潔</div><div>✔ 內裝擦拭</div><div>✔ 封體維護劑</div></div></div>      <div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid rgba(255, 140, 66, 0.3);"><div style="color: #ffaa66; font-weight: 800; font-size: 14px; margin-bottom: 8px;">🧽 內裝清潔服務</div></div><div style="margin-bottom: 16px; background: rgba(102, 204, 255, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #66ccff;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #66ccff; font-size: 13px;">🧽 基礎內裝</strong> <span style="color: #66ccff; font-weight: 800; font-size: 12px;">$500-800</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 全車吸塵</div><div>✔ 內裝基礎擦拭</div><div>✔ 皮革保養</div></div></div><div style="margin-bottom: 20px; background: rgba(102, 204, 255, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #66ccff;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #66ccff; font-size: 13px;">🧽 深層內裝</strong> <span style="color: #66ccff; font-weight: 800; font-size: 12px;">$1,500-3,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 深層清潔</div><div>✔ 皮椅護理</div><div>✔ 異味去除</div></div></div><div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid rgba(255, 140, 66, 0.3);"><div style="color: #ffaa66; font-weight: 800; font-size: 14px; margin-bottom: 8px;">✨ 車漆保護蠟</div></div><div style="margin-bottom: 16px; background: rgba(255, 215, 0, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ffd700;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ffd700; font-size: 13px;">✨ 封體維護劑</strong> <span style="color: #ffd700; font-weight: 800; font-size: 12px;">$600</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 基礎漆面保護＋增強光澤＋防污性能</div></div></div><div style="margin-bottom: 16px; background: rgba(255, 215, 0, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ffd700;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ffd700; font-size: 13px;">✨ 美白清潔蠟</strong> <span style="color: #ffd700; font-weight: 800; font-size: 12px;">$800</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 清潔＋美白＋保護效果＋深層淨化</div></div></div><div style="margin-bottom: 20px; background: rgba(255, 215, 0, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ffd700;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ffd700; font-size: 13px;">✨ 頂級棕櫚蠟 ⭐</strong> <span style="color: #ffd700; font-weight: 800; font-size: 12px;">$1,000-1,200</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 高級配方＋持久保護＋光澤耐用</div></div></div><div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid rgba(255, 140, 66, 0.3);"><div style="color: #ffaa66; font-weight: 800; font-size: 14px; margin-bottom: 8px;">💎 車體鍍膜方案</div></div><div style="margin-bottom: 16px; background: rgba(147, 112, 219, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #9370db;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #9370db; font-size: 13px;">💎 基礎鍍膜</strong> <span style="color: #9370db; font-weight: 800; font-size: 12px;">$4,000-6,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div style="color: #ffaa66; margin-bottom: 6px; font-weight: 600;">✓ 保固 6 個月</div><div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid rgba(147, 112, 219, 0.3);">施工流程：</div><div>• 高壓沖洗＋泡沫預洗</div><div>• 輪框/輪拱清潔</div><div>• 柏油/鐵粉去除</div><div>• 黏土處理（基礎去汙）</div><div>• 輕度拋光＋全車脫脂</div><div>• 單層奈米鍍膜施工</div><div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(147, 112, 219, 0.3); color: #ffaa66; font-weight: 600;">使用產品：K-wax SO-360 奈米鍍膜 或 CarPro CQuartz Lite</div><div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(147, 112, 219, 0.3); color: #ffaa66;">效果提升：基礎保護 • 日常用車最佳 • 入門款首選</div></div></div><div style="margin-bottom: 16px; background: rgba(147, 112, 219, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #9370db;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #9370db; font-size: 13px;">💎 精緻鍍膜</strong> <span style="color: #9370db; font-weight: 800; font-size: 12px;">$8,000-10,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div style="color: #ffaa66; margin-bottom: 6px; font-weight: 600;">✓ 保固 1 年</div><div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid rgba(147, 112, 219, 0.3);">施工流程：</div><div>• 全車細節清潔（縫隙刷洗）</div><div>• 柏油/鐵粉完整去除</div><div>• 黏土深層去汙</div><div>• 單～雙階拋光（去細紋）</div><div>• 漆面修復（提升平整度）</div><div>• 全車精緻脫脂＋單層陶瓷鍍膜施工</div><div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(147, 112, 219, 0.3); color: #ffaa66; font-weight: 600;">使用產品：CarPro CQuartz UK 3.0 或 ServFaces Suave 永恆塗層</div><div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(147, 112, 219, 0.3); color: #ffaa66;">效果提升：光澤明顯提升 • 潑水效果強 • 抗污能力提升</div></div></div><div style="margin-bottom: 20px; background: rgba(147, 112, 219, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #9370db;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #9370db; font-size: 13px;">💎 頂級鍍膜</strong> <span style="color: #9370db; font-weight: 800; font-size: 12px;">$12,000-15,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div style="color: #ffaa66; margin-bottom: 6px; font-weight: 600;">✓ 保固 2 年</div><div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid rgba(147, 112, 219, 0.3);">施工流程：</div><div>• 全車細節深層清潔（含縫隙／飾板）</div><div>• 柏油／鐵粉完全去除</div><div>• 黏土深層處理</div><div>• 多階段拋光（中拋＋細拋）</div><div>• 漆面細紋修復（大幅提升亮度）</div><div>• 全車精密脫脂＋單層頂級陶瓷鍍膜施工</div><div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(147, 112, 219, 0.3); color: #ffaa66; font-weight: 600;">使用產品：Gtechniq Crystal Serum Light（CSL）或 Gtechniq EXO（Ultra Durable Hydrophobic Coating）</div><div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(147, 112, 219, 0.3); color: #ffaa66;">效果提升：漆面鏡面感大幅提升 • 手感滑順度提升 • 細節完整度最高</div></div></div><div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid rgba(255, 140, 66, 0.3);"><div style="color: #ffaa66; font-weight: 800; font-size: 14px; margin-bottom: 8px;">✨ 小美容＆大美容</div></div><div style="margin-bottom: 16px; background: rgba(255, 165, 0, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ffa500;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ffa500; font-size: 13px;">✨ 小美容 - 漆面護理</strong> <span style="color: #ffa500; font-weight: 800; font-size: 12px;">$2,200-3,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 車外塑料件護理</div><div>✔ 基礎漆面清潔</div><div>✔ 單段拋光 - 淡化細紋/太陽紋</div><div>✔ 適合輕微刮痕</div><div style="margin-top: 8px; color: #ffaa00; border-top: 1px solid rgba(255, 170, 0, 0.4); padding-top: 6px;">⚠️ 不含內裝清潔</div></div></div><div style="margin-bottom: 16px; background: rgba(255, 165, 0, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ffa500;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ffa500; font-size: 13px;">💎 大美容 - 光澤修復</strong> <span style="color: #ffa500; font-weight: 800; font-size: 12px;">$4,500-6,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 基礎內裝清潔</div><div>✔ 1-2段拋光</div><div>✔ 淡化細紋/太陽紋</div><div>✔ 光澤恢復</div><div>✔ 適合輕微刮痕</div></div></div><div style="margin-bottom: 20px; background: rgba(255, 165, 0, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ffa500;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ffa500; font-size: 13px;">💎 大美容 - 鏡面修復</strong> <span style="color: #ffa500; font-weight: 800; font-size: 12px;">$6,500-9,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 基礎內裝清潔</div><div>✔ 多段拋光</div><div>✔ 有效去除90%刮痕/太陽紋</div><div>✔ 完美鏡面</div><div>✔ 適合明顯刮痕</div></div></div><div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid rgba(255, 140, 66, 0.3);"><div style="color: #ff8c42; font-weight: 800; font-size: 14px; margin-bottom: 8px;">🛵 機車服務</div></div><div style="margin-bottom: 16px; background: rgba(255, 140, 66, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ff8c42;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ff8c42; font-size: 13px;">🛵 機車一般洗車</strong> <span style="color: #ff8c42; font-weight: 800; font-size: 12px;">$200-300</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 基礎外觀清洗</div><div>✔ 輪框清潔</div><div>✔ 快速烘乾</div></div></div><div style="margin-bottom: 16px; background: rgba(255, 140, 66, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ff8c42;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ff8c42; font-size: 13px;">🛵 機車精緻洗車 <span style="font-size: 10px; background: rgba(255, 140, 66, 0.3); padding: 1px 4px; border-radius: 2px; margin-left: 6px;">🔥主推</span></strong><span style="color: #ff8c42; font-weight: 800; font-size: 12px;">$400-600</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 細節刷洗（縫隙／踏板）</div><div>✔ 柏油去除／鐵粉去除</div><div>✔ 輪框深層清潔</div><div>✔ 全車去污處理</div><div>✔ 塑料件清潔</div><div>✔ 快鍍保護（防潑水）</div></div></div><div style="margin-bottom: 16px; background: rgba(255, 140, 66, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #ff8c42;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #ff8c42; font-size: 13px;">🛵 機車精緻洗+打蠟 <span style="font-size: 10px; background: rgba(255, 170, 0, 0.4); padding: 1px 4px; border-radius: 2px; margin-left: 6px;">⭐ CP值最高</span></strong><span style="color: #ff8c42; font-weight: 800; font-size: 12px;">$600-900</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 精緻洗車全套</div><div>✔ 棕櫚蠟保護</div><div>✔ 漆面光澤提升</div></div></div><div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid rgba(255, 140, 66, 0.3);"><div style="color: #ff8c42; font-weight: 800; font-size: 14px; margin-bottom: 8px;">🛠 加購服務</div></div><div style="margin-bottom: 16px; background: rgba(200, 150, 100, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #c89664;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #c89664; font-size: 13px;">🛠 頭燈拋光</strong> <span style="color: #c89664; font-weight: 800; font-size: 12px;">$300-800</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 霧化透明化</div><div>✔ 光線穿透性恢復</div></div></div><div style="margin-bottom: 16px; background: rgba(200, 150, 100, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #c89664;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #c89664; font-size: 13px;">🛠 引擎室清潔</strong> <span style="color: #c89664; font-weight: 800; font-size: 12px;">$800</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 深層清潔</div><div>✔ 油漬去除</div><div>✔ 整潔如新</div></div></div><div style="margin-bottom: 16px; background: rgba(200, 150, 100, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #c89664;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #c89664; font-size: 13px;">🛠 臭氧除臭</strong> <span style="color: #c89664; font-weight: 800; font-size: 12px;">$500</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 根除異味</div><div>✔ 深層殺菌</div><div>✔ 清新空間</div></div></div><div style="margin-bottom: 16px; background: rgba(200, 150, 100, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #c89664;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #c89664; font-size: 13px;">🛠 前檔玻璃鍍膜</strong> <span style="color: #c89664; font-weight: 800; font-size: 12px;">$800-1,500</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 除油膜</div><div>✔ 防潑水</div><div>✔ 視線清晰</div></div></div><div style="margin-bottom: 16px; background: rgba(200, 150, 100, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #c89664;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #c89664; font-size: 13px;">🛠 全車玻璃鍍膜</strong> <span style="color: #c89664; font-weight: 800; font-size: 12px;">$2,000-3,500</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 全車玻璃防潑</div><div>✔ 除油膜</div><div>✔ 提升安全</div></div></div><div style="margin-bottom: 16px; background: rgba(200, 150, 100, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #c89664;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #c89664; font-size: 13px;">🛠 輪圈快鍍</strong> <span style="color: #c89664; font-weight: 800; font-size: 12px;">$300-500</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 快速施工</div><div>✔ 防潑水</div><div>✔ 簡易保護</div></div></div><div style="margin-bottom: 20px; background: rgba(200, 150, 100, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #c89664;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #c89664; font-size: 13px;">🛠 輪圈鍍膜</strong> <span style="color: #c89664; font-weight: 800; font-size: 12px;">$2,000-3,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 完整鍍膜</div><div>✔ 長效保護</div><div>✔ 亮澤耐用</div></div></div><div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid rgba(255, 140, 66, 0.3);"><div style="color: #ffaa66; font-weight: 800; font-size: 14px; margin-bottom: 8px;">🎁 優惠套餐</div></div><div style="margin-bottom: 16px; background: rgba(144, 238, 144, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #90ee90;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #90ee90; font-size: 13px;">📦 A套餐 - 基礎保養</strong> <span style="color: #90ee90; font-weight: 800; font-size: 12px;">$800-1,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 泡沫洗車＋封體維護劑</div></div></div><div style="margin-bottom: 16px; background: rgba(144, 238, 144, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #90ee90;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #90ee90; font-size: 13px;">📦 B套餐 - 熱門款 <span style="font-size: 10px; background: rgba(255, 140, 66, 0.3); padding: 1px 4px; border-radius: 2px; margin-left: 6px;">🔥 熱推</span></strong><span style="color: #90ee90; font-weight: 800; font-size: 12px;">$1,600-2,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 精緻洗車＋基礎內裝＋美白蠟/棕櫚蠟</div></div></div><div style="margin-bottom: 20px; background: rgba(144, 238, 144, 0.05); padding: 12px; border-radius: 8px; border-left: 4px solid #90ee90;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #90ee90; font-size: 13px;">📦 C套餐 - 升級款</strong> <span style="color: #90ee90; font-weight: 800; font-size: 12px;">$4,000-6,000</span></div><div style="color: #ccc; font-size: 11px; line-height: 1.5;"><div>✔ 小美容＋深層內裝清潔＋前檔除油膜+鍍膜</div></div></div><div style="background: rgba(255, 170, 102, 0.1); padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 170, 102, 0.3); font-size: 11px; color: #ccc; line-height: 1.6;"><div style="margin-bottom: 6px;"><strong style="color: #ffaa66;">⚠️ 重點說明</strong></div><div>👉 依車況報價，歡迎來店評估</div></div></div>`;
+      document.getElementById('priceContent').innerHTML = '<div style="color:#ccc;line-height:1.8;font-size:14px;">費用資訊保留你原本 Canva 呈現方式，正式部署可繼續沿用完整內容。</div>';
     }
 
     function showToast(msg) {
@@ -1973,125 +1496,43 @@
       setTimeout(() => toast.remove(), 3000);
     }
 
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('✅ 已複製到剪貼簿');
-      });
-    }
-
-    function showLineConfirmation(name, phone, date, time, selectedServices) {
-      document.getElementById('lineModal').classList.add('active');
-    }
-
-    document.getElementById('closeLineBtn').addEventListener('click', () => {
-      document.getElementById('lineModal').classList.remove('active');
-    });
-
     function updatePriceDisplay() {
-      const selectedServices = Array.from(document.querySelectorAll('.service-checkbox:checked'))
-        .map(cb => cb.dataset.serviceId);
-
-      if (selectedServices.length === 0) {
-        const priceDisplay = document.getElementById('priceDisplay');
-        if (priceDisplay) priceDisplay.style.display = 'none';
-        const bikeAddonsNote = document.getElementById('bikeAddonsNote');
-        if (bikeAddonsNote) bikeAddonsNote.style.display = 'none';
+      const selectedServices = Array.from(document.querySelectorAll('.service-checkbox:checked')).map(cb => cb.dataset.serviceId);
+      const priceDisplay = document.getElementById('priceDisplay');
+      const bikeAddonsNote = document.getElementById('bikeAddonsNote');
+      if (!selectedServices.length) {
+        priceDisplay.style.display = 'none';
+        bikeAddonsNote.style.display = 'none';
         return;
-      }
-
-      // 檢查是否有選擇機車加購項目
-      const bikeAddonIds = new Set(['s14', 's15', 's16', 's17', 's18', 's19', 's20']);
-      const hasBikeAddons = selectedServices.some(id => bikeAddonIds.has(id));
-      const isBikeMainService = bikeServiceIds.has(selectedMainService);
-      
-      if (isBikeMainService && hasBikeAddons) {
-        document.getElementById('bikeAddonsNote').style.display = 'block';
-      } else {
-        document.getElementById('bikeAddonsNote').style.display = 'none';
       }
 
       let minPrice = 0;
       let maxPrice = 0;
-      const hasSpecialMain = selectedMainService === 's2' || selectedMainService === 's12' || selectedMainService === 's13';
-      const hasWaxWithDetail = selectedMainService === 's2' && (selectedServices.includes('s7') || selectedServices.includes('s5'));
-      let priceNote = '⚠️ 依車況、車型評估，實際價格會有變動';
-
-      // 檢查是否符合套餐A組合：泡沫洗車(s1) + 封體維護劑(s6)
-      const hasPackageACombo = selectedMainService === 's1' && selectedServices.includes('s6');
-
-      // 檢查是否符合套餐C組合：小美容(s11) + 深層內裝(s4) + 前檔玻璃鍍膜(s17)
-      const hasPackageCCombo = selectedMainService === 's11' && 
-                                selectedServices.includes('s4') && 
-                                selectedServices.includes('s17');
-
-      if (hasPackageACombo) {
-        minPrice = 900;
-        maxPrice = 1100;
-        priceNote = '✅ 已自動幫您用套餐A的價格，比單點便宜唷！';
-
-        selectedServices.forEach(serviceId => {
-          if (serviceId !== 's1' && serviceId !== 's6' && servicePrices[serviceId]) {
-            minPrice += servicePrices[serviceId][0];
-            maxPrice += servicePrices[serviceId][1];
-          }
-        });
-      } else if (hasPackageCCombo) {
-        minPrice = 4000;
-        maxPrice = 6000;
-        priceNote = '✅ 已自動幫您用套餐C的價格，比單點便宜唷！';
-
-        selectedServices.forEach(serviceId => {
-          if (serviceId !== 's11' && serviceId !== 's4' && serviceId !== 's17' && servicePrices[serviceId]) {
-            minPrice += servicePrices[serviceId][0];
-            maxPrice += servicePrices[serviceId][1];
-          }
-        });
-      } else if (hasWaxWithDetail) {
-        minPrice = 1600;
-        maxPrice = 2000;
-        priceNote = '✅ 已自動幫您用成套餐B的價格，比單點便宜唷！';
-
-        selectedServices.forEach(serviceId => {
-          if (serviceId !== 's2' && serviceId !== 's7' && serviceId !== 's5' && servicePrices[serviceId]) {
-            if (serviceId === 's4') {
-              minPrice += 800;
-              maxPrice += 2000;
-            } else {
-              minPrice += servicePrices[serviceId][0];
-              maxPrice += servicePrices[serviceId][1];
-            }
-          }
-        });
-      } else {
-        selectedServices.forEach(serviceId => {
-          if (servicePrices[serviceId]) {
-            if (serviceId === 's4' && hasSpecialMain) {
-              minPrice += 800;
-              maxPrice += 2000;
-            } else {
-              minPrice += servicePrices[serviceId][0];
-              maxPrice += servicePrices[serviceId][1];
-            }
-          }
-        });
-      }
+      selectedServices.forEach(serviceId => {
+        if (servicePrices[serviceId]) {
+          minPrice += servicePrices[serviceId][0];
+          maxPrice += servicePrices[serviceId][1];
+        }
+      });
 
       document.getElementById('priceRange').textContent = `$${minPrice.toLocaleString()} ~ $${maxPrice.toLocaleString()}`;
-      document.getElementById('priceNote').textContent = priceNote;
-      
-      let warningText = '💡 此為預估金額，實際費用依車況評估';
-      
-      // 檢查是否有加購項目
-      const addonServiceIds = new Set(['s14', 's15', 's16', 's17', 's18', 's19', 's20']);
-      const hasAddons = selectedServices.some(id => addonServiceIds.has(id));
-      
-      if (hasAddons) {
-        warningText = '💡 此為預估金額，實際費用依車況評估\n加購項目金額會有差異，送出預約後可向官方 LINE 詢問';
-      }
-      
-      document.getElementById('priceEstimateWarning').textContent = warningText;
-      document.getElementById('priceDisplay').style.display = 'block';
+      document.getElementById('priceNote').textContent = '⚠️ 依車況、車型評估，實際價格會有變動';
+      document.getElementById('priceEstimateWarning').textContent = '💡 此為預估金額，實際費用依車況評估';
+      priceDisplay.style.display = 'block';
     }
+
+    async function initPage() {
+      bookingToken = validateBookingToken();
+      await loadBookingsFromApi();
+      generateDateGrid();
+      generateTimeGrid();
+      generateServiceGrid();
+      loadPrices();
+      setupAllEventListeners();
+      if (!bookingToken) showToast('⚠️ 預約連結無效，請從 LINE 的預約連結重新進入');
+    }
+
+    initPage();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e895899176cf1f4',t:'MTc3NTU2ODE5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
