@@ -107,18 +107,17 @@ module.exports = async (req, res) => {
 
           const formUrl = `${process.env.BOOKING_FORM_BASE_URL}?booking_token=${bookingToken}`;
 
-          await client.replyMessage({
-            replyToken: event.replyToken,
-            messages: [
-              {
-                type: 'text',
-                text:
-                  '請點擊下方連結填寫預約表單👇\n' +
-                  `${formUrl}\n\n` +
-                  '⚠️ 請勿刪除或修改 booking_token，否則系統將無法自動對應您的 LINE。'
-              }
-            ]
-          });
+          await client.pushMessage({
+  to: userId,
+  messages: [
+    {
+      type: 'text',
+      text:
+        '請點擊下方連結填寫預約表單👇\n' +
+        `${formUrl}\n\n` +        
+    }
+  ]
+});
 
           return;
         }
