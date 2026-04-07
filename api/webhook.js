@@ -106,7 +106,7 @@ module.exports = async (req, res) => {
             bookingToken
           });
 
-          const formUrl = `${process.env.BOOKING_FORM_BASE_URL}?booking_token=${bookingToken}`;
+          const formUrl = `${process.env.BOOKING_FORM_BASE_URL}#booking_token=${bookingToken}`;
 
           await client.pushMessage({
   to: userId,
