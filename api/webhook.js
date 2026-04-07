@@ -64,7 +64,7 @@ module.exports = async (req, res) => {
                 type: 'text',
                 text:
                   '請點擊下方連結填寫預約表單👇\n' +
-                  'https://fuxing-detailing.my.canva.site/'
+                  'https://fuxing-detailing.my.canva./'
               }
             ]
           });
