@@ -9,6 +9,12 @@ const client = new line.messagingApi.MessagingApiClient({
   channelAccessToken: config.channelAccessToken
 });
 
+// 用來暫存「有按我要預約的客戶」
+// 結構：global.bookingUsers[userId] = { userId, requestedAt }
+if (!global.bookingUsers) {
+  global.bookingUsers = {};
+}
+
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
     return res.status(200).json({ status: 'ok' });
@@ -51,10 +57,16 @@ module.exports = async (req, res) => {
           text.includes('時間：') &&
           text.includes('服務項目：');
 
-        // 1. 客戶按圖文選單「我要預約！」
+        // 1. 客戶按圖文選單「我要預約」
         if (text === '我要預約！' || text === '我要預約') {
           if (userId) {
-            global.lastUserId = userId;
+            global.bookingUsers[userId] = {
+              userId,
+              requestedAt: Date.now()
+            };
+            console.log('已記錄預約用戶:', userId);
+          } else {
+            console.log('沒有抓到 userId');
           }
 
           await client.replyMessage({
@@ -64,14 +76,16 @@ module.exports = async (req, res) => {
                 type: 'text',
                 text:
                   '請點擊下方連結填寫預約表單👇\n' +
-                  'https://fuxing-detailing.my.canva.site/'
+                  'https://fuxing-detailing.my.canva.site/\n\n' +
+                  '⚠️ 請務必填寫您目前這個 LINE 對應的電話號碼，' +
+                  '送出後我們才會自動回傳預約資訊給您。'
               }
             ]
           });
           return;
         }
 
-        // 2. 客戶手動把預約格式貼進來
+        // 2. 客戶手動把預約格式貼進聊天室
         if (isBookingMessage) {
           await client.replyMessage({
             replyToken: event.replyToken,
