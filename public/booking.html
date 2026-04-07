@@ -4,87 +4,157 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LINE 預約</title>
-
   <style>
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: sans-serif;
-      background: linear-gradient(135deg, #000, #ff7a00);
+      font-family: "Noto Sans TC", sans-serif;
+      background: linear-gradient(135deg, #000000, #ff7a00);
       color: white;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding: 20px;
     }
 
     .box {
       background: #111;
       padding: 30px;
-      border-radius: 12px;
+      border-radius: 16px;
       text-align: center;
-      max-width: 400px;
-      width: 90%;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      color: #ddd;
     }
 
     input, button {
       width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 8px;
+      padding: 14px;
+      margin-top: 12px;
+      border-radius: 10px;
       border: none;
+      font-size: 16px;
+    }
+
+    input {
+      background: #222;
+      color: white;
     }
 
     button {
       background: #ff7a00;
       color: black;
       font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #result {
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #ffd8b0;
+      white-space: pre-line;
     }
   </style>
 </head>
-
 <body>
   <div class="box">
     <h2>LINE 預約系統</h2>
-
     <p id="status">讀取中...</p>
 
-    <input id="name" placeholder="姓名">
-    <input id="phone" placeholder="電話">
+    <input id="name" type="text" placeholder="姓名" />
+    <input id="phone" type="text" placeholder="電話" />
 
-    <button onclick="sendBooking()">送出預約</button>
+    <button id="submitBtn" type="button">送出預約</button>
+
+    <div id="result"></div>
   </div>
 
   <script>
-    const token = new URLSearchParams(location.search).get("booking_token");
-
+    const token = new URLSearchParams(window.location.search).get("booking_token");
     const statusEl = document.getElementById("status");
+    const resultEl = document.getElementById("result");
+    const submitBtn = document.getElementById("submitBtn");
 
     if (!token) {
-      statusEl.innerText = "❌ 預約連結無效";
+      statusEl.textContent = "❌ 預約連結無效";
     } else {
-      statusEl.innerText = "✅ 已取得 token";
+      statusEl.textContent = "✅ 已取得 booking_token";
     }
 
-    async function sendBooking() {
-      const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
+    submitBtn.addEventListener("click", async function () {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
 
-      const res = await fetch("/api/create-booking", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          booking_token: token,
-          customer_name: name,
-          customer_phone: phone
-        })
-      });
+      if (!token) {
+        resultEl.textContent = "請從 LINE 預約連結重新進入。";
+        return;
+      }
 
-      const data = await res.json();
+      if (!name) {
+        resultEl.textContent = "請輸入姓名";
+        return;
+      }
 
-      alert(data.message || "完成");
-    }
+      if (!phone) {
+        resultEl.textContent = "請輸入電話";
+        return;
+      }
+
+      submitBtn.disabled = true;
+      resultEl.textContent = "送出中...";
+
+      try {
+        const res = await fetch("/api/create-booking", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            booking_token: token,
+            customer_name: name,
+            customer_phone: phone
+          })
+        });
+
+        const text = await res.text();
+
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          data = { message: text || "伺服器沒有回傳 JSON" };
+        }
+
+        if (!res.ok) {
+          resultEl.textContent = "送出失敗：\\n" + (data.message || "未知錯誤");
+          return;
+        }
+
+        resultEl.textContent = "✅ 預約送出成功\\n" + (data.message || "");
+      } catch (error) {
+        resultEl.textContent = "送出失敗：\\n" + error.message;
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
   </script>
 </body>
 </html>
