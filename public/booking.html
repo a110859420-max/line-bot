@@ -2,159 +2,970 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LINE 預約</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LINE 預約系統</title>
   <style>
+    :root {
+      --bg: #0b0b0b;
+      --bg-soft: #141414;
+      --card: #191919;
+      --card-2: #202020;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f5f5f5;
+      --muted: #a0a0a0;
+      --orange: #ff7a00;
+      --orange-2: #ff9d3d;
+      --danger: #ff5b5b;
+      --success: #22c55e;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
     * { box-sizing: border-box; }
 
-    body {
+    html, body {
       margin: 0;
-      font-family: "Noto Sans TC", sans-serif;
-      background: linear-gradient(135deg, #000000, #ff7a00);
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
+      padding: 0;
+      min-height: 100%;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(255, 122, 0, 0.16), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(255, 122, 0, 0.08), transparent 24%),
+        linear-gradient(180deg, #090909 0%, #111111 100%);
+    }
+
+    body { padding: 18px; }
+
+    .wrap {
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+      padding-bottom: 48px;
+    }
+
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, rgba(255,122,0,0.14), rgba(255,122,0,0.03));
+      border: 1px solid rgba(255,122,0,0.22);
+      border-radius: 28px;
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "BOOKING";
+      position: absolute;
+      right: 14px;
+      bottom: -10px;
+      font-size: clamp(2rem, 9vw, 5rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.03);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
       align-items: center;
+      gap: 8px;
+      background: rgba(255, 122, 0, 0.14);
+      color: #ffd6af;
+      border: 1px solid rgba(255, 122, 0, 0.26);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      line-height: 1.18;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+      max-width: 620px;
+    }
+
+    .panel {
+      margin-top: 18px;
+      background: rgba(16, 16, 16, 0.94);
+      border: 1px solid var(--border);
+      border-radius: 24px;
       padding: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
     }
 
-    .box {
-      background: #111;
-      padding: 30px;
-      border-radius: 16px;
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .step-pill {
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      padding: 14px 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-height: 78px;
+    }
+
+    .step-pill .num {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: #2a2a2a;
+      font-size: 14px;
+      font-weight: 900;
+      color: #fff;
+      flex: 0 0 auto;
+    }
+
+    .step-pill.active,
+    .step-pill.done {
+      border-color: rgba(255,122,0,0.45);
+      background: linear-gradient(180deg, rgba(255,122,0,0.14), rgba(255,122,0,0.06));
+    }
+
+    .step-pill.active .num,
+    .step-pill.done .num {
+      background: linear-gradient(135deg, var(--orange), var(--orange-2));
+      color: #111;
+    }
+
+    .step-pill small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .step-pill strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .step-page { display: none; }
+    .step-page.active { display: block; }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .section-desc {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .service-grid,
+    .slots-grid,
+    .addon-grid,
+    .inline-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .slots-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .addon-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .inline-grid { grid-template-columns: 1fr 1fr; }
+
+    .service-card,
+    .slot-btn,
+    .chip-btn,
+    .addon-item {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #1b1b1b 0%, #151515 100%);
+      border-radius: 18px;
+      transition: 0.18s ease;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .service-card:hover,
+    .slot-btn:hover,
+    .chip-btn:hover,
+    .addon-item:hover {
+      border-color: rgba(255,122,0,0.45);
+      transform: translateY(-1px);
+    }
+
+    .service-card.active,
+    .slot-btn.active,
+    .chip-btn.active,
+    .addon-item.active {
+      border-color: rgba(255,122,0,0.72);
+      background: linear-gradient(180deg, rgba(255,122,0,0.18), rgba(255,122,0,0.08));
+      box-shadow: inset 0 0 0 1px rgba(255,122,0,0.14);
+    }
+
+    .service-card {
+      width: 100%;
+      text-align: left;
+      padding: 16px;
+    }
+
+    .service-card h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+
+    .service-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .price-tag {
+      margin-top: 14px;
+      color: #ffb56c;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .field { margin-bottom: 16px; }
+
+    .field label {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      background: #101010;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 14px;
+      font-size: 15px;
+      outline: none;
+      transition: 0.18s ease;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: rgba(255,122,0,0.65);
+      box-shadow: 0 0 0 4px rgba(255,122,0,0.12);
+    }
+
+    .textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .date-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .chip-btn {
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .slot-btn {
+      padding: 14px 10px;
+      font-size: 15px;
+      font-weight: 900;
       text-align: center;
-      max-width: 420px;
-      width: 100%;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
     }
 
-    h2 {
-      margin-top: 0;
-      margin-bottom: 10px;
+    .slot-btn[disabled],
+    .chip-btn[disabled] {
+      opacity: 0.42;
+      cursor: not-allowed;
+      transform: none;
     }
 
-    p {
-      margin-bottom: 20px;
-      color: #ddd;
-    }
-
-    input, button {
-      width: 100%;
+    .addon-item {
       padding: 14px;
-      margin-top: 12px;
-      border-radius: 10px;
-      border: none;
+      font-size: 14px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .summary {
+      background: linear-gradient(180deg, #161616 0%, #121212 100%);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .summary h3 {
+      margin: 0 0 12px;
       font-size: 16px;
     }
 
-    input {
-      background: #222;
-      color: white;
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.08);
+      font-size: 14px;
     }
 
-    button {
-      background: #ff7a00;
-      color: black;
-      font-weight: bold;
+    .summary-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .summary-row span:first-child { color: var(--muted); }
+    .summary-row span:last-child {
+      text-align: right;
+      font-weight: 800;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 900;
       cursor: pointer;
+      transition: 0.18s ease;
     }
 
-    button:disabled {
-      opacity: 0.6;
+    .btn:disabled {
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
-    #result {
-      margin-top: 16px;
+    .btn-secondary {
+      background: #181818;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--orange), var(--orange-2));
+      color: #111;
+      min-width: 150px;
+      box-shadow: 0 10px 30px rgba(255, 122, 0, 0.28);
+    }
+
+    .notice,
+    .error,
+    .success-box,
+    .loading-box {
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 18px;
+      line-height: 1.7;
       font-size: 14px;
+    }
+
+    .notice {
+      background: rgba(255, 122, 0, 0.08);
+      border: 1px solid rgba(255, 122, 0, 0.2);
+      color: #ffcf9f;
+    }
+
+    .loading-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #ddd;
+    }
+
+    .error {
+      background: rgba(255, 91, 91, 0.08);
+      border: 1px solid rgba(255, 91, 91, 0.2);
+      color: #ffc8c8;
+    }
+
+    .success-box {
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      color: #cbffd7;
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted);
       line-height: 1.6;
-      color: #ffd8b0;
-      white-space: pre-line;
+    }
+
+    .hidden { display: none !important; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-page.active { animation: fadeIn 0.22s ease; }
+
+    @media (max-width: 760px) {
+      body { padding: 14px; }
+      .progress,
+      .service-grid,
+      .slots-grid,
+      .addon-grid,
+      .inline-grid {
+        grid-template-columns: 1fr;
+      }
+      .actions { flex-direction: column-reverse; }
+      .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h2>LINE 預約系統</h2>
-    <p id="status">讀取中...</p>
+  <div class="wrap">
+    <section class="hero">
+      <div class="badge">LINE 專屬預約連結</div>
+      <h1>線上預約</h1>
+      <p class="sub">黑橘風格三步驟預約頁。從 LINE 點進來後，直接完成服務、日期時段與聯絡資料填寫。送出後會寫入 Supabase，並同步通知 LINE 群組。</p>
+    </section>
 
-    <input id="name" type="text" placeholder="姓名" />
-    <input id="phone" type="text" placeholder="電話" />
+    <section class="panel" id="app">
+      <div id="bootLoading" class="loading-box">正在驗證預約連結，請稍候...</div>
+      <div id="bootError" class="error hidden"></div>
+      <div id="bootNotice" class="notice hidden"></div>
 
-    <button id="submitBtn" type="button">送出預約</button>
+      <div id="bookingContent" class="hidden">
+        <div class="progress">
+          <div class="step-pill active" data-progress="1">
+            <div class="num">1</div>
+            <div><small>STEP 1</small><strong>選擇服務</strong></div>
+          </div>
+          <div class="step-pill" data-progress="2">
+            <div class="num">2</div>
+            <div><small>STEP 2</small><strong>日期與時段</strong></div>
+          </div>
+          <div class="step-pill" data-progress="3">
+            <div class="num">3</div>
+            <div><small>STEP 3</small><strong>填寫資料並送出</strong></div>
+          </div>
+        </div>
 
-    <div id="result"></div>
+        <form id="bookingForm">
+          <div class="step-page active" data-step="1">
+            <h2 class="section-title">選擇預約服務</h2>
+            <p class="section-desc">先選擇主要服務，也可以加購其他處理項目。</p>
+            <div class="service-grid" id="serviceGrid"></div>
+
+            <div style="margin-top:18px;">
+              <h3 style="margin:0 0 10px;font-size:16px;">加購項目</h3>
+              <div class="addon-grid" id="addonGrid"></div>
+              <p class="small" style="margin-top:10px;">沒有加購也可以直接下一步。</p>
+            </div>
+          </div>
+
+          <div class="step-page" data-step="2">
+            <h2 class="section-title">選擇日期與時段</h2>
+            <p class="section-desc">先選日期，再選可預約時段。你現在如果還沒有後端時段 API，頁面會先用預設時段讓系統可正常運作。</p>
+
+            <div class="field">
+              <label>可預約日期</label>
+              <div class="date-row" id="dateRow"></div>
+            </div>
+
+            <div class="field">
+              <label>可預約時段</label>
+              <div class="slots-grid" id="slotsGrid"></div>
+            </div>
+          </div>
+
+          <div class="step-page" data-step="3">
+            <h2 class="section-title">填寫預約資料</h2>
+            <p class="section-desc">確認預約內容後送出，系統會建立紀錄並通知管理端。</p>
+
+            <div class="summary" id="summaryBox"></div>
+
+            <div class="inline-grid">
+              <div class="field">
+                <label for="customer_name">姓名</label>
+                <input id="customer_name" name="customer_name" class="input" placeholder="請輸入姓名" required />
+              </div>
+              <div class="field">
+                <label for="customer_phone">電話</label>
+                <input id="customer_phone" name="customer_phone" class="input" inputmode="tel" placeholder="請輸入電話" required />
+              </div>
+            </div>
+
+            <div class="inline-grid">
+              <div class="field">
+                <label for="vehicle_type">車型</label>
+                <select id="vehicle_type" name="vehicle_type" class="select">
+                  <option value="">請選擇</option>
+                  <option value="機車">機車</option>
+                  <option value="小型車">小型車</option>
+                  <option value="休旅車">休旅車</option>
+                  <option value="大型車">大型車</option>
+                  <option value="其他">其他</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="car_color">車色</label>
+                <input id="car_color" name="car_color" class="input" placeholder="例如：黑色、白色" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="vehicle_number">車牌</label>
+              <input id="vehicle_number" name="vehicle_number" class="input" placeholder="例如：ABC-1234" />
+            </div>
+
+            <div class="field">
+              <label for="note">備註</label>
+              <textarea id="note" name="note" class="textarea" placeholder="可填寫特殊需求、車況說明、想加問的項目"></textarea>
+            </div>
+          </div>
+
+          <div id="submitError" class="error hidden"></div>
+          <div id="submitSuccess" class="success-box hidden"></div>
+
+          <div class="actions">
+            <button type="button" class="btn btn-secondary" id="prevBtn">上一步</button>
+            <button type="button" class="btn btn-primary" id="nextBtn">下一步</button>
+          </div>
+        </form>
+      </div>
+    </section>
   </div>
 
   <script>
-    const token = new URLSearchParams(window.location.search).get("booking_token");
-    const statusEl = document.getElementById("status");
-    const resultEl = document.getElementById("result");
-    const submitBtn = document.getElementById("submitBtn");
+    const API = {
+      createBooking: '/api/create-booking',
+      validateToken: '/api/validate-booking-token',
+      availability: '/api/booking-availability'
+    };
 
-    if (!token) {
-      statusEl.textContent = "❌ 預約連結無效";
-    } else {
-      statusEl.textContent = "✅ 已取得 booking_token";
+    const DEFAULT_SERVICES = [
+      { id: 'basic_wash', name: '基礎洗車', desc: '外觀清潔、輪圈清潔、基礎擦拭整理。', price: '$600 起' },
+      { id: 'premium_wash', name: '精緻洗車', desc: '外觀細節處理、基礎內裝整理、完整清潔流程。', price: '$1200 起' },
+      { id: 'coating', name: '鍍膜施工', desc: '依車況評估，提供鍍膜與拋光前置處理。', price: '$4000 起' },
+      { id: 'interior', name: '內裝清潔', desc: '座椅、地墊、細節刷洗與基礎除味整理。', price: '$1000 起' }
+    ];
+
+    const DEFAULT_ADDONS = [
+      { id: 'glass_coating', name: '玻璃鍍膜' },
+      { id: 'oil_film', name: '除油膜' },
+      { id: 'wheel_coating', name: '輪框鍍膜' },
+      { id: 'odor_removal', name: '異味處理' },
+      { id: 'pet_hair', name: '寵物毛髮處理' },
+      { id: 'pickup', name: '到府牽車' }
+    ];
+
+    const DEFAULT_SLOTS = ['09:00', '10:30', '13:00', '14:30', '16:00', '18:30'];
+
+    const state = {
+      step: 1,
+      bookingToken: '',
+      tokenPayload: null,
+      services: [...DEFAULT_SERVICES],
+      addons: [...DEFAULT_ADDONS],
+      selectedService: null,
+      selectedAddons: [],
+      dates: [],
+      selectedDate: '',
+      slots: [],
+      selectedSlot: ''
+    };
+
+    const els = {
+      bootLoading: document.getElementById('bootLoading'),
+      bootError: document.getElementById('bootError'),
+      bootNotice: document.getElementById('bootNotice'),
+      bookingContent: document.getElementById('bookingContent'),
+      serviceGrid: document.getElementById('serviceGrid'),
+      addonGrid: document.getElementById('addonGrid'),
+      dateRow: document.getElementById('dateRow'),
+      slotsGrid: document.getElementById('slotsGrid'),
+      nextBtn: document.getElementById('nextBtn'),
+      prevBtn: document.getElementById('prevBtn'),
+      summaryBox: document.getElementById('summaryBox'),
+      submitError: document.getElementById('submitError'),
+      submitSuccess: document.getElementById('submitSuccess')
+    };
+
+    function qs(name) {
+      return new URLSearchParams(window.location.search).get(name) || '';
     }
 
-    submitBtn.addEventListener("click", async function () {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
+    function show(el) { el.classList.remove('hidden'); }
+    function hide(el) { el.classList.add('hidden'); }
+    function setText(el, text) { el.textContent = text; }
 
-      if (!token) {
-        resultEl.textContent = "請從 LINE 預約連結重新進入。";
+    function escapeHtml(str = '') {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function buildNextDates(days = 10) {
+      const list = [];
+      const today = new Date();
+      for (let i = 0; i < days; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+        const iso = d.toISOString().slice(0, 10);
+        const label = d.toLocaleDateString('zh-TW', {
+          month: 'numeric',
+          day: 'numeric',
+          weekday: 'short'
+        });
+        list.push({ date: iso, label });
+      }
+      return list;
+    }
+
+    function getServiceName() {
+      return state.services.find(item => item.id === state.selectedService)?.name || '未選擇';
+    }
+
+    function getAddonNames() {
+      return state.addons
+        .filter(item => state.selectedAddons.includes(item.id))
+        .map(item => item.name);
+    }
+
+    function renderProgress() {
+      document.querySelectorAll('[data-progress]').forEach((item) => {
+        const num = Number(item.dataset.progress);
+        item.classList.remove('active', 'done');
+        if (num < state.step) item.classList.add('done');
+        if (num === state.step) item.classList.add('active');
+      });
+
+      document.querySelectorAll('[data-step]').forEach((page) => {
+        page.classList.toggle('active', Number(page.dataset.step) === state.step);
+      });
+
+      els.prevBtn.style.visibility = state.step === 1 ? 'hidden' : 'visible';
+      els.nextBtn.textContent = state.step === 3 ? '送出預約' : '下一步';
+    }
+
+    function renderServices() {
+      els.serviceGrid.innerHTML = state.services.map((service) => {
+        const active = state.selectedService === service.id ? 'active' : '';
+        return `
+          <button type="button" class="service-card ${active}" data-service-id="${service.id}">
+            <h3>${escapeHtml(service.name)}</h3>
+            <p>${escapeHtml(service.desc || '')}</p>
+            <div class="price-tag">${escapeHtml(service.price || '')}</div>
+          </button>
+        `;
+      }).join('');
+
+      els.serviceGrid.querySelectorAll('[data-service-id]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.selectedService = btn.dataset.serviceId;
+          renderServices();
+          updateSummary();
+        });
+      });
+    }
+
+    function renderAddons() {
+      els.addonGrid.innerHTML = state.addons.map((addon) => {
+        const active = state.selectedAddons.includes(addon.id) ? 'active' : '';
+        return `<button type="button" class="addon-item ${active}" data-addon-id="${addon.id}">${escapeHtml(addon.name)}</button>`;
+      }).join('');
+
+      els.addonGrid.querySelectorAll('[data-addon-id]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.addonId;
+          if (state.selectedAddons.includes(id)) {
+            state.selectedAddons = state.selectedAddons.filter(item => item !== id);
+          } else {
+            state.selectedAddons.push(id);
+          }
+          renderAddons();
+          updateSummary();
+        });
+      });
+    }
+
+    function renderDates() {
+      els.dateRow.innerHTML = state.dates.map((item) => {
+        const active = state.selectedDate === item.date ? 'active' : '';
+        return `<button type="button" class="chip-btn ${active}" data-date="${item.date}">${escapeHtml(item.label)}</button>`;
+      }).join('');
+
+      els.dateRow.querySelectorAll('[data-date]').forEach((btn) => {
+        btn.addEventListener('click', () => loadAvailability(btn.dataset.date));
+      });
+    }
+
+    function renderSlots() {
+      if (!state.slots.length) {
+        els.slotsGrid.innerHTML = '<div class="notice" style="grid-column:1 / -1; margin:0;">這一天目前沒有可預約時段。</div>';
         return;
       }
 
-      if (!name) {
-        resultEl.textContent = "請輸入姓名";
+      els.slotsGrid.innerHTML = state.slots.map((slot) => {
+        const value = typeof slot === 'string' ? slot : slot.time;
+        const disabled = typeof slot === 'object' && slot.available === false;
+        const active = state.selectedSlot === value ? 'active' : '';
+        return `<button type="button" class="slot-btn ${active}" data-slot="${escapeHtml(value)}" ${disabled ? 'disabled' : ''}>${escapeHtml(value)}</button>`;
+      }).join('');
+
+      els.slotsGrid.querySelectorAll('[data-slot]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (btn.disabled) return;
+          state.selectedSlot = btn.dataset.slot;
+          renderSlots();
+          updateSummary();
+        });
+      });
+    }
+
+    function updateSummary() {
+      const addonNames = getAddonNames();
+      els.summaryBox.innerHTML = `
+        <h3>預約摘要</h3>
+        <div class="summary-row"><span>主要服務</span><span>${escapeHtml(getServiceName())}</span></div>
+        <div class="summary-row"><span>加購項目</span><span>${escapeHtml(addonNames.length ? addonNames.join('、') : '無')}</span></div>
+        <div class="summary-row"><span>預約日期</span><span>${escapeHtml(state.selectedDate || '未選擇')}</span></div>
+        <div class="summary-row"><span>預約時段</span><span>${escapeHtml(state.selectedSlot || '未選擇')}</span></div>
+      `;
+    }
+
+    function setFormError(message = '') {
+      if (!message) {
+        hide(els.submitError);
+        els.submitError.textContent = '';
         return;
       }
+      setText(els.submitError, message);
+      show(els.submitError);
+    }
 
-      if (!phone) {
-        resultEl.textContent = "請輸入電話";
+    function setFormSuccess(message = '') {
+      if (!message) {
+        hide(els.submitSuccess);
+        els.submitSuccess.textContent = '';
         return;
       }
+      setText(els.submitSuccess, message);
+      show(els.submitSuccess);
+    }
 
-      submitBtn.disabled = true;
-      resultEl.textContent = "送出中...";
+    function validateStep1() {
+      if (!state.selectedService) throw new Error('請先選擇一個主要服務。');
+    }
+
+    function validateStep2() {
+      if (!state.selectedDate) throw new Error('請先選擇預約日期。');
+      if (!state.selectedSlot) throw new Error('請先選擇預約時段。');
+    }
+
+    function validateStep3() {
+      const name = document.getElementById('customer_name').value.trim();
+      const phone = document.getElementById('customer_phone').value.trim();
+      if (!name) throw new Error('請輸入姓名。');
+      if (!phone) throw new Error('請輸入電話。');
+    }
+
+    async function loadAvailability(date) {
+      state.selectedDate = date;
+      state.selectedSlot = '';
+      renderDates();
+      els.slotsGrid.innerHTML = '<div class="loading-box" style="grid-column:1 / -1; margin:0;">正在載入時段...</div>';
 
       try {
-        const res = await fetch("/api/create-booking", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            booking_token: token,
-            customer_name: name,
-            customer_phone: phone
-          })
+        const res = await fetch(`${API.availability}?date=${encodeURIComponent(date)}&booking_token=${encodeURIComponent(state.bookingToken)}`);
+        if (!res.ok) throw new Error('availability api not ready');
+        const data = await res.json();
+        state.slots = Array.isArray(data.slots) && data.slots.length ? data.slots : [...DEFAULT_SLOTS];
+      } catch (err) {
+        state.slots = [...DEFAULT_SLOTS];
+      }
+
+      renderSlots();
+      updateSummary();
+    }
+
+    async function submitBooking() {
+      validateStep1();
+      validateStep2();
+      validateStep3();
+
+      const payload = {
+        booking_token: state.bookingToken,
+        customer_name: document.getElementById('customer_name').value.trim(),
+        customer_phone: document.getElementById('customer_phone').value.trim(),
+        vehicle_type: document.getElementById('vehicle_type').value,
+        car_color: document.getElementById('car_color').value.trim(),
+        vehicle_number: document.getElementById('vehicle_number').value.trim(),
+        service_id: state.selectedService,
+        service_name: getServiceName(),
+        addon_ids: state.selectedAddons,
+        addon_names: getAddonNames(),
+        booking_date: state.selectedDate,
+        booking_time: state.selectedSlot,
+        note: document.getElementById('note').value.trim(),
+        source: 'vercel-booking-page'
+      };
+
+      els.nextBtn.disabled = true;
+      els.prevBtn.disabled = true;
+      els.nextBtn.textContent = '送出中...';
+      setFormError('');
+      setFormSuccess('');
+
+      try {
+        const res = await fetch(API.createBooking, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
 
         const text = await res.text();
-
         let data;
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          data = { message: text || "伺服器沒有回傳 JSON" };
-        }
+        try { data = JSON.parse(text); }
+        catch { data = { message: text || '伺服器沒有回傳 JSON' }; }
 
         if (!res.ok) {
-          resultEl.textContent = "送出失敗：\\n" + (data.message || "未知錯誤");
+          throw new Error(data.message || '送出失敗，請稍後再試。');
+        }
+
+        setFormSuccess(data.message || '預約成功，請回到 LINE 查看通知。');
+        document.getElementById('bookingForm').reset();
+        state.step = 1;
+        state.selectedService = null;
+        state.selectedAddons = [];
+        state.selectedDate = '';
+        state.selectedSlot = '';
+        state.slots = [];
+        state.dates = buildNextDates(10);
+        renderProgress();
+        renderServices();
+        renderAddons();
+        renderDates();
+        els.slotsGrid.innerHTML = '';
+        updateSummary();
+      } catch (err) {
+        setFormError(err.message || '送出失敗，請稍後再試。');
+      } finally {
+        els.nextBtn.disabled = false;
+        els.prevBtn.disabled = false;
+        els.nextBtn.textContent = state.step === 3 ? '送出預約' : '下一步';
+      }
+    }
+
+    async function boot() {
+      state.bookingToken = qs('booking_token');
+      if (!state.bookingToken) {
+        hide(els.bootLoading);
+        setText(els.bootError, '預約連結無效，請從 LINE 的預約連結重新進入。');
+        show(els.bootError);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API.validateToken}?booking_token=${encodeURIComponent(state.bookingToken)}`);
+        if (!res.ok) throw new Error('validate api not ready');
+        const data = await res.json();
+        if (data.valid === false) throw new Error(data.message || '預約連結無效');
+
+        state.tokenPayload = data;
+        if (Array.isArray(data.services) && data.services.length) state.services = data.services;
+        if (Array.isArray(data.addons) && data.addons.length) state.addons = data.addons;
+        if (Array.isArray(data.available_dates) && data.available_dates.length) {
+          state.dates = data.available_dates.map(item => ({ date: item.date, label: item.label || item.date }));
+        } else {
+          state.dates = buildNextDates(10);
+        }
+        if (data.customer_name) document.getElementById('customer_name').value = data.customer_name;
+        if (data.customer_phone) document.getElementById('customer_phone').value = data.customer_phone;
+        if (data.notice) {
+          setText(els.bootNotice, data.notice);
+          show(els.bootNotice);
+        }
+      } catch (err) {
+        state.dates = buildNextDates(10);
+        setText(els.bootNotice, '目前尚未接上 token 驗證 API，頁面先以可測試模式開啟。正式上線時再接 /api/validate-booking-token 即可。');
+        show(els.bootNotice);
+      }
+
+      renderServices();
+      renderAddons();
+      renderDates();
+      renderProgress();
+      updateSummary();
+      hide(els.bootLoading);
+      show(els.bookingContent);
+    }
+
+    els.prevBtn.addEventListener('click', () => {
+      setFormError('');
+      setFormSuccess('');
+      if (state.step > 1) {
+        state.step -= 1;
+        renderProgress();
+      }
+    });
+
+    els.nextBtn.addEventListener('click', async () => {
+      try {
+        setFormError('');
+        setFormSuccess('');
+
+        if (state.step === 1) {
+          validateStep1();
+          state.step = 2;
+          renderProgress();
+          if (!state.selectedDate && state.dates[0]) {
+            await loadAvailability(state.dates[0].date);
+          }
           return;
         }
 
-        resultEl.textContent = "✅ 預約送出成功\\n" + (data.message || "");
-      } catch (error) {
-        resultEl.textContent = "送出失敗：\\n" + error.message;
-      } finally {
-        submitBtn.disabled = false;
+        if (state.step === 2) {
+          validateStep2();
+          state.step = 3;
+          renderProgress();
+          updateSummary();
+          return;
+        }
+
+        await submitBooking();
+      } catch (err) {
+        setFormError(err.message || '請檢查欄位內容。');
       }
     });
+
+    boot();
   </script>
 </body>
 </html>
