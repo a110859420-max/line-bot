@@ -716,6 +716,8 @@
           <div class="step-card glass">
             <div class="section-title">填寫資料</div>
             <div class="form-group"><label class="form-label">姓名 *</label><input class="form-input" id="name" type="text" placeholder="請輸入姓名" required></div>
+            <div class="form-group"><label for="vehicle_type">車型 *</label><input type="text"id="vehicle_type"name="vehicle_type"placeholder="例如：Altis、CX-5、Model 3" required></div>
+
             <div class="form-group"><label class="form-label">電話 *</label><input class="form-input" id="phone" type="tel" placeholder="請輸入電話" required></div>
             <div class="form-group"><label class="form-label">LINE ID *</label><input class="form-input" id="lineId" type="text" placeholder="請輸入 LINE ID" required></div>
 
@@ -1144,7 +1146,7 @@
       const lineId = document.getElementById('lineId').value.trim();
       const selectedServices = Array.from(document.querySelectorAll('.service-checkbox:checked')).map(cb => cb.value);
 
-      if (!name || !phone || !lineId) return showToast('❌ 請填寫所有欄位');
+      if (!name || !phone || !vehicleType) {alert('請完整填寫姓名、電話、車型');return;}
       if (!selectedDate) return showToast('❌ 請選擇日期');
       if (!selectedTime) return showToast('❌ 請選擇時段');
       if (!selectedServices.length) return showToast('❌ 請選擇服務');
@@ -1153,6 +1155,7 @@
         booking_token: bookingToken,
         customer_name: name,
         customer_phone: phone,
+        vehicle_type: vehicleType,
         customer_line: lineId,
         booking_date: selectedDate,
         booking_time: selectedTime,

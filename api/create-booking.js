@@ -112,6 +112,7 @@ export default async function handler(req, res) {
       booking_token,
       customer_name,
       customer_phone,
+      vehicle_type,
       booking_date,
       booking_time,
       status: "pending"
