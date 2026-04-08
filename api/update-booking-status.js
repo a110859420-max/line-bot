@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -6,43 +6,50 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method Not Allowed" });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
   try {
-    const { id, contact_status, service_status } = req.body || {};
+    const { id, type } = req.body;
 
-    if (!id) {
-      return res.status(400).json({ message: "缺少 id" });
+    if (!id || !type) {
+      return res.status(400).json({ message: '缺少參數' });
     }
 
-    const updateData = {};
-    if (contact_status) updateData.contact_status = contact_status;
-    if (service_status) updateData.service_status = service_status;
-
-    const { data, error } = await supabase
-      .from("bookings")
-      .update(updateData)
-      .eq("id", id)
-      .select()
+    // 先抓目前狀態
+    const { data: current, error: fetchError } = await supabase
+      .from('bookings')
+      .select('is_contacted, is_completed')
+      .eq('id', id)
       .single();
 
-    if (error) {
-      return res.status(500).json({
-        message: "更新狀態失敗",
-        error: error.message
-      });
+    if (fetchError) {
+      return res.status(500).json({ message: '讀取失敗' });
     }
 
-    return res.status(200).json({
-      message: "狀態更新成功",
-      booking: data
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "伺服器錯誤",
-      error: error.message
-    });
+    let updateData = {};
+
+    if (type === 'contacted') {
+      updateData.is_contacted = !current.is_contacted;
+    }
+
+    if (type === 'completed') {
+      updateData.is_completed = !current.is_completed;
+    }
+
+    const { error } = await supabase
+      .from('bookings')
+      .update(updateData)
+      .eq('id', id);
+
+    if (error) {
+      return res.status(500).json({ message: '更新失敗' });
+    }
+
+    return res.status(200).json({ success: true });
+
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
 }
