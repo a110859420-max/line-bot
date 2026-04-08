@@ -6,8 +6,7 @@
   <title>富星車美｜預約後台</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:#0b0b0b;
+       --bg:#0b0b0b;
       --panel:rgba(18,18,18,.9);
       --border:rgba(255,140,66,.28);
       --text:#f5f7ff;
@@ -78,7 +77,40 @@
       .actions{justify-content:flex-start}
       .toolbar{width:100%}
       .toolbar > *{flex:1 1 auto}
-    }
+    
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-btn {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ff8a2a, #ffb347);
+  color: #111;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.refresh-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: #1c1c20;
+  color: #fff;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
@@ -104,6 +136,7 @@
       </div>
       <div class="toolbar">
         <input id="filterDate" class="input" type="date">
+        <a href="/calendar.html" class="admin-btn">行事曆檢視</a>
         <button id="todayBtn" class="btn green" type="button">今天</button>
         <button id="refreshBtn" class="btn" type="button">重新整理</button>
         <button id="logoutBtn" class="btn danger" type="button">登出</button>
