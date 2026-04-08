@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>富星車美｜預約後台</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0b0b0b;
+      --panel:rgba(18,18,18,.9);
+      --border:rgba(255,140,66,.28);
+      --text:#f5f7ff;
+      --muted:#b9bfcb;
+      --orange:#ff8c42;
+      --orange2:#ff6b1a;
+      --red:#ff4a4a;
+      --green:#19c46b;
+      --radius:18px;
+      --shadow:0 16px 45px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(255,140,66,.16), transparent 18%),
+        linear-gradient(180deg, rgba(0,0,0,.56), rgba(0,0,0,.82)),
+        url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=80') center/cover fixed;
+      min-height:100vh;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:22px 16px 36px}
+    .glass{
+      background:linear-gradient(135deg, rgba(18,18,18,.88), rgba(10,10,10,.92));
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+    }
+    .header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;margin-bottom:18px}
+    .title{display:flex;align-items:center;gap:14px}
+    .title img{width:52px;height:52px;object-fit:contain;border-radius:12px;box-shadow:0 0 22px rgba(255,180,80,.22)}
+    h1{margin:0;font-family:'Orbitron','Noto Sans TC',sans-serif;font-size:clamp(1.2rem,2vw,1.7rem);background:linear-gradient(90deg,#ffd49d,#ff9d4d,#ff6b1a);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .sub{margin-top:4px;color:#ffd49d;font-size:.84rem;font-family:'Orbitron','Noto Sans TC',sans-serif}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .btn,.input,.select{border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--text);padding:11px 14px;font-size:.95rem}
+    .btn{cursor:pointer;font-family:'Orbitron','Noto Sans TC',sans-serif;font-weight:700}
+    .btn.primary{background:linear-gradient(135deg,var(--orange),var(--orange2));border:none}
+    .btn.danger{background:rgba(255,74,74,.14);border-color:rgba(255,74,74,.4);color:#ff9c9c}
+    .btn.green{background:rgba(25,196,107,.14);border-color:rgba(25,196,107,.35);color:#97f1c0}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+    .stat{padding:18px}
+    .stat .label{color:var(--muted);font-size:.84rem;margin-bottom:8px}
+    .stat .value{font-family:'Orbitron','Noto Sans TC',sans-serif;font-size:1.5rem;font-weight:800;color:#fff}
+    .panel{padding:18px}
+    .panel h2{margin:0 0 14px;font-size:1.05rem;color:#ffc482;font-family:'Orbitron','Noto Sans TC',sans-serif}
+    .list{display:grid;gap:12px}
+    .item{padding:16px;border-radius:16px;border:1px solid rgba(255,140,66,.18);background:rgba(255,255,255,.03);display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
+    .meta{display:grid;gap:6px}
+    .name{font-size:1.02rem;font-weight:800;color:#fff}
+    .line{color:var(--muted);font-size:.93rem;line-height:1.7}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:rgba(255,140,66,.14);border:1px solid rgba(255,140,66,.28);color:#ffcb96;font-size:.78rem;font-weight:700;margin-right:8px}
+    .actions{display:flex;gap:10px;align-items:center}
+    .empty{padding:28px;text-align:center;color:var(--muted)}
+    .login-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:18px;z-index:999}
+    .login-card{width:100%;max-width:420px;padding:24px}
+    .login-card h3{margin:0 0 12px;font-family:'Orbitron','Noto Sans TC',sans-serif;color:#ffc482}
+    .login-card p{margin:0 0 16px;color:var(--muted);line-height:1.7}
+    .login-actions{display:flex;gap:10px;margin-top:12px}
+    .hidden{display:none!important}
+    .toast{position:fixed;right:18px;bottom:18px;z-index:1200;padding:14px 18px;border-radius:12px;background:var(--orange);color:white;font-family:'Orbitron','Noto Sans TC',sans-serif;font-size:.84rem;font-weight:800;box-shadow:var(--shadow)}
+    @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:720px){
+      .header{flex-direction:column;align-items:flex-start}
+      .grid{grid-template-columns:1fr}
+      .item{grid-template-columns:1fr}
+      .actions{justify-content:flex-start}
+      .toolbar{width:100%}
+      .toolbar > *{flex:1 1 auto}
+    }
+  </style>
+</head>
+<body>
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card glass">
+      <h3>富星車美｜後台登入</h3>
+      <p>這個頁面只有你自己使用，不會出現在前台。輸入密碼後即可查看預約資料。</p>
+      <input id="passwordInput" class="input" type="password" placeholder="請輸入後台密碼" style="width:100%">
+      <div class="login-actions">
+        <button id="loginBtn" class="btn primary" type="button">登入</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="header glass">
+      <div class="title">
+        <img src="/logo.png" alt="logo" onerror="this.style.display='none'">
+        <div>
+          <h1>富星車美｜預約後台</h1>
+          <div class="sub">PRIVATE BOOKING ADMIN</div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <input id="filterDate" class="input" type="date">
+        <button id="todayBtn" class="btn green" type="button">今天</button>
+        <button id="refreshBtn" class="btn" type="button">重新整理</button>
+        <button id="logoutBtn" class="btn danger" type="button">登出</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="stat glass"><div class="label">全部預約</div><div id="statTotal" class="value">0</div></div>
+      <div class="stat glass"><div class="label">今天預約</div><div id="statToday" class="value">0</div></div>
+      <div class="stat glass"><div class="label">上午</div><div id="statMorning" class="value">0</div></div>
+      <div class="stat glass"><div class="label">下午／傍晚</div><div id="statLater" class="value">0</div></div>
+    </div>
+
+    <div class="panel glass">
+      <h2>預約列表</h2>
+      <div id="bookingList" class="list"></div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_PASSWORD = 'qaz9958770';
+    let bookings = [];
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2800);
+    }
+
+    function timeLabel(time) {
+      if (time === '10:00') return '上午';
+      if (time === '14:00') return '下午';
+      if (time === '18:00') return '傍晚';
+      return time || '未填寫';
+    }
+
+    function todayString() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function renderStats(list) {
+      const today = todayString();
+      const todayBookings = list.filter(b => b.booking_date === today);
+      const morning = todayBookings.filter(b => b.booking_time === '10:00').length;
+      const later = todayBookings.filter(b => b.booking_time === '14:00' || b.booking_time === '18:00').length;
+      document.getElementById('statTotal').textContent = list.length;
+      document.getElementById('statToday').textContent = todayBookings.length;
+      document.getElementById('statMorning').textContent = morning;
+      document.getElementById('statLater').textContent = later;
+    }
+
+    function renderBookings(list) {
+      const el = document.getElementById('bookingList');
+      if (!list.length) {
+        el.innerHTML = '<div class="empty">目前沒有符合條件的預約資料</div>';
+        return;
+      }
+
+      el.innerHTML = list.map(item => `
+        <div class="item">
+          <div class="meta">
+            <div class="name">${item.customer_name || '未填寫姓名'}</div>
+            <div>
+              <span class="badge">📅 ${item.booking_date || '未填寫'}</span>
+              <span class="badge">⏰ ${timeLabel(item.booking_time)}</span>
+            </div>
+            <div class="line">📞 ${item.customer_phone || '未填寫'}　／　LINE：${item.customer_line || '未填寫'}</div>
+            <div class="line">🧽 ${item.service_name || item.service_items || '未填寫服務'}</div>
+            <div class="line">📝 ${item.note || '無備註'}</div>
+          </div>
+          <div class="actions">
+  <button class="btn green" onclick="markContacted(${item.id})">已聯絡</button>
+  <button class="btn primary" onclick="markCompleted(${item.id})">已完成</button>
+  <button class="btn danger" onclick="deleteBooking(${item.id})">刪除</button>
+</div>>
+        </div>
+      `).join('');
+    }
+
+    async function fetchBookings(date = '') {
+      let url = '/api/admin-bookings';
+      if (date) url += `?date=${encodeURIComponent(date)}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || '讀取失敗');
+      bookings = Array.isArray(data.bookings) ? data.bookings : [];
+      renderStats(bookings);
+      renderBookings(bookings);
+    }
+
+    async function deleteBooking(id) {
+      if (!confirm('確定要刪除這筆預約嗎？')) return;
+      const res = await fetch('/api/delete-booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const data = await res.json();
+      if (!res.ok) return showToast(`❌ ${data.message || '刪除失敗'}`);
+      showToast('✅ 已刪除');
+      const date = document.getElementById('filterDate').value;
+      fetchBookings(date).catch(err => showToast(`❌ ${err.message}`));
+    }
+    window.deleteBooking = deleteBooking;
+
+    function unlock() {
+      sessionStorage.setItem('fuxing_admin_ok', '1');
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('filterDate').value = todayString();
+      fetchBookings(todayString()).catch(err => showToast(`❌ ${err.message}`));
+    }
+
+    function login() {
+      const value = document.getElementById('passwordInput').value;
+      if (value !== ADMIN_PASSWORD) return showToast('❌ 密碼錯誤');
+      unlock();
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', login);
+    document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') login();
+    });
+
+    document.getElementById('todayBtn').addEventListener('click', () => {
+      const t = todayString();
+      document.getElementById('filterDate').value = t;
+      fetchBookings(t).catch(err => showToast(`❌ ${err.message}`));
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      const date = document.getElementById('filterDate').value;
+      fetchBookings(date).catch(err => showToast(`❌ ${err.message}`));
+    });
+
+    document.getElementById('filterDate').addEventListener('change', (e) => {
+      fetchBookings(e.target.value).catch(err => showToast(`❌ ${err.message}`));
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('fuxing_admin_ok');
+      location.reload();
+    });
+
+    if (sessionStorage.getItem('fuxing_admin_ok') === '1') {
+      unlock();
+    }
+  </script>
+.btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+.green {
+  background: #22c55e;
+  color: white;
+}
+
+.primary {
+  background: #ff7a00;
+  color: white;
+}
+
+.danger {
+  background: #ff4d4f;
+  color: white;
+}
+</body>
+</html>

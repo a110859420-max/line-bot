@@ -1,980 +1,750 @@
 <!doctype html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:title" content="富星車美線上預約系統">
-  <meta property="og:description" content="代客洗車 行動洗車 - 專業車美服務線上預約">
-  <meta property="og:type" content="website">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>富星車美線上預約系統</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --bg-1: #080808;
+      --bg-2: #121212;
+      --panel: rgba(14, 14, 14, 0.78);
+      --panel-2: rgba(22, 22, 22, 0.85);
+      --border: rgba(255, 140, 66, 0.28);
+      --border-strong: rgba(255, 140, 66, 0.48);
+      --text: #eef2ff;
+      --muted: #b8bcc7;
+      --orange: #ff8c42;
+      --orange-2: #ff6b1a;
+      --gold: #ffcf7a;
+      --red: #ff2f2f;
+      --green: #00c853;
+      --shadow: 0 18px 45px rgba(0,0,0,.36);
+      --radius: 18px;
     }
 
-    html, body {
-      height: 100%;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-      color: #e0e7ff;
-      font-weight: 400;
-      letter-spacing: 0.2px;
-    }
-
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
     body {
+      margin: 0;
+      color: var(--text);
       font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+      background:
+        radial-gradient(circle at 18% 16%, rgba(255,140,66,.16), transparent 20%),
+        radial-gradient(circle at 82% 10%, rgba(255,90,20,.10), transparent 18%),
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.78)),
+        url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=80') center/cover fixed;
+      letter-spacing: .2px;
     }
 
     .app-wrapper {
-      width: 100%;
-      min-height: 100%;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      backdrop-filter: blur(1.5px);
     }
 
     .header {
-      background: linear-gradient(135deg, rgba(10, 10, 10, 0.8), rgba(26, 26, 26, 0.8));
-      padding: 20px;
-      border-bottom: 2px solid rgba(255, 140, 66, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 50;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(8,8,8,.84), rgba(18,18,18,.88));
+      backdrop-filter: blur(12px);
+      box-shadow: 0 6px 24px rgba(0,0,0,.25);
+      transition: transform .3s ease, box-shadow .3s ease, background .3s ease;
     }
 
-    .header h1 {
-      font-size: 22px;
-      background: linear-gradient(90deg, #ffaa66 0%, #ff6b1a 20%, #ff8c42 40%, #ffaa66 60%, #ff6b1a 80%, #ff8c42 100%);
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      position: relative;
+    .brand {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 14px;
+      background: rgba(0,0,0,.22);
+      box-shadow: 0 0 18px rgba(255, 180, 80, .22), 0 0 36px rgba(255, 140, 66, .14);
+      flex: 0 0 auto;
+      animation: logoGlow 3.2s ease-in-out infinite;
+      transition: transform .28s ease, box-shadow .28s ease;
+    }
+
+    .brand h1 {
+      margin: 0;
       font-family: 'Playfair Display', 'Noto Sans TC', serif;
-      animation: colorFlow 3s ease-in-out infinite;
-    }
-
-    @keyframes colorFlow {
-      0% { background-position: 200% center; }
-      50% { background-position: 0% center; }
-      100% { background-position: 200% center; }
-    }
-
-    .header-subtitle {
-      font-size: 12px;
-      background: linear-gradient(90deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
-      background-size: 200% 100%;
+      font-size: clamp(1.45rem, 2.3vw, 2.35rem);
+      line-height: 1.1;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ffd49d 0%, #ff9d4d 30%, #ff6b1a 58%, #ffb35c 100%);
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       background-clip: text;
-      font-weight: 500;
-      letter-spacing: 0.3px;
+      color: transparent;
       white-space: nowrap;
-      flex-shrink: 0;
+      animation: titleFadeUp .9s ease both;
+    }
+
+    .brand-subtitle {
+      margin-top: 4px;
       font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-      animation: colorFlow 3s ease-in-out infinite;
+      font-size: clamp(.72rem, 1vw, .95rem);
+      color: #ffdca9;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      opacity: .96;
     }
 
-    @media (max-width: 767px) {
-      .header-subtitle {
-        max-width: 110px;
-        overflow: hidden;
-        text-overflow: clip;
-        white-space: nowrap;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .header h1 {
-        font-size: 40px;
-        letter-spacing: 2px;
-        gap: 8px;
-        flex-direction: row;
-        align-items: center;
-      }
-
-      .header-subtitle {
-        font-size: 18px;
-        white-space: normal;
-      }
-    }
-
-    .header-buttons {
+    .header-actions {
       display: flex;
+      align-items: center;
       gap: 10px;
+      flex: 0 0 auto;
     }
 
     .header-btn {
-      background: rgba(245, 245, 240, 0.1);
-      border: 2px solid #f5f5f0;
-      color: #f5f5f0;
-      padding: 8px 12px;
-      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.05);
+      color: #fff7ef;
+      padding: 10px 14px;
+      border-radius: 12px;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 13px;
-      transition: all 0.3s ease;
-      white-space: nowrap;
       font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-    }
-
-    @media (min-width: 768px) {
-      .header-btn {
-        padding: 10px 18px;
-        font-size: 15px;
-      }
+      font-size: .82rem;
+      font-weight: 700;
+      transition: .22s ease;
     }
 
     .header-btn:hover {
-      background: #f5f5f0;
-      color: #0a0a0a;
+      transform: translateY(-1px);
+      border-color: var(--border-strong);
+      color: #fff;
     }
 
     .content {
       flex: 1;
-      overflow-y: auto;
-      padding: 30px 20px;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      padding: 22px 16px 34px;
     }
 
     .container {
-      max-width: 900px;
+      width: 100%;
+      max-width: 980px;
       margin: 0 auto;
     }
 
+    .glass {
+      background: linear-gradient(135deg, rgba(20,20,20,.76), rgba(12,12,12,.88));
+      border: 1px solid rgba(255,140,66,.18);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
     .service-philosophy {
-      background: linear-gradient(135deg, rgba(255, 140, 66, 0.15) 0%, rgba(236, 72, 153, 0.08) 100%);
-      border: 2px solid rgba(255, 140, 66, 0.4);
-      border-radius: 16px;
-      padding: 40px 32px;
-      margin-bottom: 50px;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 36px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 12px 40px rgba(255, 140, 66, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
-    
-    @media (min-width: 768px) {
-      .service-philosophy {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 28px;
-        max-width: 100%;
-        padding: 48px 40px;
-      }
+      gap: 18px;
+      padding: 26px 22px;
+      border-radius: 22px;
+      margin-bottom: 26px;
+      animation: sectionFadeUp .9s ease both;
     }
 
     .philosophy-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
       text-align: center;
+      gap: 10px;
+      padding: 10px 6px;
     }
 
     .philosophy-icon {
-      font-size: 32px;
-      line-height: 1;
-      filter: drop-shadow(0 4px 8px rgba(255, 140, 66, 0.15));
-      animation: bobbing 3s ease-in-out infinite;
-    }
-
-    @keyframes bobbing {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
+      font-size: 2rem;
+      filter: drop-shadow(0 6px 14px rgba(255,140,66,.18));
     }
 
     .philosophy-text {
-      font-size: 12px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffaa66 0%, #ff8c42 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 0.5px;
       font-family: 'Playfair Display', 'Noto Sans TC', serif;
-    }
-
-    .philosophy-desc {
-      display: none;
-    }
-
-    @media (max-width: 767px) {
-      .service-philosophy {
-        gap: 28px;
-        padding: 32px 24px;
-      }
-
-      .philosophy-icon {
-        font-size: 56px;
-      }
-
-      .philosophy-text {
-        font-size: 13px;
-      }
+      font-size: .98rem;
+      font-weight: 800;
+      color: #ffd49d;
     }
 
     .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 24px;
-      background: linear-gradient(135deg, #ffffff 0%, #ffaa66 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
       display: flex;
       align-items: center;
       gap: 12px;
-      letter-spacing: 0.5px;
+      margin: 0 0 18px;
       font-family: 'Playfair Display', 'Noto Sans TC', serif;
-    }
-    
-    @media (min-width: 768px) {
-      .section-title {
-        font-size: 22px;
-      }
+      font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, #ffbf83 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     .section-title::before {
       content: '';
-      width: 3px;
+      width: 4px;
       height: 26px;
-      background: #ff1a1a;
-      border-radius: 2px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, var(--red), var(--orange));
     }
 
-    .step-section {
-      display: none;
-    }
+    .step-section { display: none; }
+    .step-section.active { display: block; }
 
-    .step-section.active {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .step-card {
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 22px;
     }
 
     .date-selector-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      padding: 0 10px;
+      gap: 14px;
+      margin-bottom: 14px;
+      padding: 0 4px;
     }
 
     .date-selector-header h3 {
-      font-size: 18px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #ffaa66 0%, #ff8c42 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 0.5px;
+      margin: 0;
       font-family: 'Playfair Display', 'Noto Sans TC', serif;
+      font-size: 1.15rem;
+      color: #ffc482;
     }
 
-    .date-nav {
-      display: flex;
-      gap: 10px;
-    }
-
+    .date-nav { display: flex; gap: 10px; }
     .date-nav button {
-      background: rgba(255, 140, 66, 0.2);
-      border: 2px solid #ff8c42;
-      color: #ff8c42;
-      width: 36px;
-      height: 36px;
-      border-radius: 6px;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: rgba(255,140,66,.12);
+      color: var(--orange);
       cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-
-    .date-nav button:hover {
-      background: #ff8c42;
-      color: white;
+      font-weight: 900;
     }
 
     .date-list {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-bottom: 30px;
+      margin-bottom: 26px;
     }
 
     .date-card {
-      background: linear-gradient(135deg, rgba(26, 26, 26, 0.6), rgba(15, 15, 15, 0.5));
+      padding: 14px 16px;
+      border-radius: 16px;
       border: 2px solid #333;
-      border-radius: 12px;
-      padding: 12px 14px;
-      transition: all 0.3s ease;
+      background: linear-gradient(135deg, rgba(26,26,26,.72), rgba(15,15,15,.64));
       cursor: pointer;
+      transition: .2s ease;
     }
 
     .date-card:hover:not(.disabled) {
-      border-color: #ff8c42;
-      background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 107, 26, 0.05));
+      border-color: var(--orange);
       transform: translateX(4px);
+      background: linear-gradient(135deg, rgba(255,140,66,.14), rgba(255,107,26,.07));
     }
 
     .date-card.selected {
-      background: linear-gradient(135deg, #ff8c42, #ff6b1a);
-      border-color: #ff6b1a;
-      box-shadow: 0 0 16px rgba(255, 140, 66, 0.6);
-    }
-
-    .date-card.selected .date-card-title,
-    .date-card.selected .date-card-slots {
-      color: white;
+      background: linear-gradient(135deg, var(--orange), var(--orange-2));
+      border-color: var(--orange-2);
+      box-shadow: 0 0 18px rgba(255,140,66,.35);
     }
 
     .date-card.disabled {
-      opacity: 0.4;
+      opacity: .42;
       cursor: not-allowed;
     }
 
-    .date-card.disabled:hover {
-      border-color: #333;
-      background: linear-gradient(135deg, rgba(26, 26, 26, 0.6), rgba(15, 15, 15, 0.5));
-      transform: none;
-    }
-
     .date-card-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #ffaa66;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
+      margin-bottom: 8px;
+      font-weight: 800;
+      font-size: .95rem;
+      color: #ffc17f;
     }
 
-    .date-card-title.today::before {
-      content: '📍';
-    }
+    .date-card.selected .date-card-title,
+    .date-card.selected .date-card-slots { color: white; }
 
     .date-card-slots {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
-      color: #ccc;
-      font-size: 12px;
-      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
+      color: var(--muted);
+      font-size: .78rem;
     }
 
     .time-slot-badge {
-      background: rgba(100, 200, 255, 0.2);
+      padding: 4px 8px;
+      border-radius: 999px;
       border: 1px solid #66ccff;
-      color: #66ccff;
-      padding: 3px 6px;
-      border-radius: 4px;
-      font-weight: 600;
-      font-size: 11px;
+      background: rgba(100,200,255,.15);
+      color: #7fdcff;
+      font-weight: 700;
     }
 
     .time-slot-badge.booked {
-      background: rgba(255, 68, 68, 0.2);
-      border-color: #ff4444;
-      color: #ff4444;
+      border-color: #ff5454;
+      background: rgba(255,84,84,.15);
+      color: #ff8080;
       text-decoration: line-through;
     }
 
     .time-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: 14px;
+      margin-bottom: 18px;
     }
 
     .time-btn {
-      padding: 28px 16px;
+      padding: 22px 14px;
+      border-radius: 14px;
       border: 2px solid #333;
-      background: rgba(15, 15, 15, 0.6);
-      color: #e0e7ff;
-      border-radius: 10px;
+      background: rgba(15,15,15,.68);
+      color: var(--text);
       cursor: pointer;
-      font-size: 20px;
-      font-weight: 700;
-      transition: all 0.3s ease;
-      text-align: center;
       font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-    }
-    
-    @media (min-width: 768px) {
-      .time-btn {
-        font-size: 18px;
-      }
+      font-size: 1rem;
+      font-weight: 800;
+      transition: .22s ease;
     }
 
     .time-btn:hover:not(:disabled) {
-      border-color: #ff1a1a;
-      background: rgba(255, 26, 26, 0.1);
+      border-color: var(--red);
+      background: rgba(255,26,26,.08);
       transform: translateY(-2px);
     }
 
     .time-btn.selected {
-      background: #ff7722;
-      color: white;
+      background: linear-gradient(135deg, #ff8c42, #ff6b1a);
       border-color: #ff7722;
-      box-shadow: 0 8px 24px rgba(255, 119, 34, 0.4);
+      box-shadow: 0 10px 28px rgba(255,119,34,.32);
+      color: white;
     }
 
     .time-btn:disabled {
-      opacity: 0.3;
+      opacity: .3;
       cursor: not-allowed;
       text-decoration: line-through;
     }
 
-    .full-day-msg {
-      margin-top: 10px;
-      color: #ff7d7d;
-      font-weight: 700;
+    .info-box {
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,140,66,.26);
+      background: linear-gradient(135deg, rgba(255,140,66,.10), rgba(236,72,153,.07));
+      color: #ddd;
       text-align: center;
-      font-family: 'Noto Sans TC', sans-serif;
+      margin-bottom: 22px;
     }
 
-    .form-group {
-      margin-bottom: 12px;
+    .full-day-msg {
+      margin-bottom: 14px;
+      color: #ff8d8d;
+      font-weight: 800;
+      text-align: center;
     }
+
+    .form-group { margin-bottom: 12px; }
 
     .form-label {
       display: block;
       margin-bottom: 6px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #ffffff;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
+      color: white;
       font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-transform: uppercase;
     }
 
     .form-input {
       width: 100%;
       padding: 12px 14px;
+      border-radius: 12px;
       border: 2px solid #333;
-      background: rgba(15, 15, 15, 0.6);
-      color: #e0e7ff;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: all 0.3s ease;
+      background: rgba(15,15,15,.68);
+      color: var(--text);
+      font-size: .95rem;
       font-family: 'Noto Sans TC', 'Poppins', sans-serif;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-    }
-    
-    @media (min-width: 768px) {
-      .form-input {
-        font-size: 13px;
-      }
+      transition: .2s ease;
     }
 
     .form-input:focus {
       outline: none;
-      border-color: #ff1a1a;
-      background: rgba(255, 26, 26, 0.05);
-      box-shadow: 0 0 16px rgba(255, 26, 26, 0.15);
+      border-color: var(--red);
+      box-shadow: 0 0 16px rgba(255,26,26,.14);
     }
 
     .service-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
-    .service-checkbox {
-      display: none;
-    }
+    .service-checkbox { display: none; }
 
     .service-label {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px 12px;
-      border: 2px solid #333;
-      background: rgba(15, 15, 15, 0.6);
-      color: #e0e7ff;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 600;
-      text-align: center;
-      transition: all 0.3s ease;
-      width: 100%;
       gap: 6px;
+      width: 100%;
+      min-height: 70px;
+      padding: 15px 12px;
+      border-radius: 12px;
+      border: 2px solid #333;
+      background: rgba(15,15,15,.68);
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
       font-family: 'Noto Sans TC', 'Poppins', sans-serif;
-      min-height: 68px;
-      overflow: hidden;
-    }
-    
-    @media (min-width: 768px) {
-      .service-label {
-        font-size: 13px;
-        padding: 14px 12px;
-        gap: 6px;
-        min-height: 60px;
-      }
-    }
-
-    .service-label-text {
-      flex: 1;
-      line-height: 1.15;
-      word-break: break-word;
-      font-size: 0.95em;
-      max-height: 2.4em;
-      overflow: hidden;
-    }
-
-    .service-label-detail {
-      color: #999;
-      font-size: 0.9em;
-      font-weight: 400;
-      line-height: 1.2;
-      max-height: 1.2em;
-      overflow: hidden;
-    }
-
-    .service-label-price {
-      color: #ff8c42;
-      font-weight: 700;
-      white-space: nowrap;
-      font-size: 13px;
-      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-    }
-
-    .price-estimate {
-      color: #888;
-      font-size: 9px;
-      margin-top: 2px;
-      line-height: 1.2;
-      font-weight: 500;
-      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
+      transition: .22s ease;
     }
 
     .service-label:hover:not(.disabled) {
-      border-color: #ff1a1a;
-      background: rgba(255, 26, 26, 0.1);
+      border-color: var(--red);
+      background: rgba(255,26,26,.08);
     }
 
     .service-checkbox:checked + .service-label {
       background: #ff1a1a;
       color: white;
       border-color: #ff1a1a;
-      box-shadow: 0 8px 24px rgba(255, 26, 26, 0.3);
-    }
-
-    .service-checkbox:checked + .service-label .service-label-price {
-      color: white;
-    }
-
-    .service-checkbox:checked + .service-label .service-label-detail {
-      color: #ddd;
-    }
-
-    .service-label.disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
+      box-shadow: 0 8px 24px rgba(255,26,26,.22);
     }
 
     .service-label.grayed-out {
-      opacity: 0.35;
+      opacity: .35;
       cursor: not-allowed;
-      background: rgba(15, 15, 15, 0.3) !important;
+      background: rgba(15,15,15,.3) !important;
       border-color: #444 !important;
       color: #666 !important;
     }
 
-    .service-label.grayed-out .service-label-price {
-      color: #555 !important;
+    .service-label-text { font-weight: 700; line-height: 1.2; }
+    .service-label-detail { color: #999; font-size: .85em; }
+    .service-label-price {
+      color: #ff8c42;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
+      font-size: .84rem;
+      font-weight: 800;
     }
 
     .button-group {
       display: flex;
       gap: 12px;
-      margin-top: 30px;
-      margin-bottom: 30px;
+      margin-top: 24px;
+      margin-bottom: 10px;
     }
 
     #step1 .button-group {
-      position: fixed;
+      position: sticky;
       bottom: 0;
-      left: 0;
-      right: 0;
       margin: 0;
-      padding: 16px 20px;
-      background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, rgba(10, 10, 10, 0.95) 60%, rgba(10, 10, 10, 1) 100%);
-      max-width: 100%;
-      z-index: 100;
-    }
-
-    #step1 .date-list {
-      margin-bottom: 90px;
+      padding-top: 14px;
+      background: linear-gradient(180deg, rgba(10,10,10,0), rgba(10,10,10,.90) 55%, rgba(10,10,10,1) 100%);
     }
 
     .btn {
-      padding: 14px 28px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
       flex: 1;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
       font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-    }
-    
-    @media (min-width: 768px) {
-      .btn {
-        font-size: 14px;
-      }
+      font-size: .92rem;
+      font-weight: 700;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+      transition: .22s ease;
     }
 
     .btn-primary {
-      background: #ff1a1a;
+      background: linear-gradient(135deg, #ff2f2f, #ff6b1a);
       color: white;
-      box-shadow: 0 4px 16px rgba(255, 26, 26, 0.3);
+      box-shadow: 0 8px 20px rgba(255, 47, 47, .22);
     }
 
-    .btn-primary:hover:not(:disabled) {
-      box-shadow: 0 8px 24px rgba(255, 26, 26, 0.4);
-      transform: translateY(-2px);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
 
     .btn-secondary {
-      background: rgba(0, 0, 0, 0.3);
-      color: #ffffff;
+      background: rgba(0,0,0,.25);
+      color: white;
       border: 2px solid #555;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 26, 26, 0.1);
-      border-color: #ff1a1a;
-      color: #ff1a1a;
     }
 
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(4px);
+      inset: 0;
       z-index: 1000;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.8);
+      backdrop-filter: blur(5px);
     }
 
-    .modal-overlay.active {
-      display: flex;
+    .modal-overlay.active { display: flex; }
+
+    .modal, .line-modal {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.38);
     }
 
     .modal {
-      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%);
-      border: 2px solid #ff8c42;
-      border-radius: 12px;
-      padding: 20px;
-      max-width: 600px;
-      width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(255, 140, 66, 0.2);
+      padding: 24px;
+      border: 2px solid var(--orange);
+      background: linear-gradient(135deg, rgba(10,10,10,.97), rgba(26,26,26,.97));
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid rgba(255, 140, 66, 0.2);
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid rgba(255,140,66,.18);
     }
 
     .modal-header h2 {
-      font-size: 18px;
-      font-weight: 700;
-      color: #ff8c42;
-      letter-spacing: 0.5px;
+      margin: 0;
+      color: var(--orange);
       font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
+      font-size: 1.05rem;
     }
 
     .modal-close {
       background: none;
       border: none;
-      color: #ff8c42;
-      font-size: 24px;
+      color: var(--orange);
+      font-size: 1.6rem;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
 
-    .modal-close:hover {
-      transform: rotate(90deg);
+    .line-modal {
+      max-width: 520px;
+      padding: 34px 26px;
+      text-align: center;
+      border: 2px solid rgba(0, 200, 83, .65);
+      background: linear-gradient(135deg, rgba(10,10,10,.98), rgba(22,22,22,.98));
+    }
+
+    .line-modal-header {
+      margin-bottom: 14px;
+      color: #00c853;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .line-info-text {
+      margin-bottom: 20px;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,170,102,.35);
+      background: linear-gradient(135deg, rgba(255,170,102,.12), rgba(255,170,102,.05));
+      color: #ffcc96;
+      line-height: 1.85;
+      font-weight: 600;
+    }
+
+    .line-button-group { display: flex; gap: 12px; flex-direction: column; }
+    .line-btn {
+      padding: 14px 22px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
+      font-size: .86rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .line-btn-primary {
+      background: linear-gradient(135deg, #00b900, #00d46d);
+      color: white;
     }
 
     .toast {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      right: 18px;
+      bottom: 18px;
+      z-index: 1400;
+      max-width: min(88vw, 420px);
+      padding: 14px 18px;
+      border-radius: 12px;
       background: #ff8c42;
       color: white;
-      padding: 16px 24px;
-      border-radius: 10px;
-      font-weight: 700;
-      z-index: 2000;
-      animation: slideIn 0.3s ease;
       font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-      letter-spacing: 0.3px;
-      max-width: min(88vw, 420px);
+      font-size: .84rem;
+      font-weight: 800;
+      box-shadow: 0 12px 30px rgba(0,0,0,.28);
+      animation: slideIn .24s ease;
     }
 
     @keyframes slideIn {
+      from { transform: translateX(120px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes logoGlow {
+      0%, 100% {
+        box-shadow: 0 0 18px rgba(255, 180, 80, .22), 0 0 36px rgba(255, 140, 66, .14);
+        transform: translateY(0);
+      }
+      50% {
+        box-shadow: 0 0 26px rgba(255, 200, 120, .42), 0 0 54px rgba(255, 140, 66, .24);
+        transform: translateY(-1px);
+      }
+    }
+
+    @keyframes titleFadeUp {
       from {
-        transform: translateX(400px);
         opacity: 0;
+        transform: translateY(10px);
       }
       to {
-        transform: translateX(0);
         opacity: 1;
+        transform: translateY(0);
       }
     }
 
-    .info-box {
-      text-align: center;
-      padding: 30px;
-      background: linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(236, 72, 153, 0.1));
-      border: 2px solid rgba(255, 140, 66, 0.3);
-      border-radius: 12px;
-      margin-bottom: 30px;
+    @keyframes sectionFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-
-    .info-box h3 {
-      color: #ffaa66;
-      font-weight: 800;
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
-
-    .line-modal {
-      background: linear-gradient(135deg, rgba(10, 10, 10, 0.98) 0%, rgba(26, 26, 26, 0.98) 100%);
-      border: 3px solid #00b900;
-      border-radius: 16px;
-      padding: 40px 30px;
-      max-width: 520px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0, 185, 0, 0.3);
-    }
-
-    .line-modal-header {
-      color: #00b900;
-      font-size: 28px;
-      font-weight: 900;
-      margin-bottom: 12px;
-      letter-spacing: 1.5px;
-      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-    }
-
-    .line-info-text {
-      background: linear-gradient(135deg, rgba(255, 170, 102, 0.12), rgba(255, 170, 102, 0.05));
-      border: 2px solid rgba(255, 170, 102, 0.35);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 26px;
-      color: #ffaa66;
-      font-size: 14px;
-      line-height: 1.9;
-      text-align: center;
-      font-weight: 600;
-      font-family: 'Noto Sans TC', 'Poppins', sans-serif;
-      letter-spacing: 0.3px;
-    }
-
-    .line-button-group {
-      display: flex;
-      gap: 12px;
-      flex-direction: column;
-    }
-
-    .line-btn {
-      padding: 14px 24px;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-    }
-
-    .line-btn-primary {
-      background: linear-gradient(135deg, #00b900 0%, #00d400 100%);
-      color: white;
-      box-shadow: 0 4px 16px rgba(0, 185, 0, 0.3);
-    }
-
-    .line-btn-primary:hover {
-      box-shadow: 0 8px 24px rgba(0, 185, 0, 0.5);
-      transform: translateY(-2px);
+      to { transform: translateX(0); opacity: 1; }
     }
 
     @media (max-width: 767px) {
       .header {
-        padding: 16px 14px;
-        gap: 10px;
+        padding: 14px;
         align-items: flex-start;
       }
 
-      .header h1 {
-        font-size: 24px;
-        line-height: 1.2;
-      }
-
-      .content {
-        padding: 18px 14px 28px;
-      }
-
-      .container {
-        max-width: 100%;
-      }
-
-      .time-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .service-grid {
-        gap: 10px;
-      }
-
-      .service-label {
-        min-height: 72px;
-        padding: 14px 12px;
-      }
-
-      .button-group {
-        gap: 10px;
-      }
-
-      .btn {
-        padding: 14px 16px;
-        font-size: 15px;
-      }
-
-      .modal,
-      .line-modal {
-        width: 100%;
-        max-width: 100%;
-        padding: 22px 18px;
-        border-radius: 14px;
-      }
+      .brand-logo { width: 52px; height: 52px; }
+      .header-actions { display: none; }
+      .content { padding: 18px 14px 28px; }
+      .service-philosophy { padding: 24px 18px; }
+      .time-grid { grid-template-columns: 1fr; }
+      .btn { font-size: .88rem; }
+      .line-modal { padding: 24px 18px; }
     }
   </style>
 </head>
 <body>
   <div class="app-wrapper">
-    <div class="header">
-      <h1>富星車美 
-        <div class="header-subtitle">代客洗車 行動洗車</div>
-      </h1>
-      <div class="header-buttons">
+    <header class="header">
+      <div class="brand">
+        <img class="brand-logo" src="/mnt/data/8BEB7091-8485-488F-96BE-87A610B7B283.png" alt="富星車美 Logo" />
+        <div>
+          <h1>富星車美</h1>
+          <div class="brand-subtitle">SHINE BEYOND LIMITS</div>
+        </div>
+      </div>
+      <div class="header-actions">
         <button class="header-btn" id="priceBtn">💰 費用</button>
       </div>
-    </div>
+    </header>
 
-    <div class="content">
+    <main class="content">
       <div class="container">
-        <div class="service-philosophy">
+        <section class="service-philosophy glass">
           <div class="philosophy-item"><div class="philosophy-icon">⭐</div><div class="philosophy-text">專業技術</div></div>
           <div class="philosophy-item"><div class="philosophy-icon">🎯</div><div class="philosophy-text">完美效果</div></div>
           <div class="philosophy-item"><div class="philosophy-icon">⚡</div><div class="philosophy-text">快速有效</div></div>
           <div class="philosophy-item"><div class="philosophy-icon">🤝</div><div class="philosophy-text">誠心服務</div></div>
-        </div>
+        </section>
 
-        <div id="step1" class="step-section active">
-          <div class="section-title">選擇日期</div>
-          <div class="date-selector-header">
-            <h3 id="dateMonthLabel"></h3>
-            <div class="date-nav">
-              <button id="prevMonth">←</button>
-              <button id="nextMonth">→</button>
+        <section id="step1" class="step-section active">
+          <div class="step-card glass">
+            <div class="section-title">選擇日期</div>
+            <div class="date-selector-header">
+              <h3 id="dateMonthLabel"></h3>
+              <div class="date-nav">
+                <button id="prevMonth">←</button>
+                <button id="nextMonth">→</button>
+              </div>
             </div>
+            <div class="date-list" id="dateList"></div>
+            <div class="button-group"><button class="btn btn-primary" id="nextFromStep1">下一步 →</button></div>
           </div>
-          <div class="date-list" id="dateList"></div>
-          <div class="button-group"><button class="btn btn-primary" id="nextFromStep1">下一步 →</button></div>
-        </div>
+        </section>
 
-        <div id="step2" class="step-section">
-          <div class="section-title">選擇時段</div>
-          <div class="time-grid" id="timeGrid"></div>
-          <div id="fullDayMsg" class="full-day-msg"></div>
-          <div class="info-box">
-            <p style="color: #ccc; font-size: 13px; line-height: 1.6;">💡 <strong>重要提醒：</strong>此為預約時段參考，具體的時間與地點會在預約完成後由真人與您做詳細確認。</p>
+        <section id="step2" class="step-section">
+          <div class="step-card glass">
+            <div class="section-title">選擇時段</div>
+            <div class="time-grid" id="timeGrid"></div>
+            <div id="fullDayMsg" class="full-day-msg"></div>
+            <div class="info-box">💡 <strong>重要提醒：</strong>此為預約時段參考，具體的時間與地點會在預約完成後由真人與您做詳細確認。</div>
+            <div class="button-group"><button class="btn btn-secondary" id="backFrom2">← 上一步</button> <button class="btn btn-primary" id="nextFromStep2">下一步 →</button></div>
           </div>
-          <div class="button-group"><button class="btn btn-secondary" id="backFrom2">← 上一步</button> <button class="btn btn-primary" id="nextFromStep2">下一步 →</button></div>
-        </div>
+        </section>
 
-        <div id="step3" class="step-section">
-          <div class="section-title">填寫資料</div>
-          <div class="form-group"><label class="form-label">姓名 *</label> <input class="form-input" id="name" type="text" placeholder="請輸入姓名" required></div>
-          <div class="form-group"><label class="form-label">電話 *</label> <input class="form-input" id="phone" type="tel" placeholder="請輸入電話" required></div>
-          <div class="form-group"><label class="form-label">LINE ID *</label> <input class="form-input" id="lineId" type="text" placeholder="請輸入 LINE ID" required></div>
+        <section id="step3" class="step-section">
+          <div class="step-card glass">
+            <div class="section-title">填寫資料</div>
+            <div class="form-group"><label class="form-label">姓名 *</label><input class="form-input" id="name" type="text" placeholder="請輸入姓名" required></div>
+            <div class="form-group"><label class="form-label">電話 *</label><input class="form-input" id="phone" type="tel" placeholder="請輸入電話" required></div>
+            <div class="form-group"><label class="form-label">LINE ID *</label><input class="form-input" id="lineId" type="text" placeholder="請輸入 LINE ID" required></div>
 
-          <div class="section-title" style="margin-top: 30px;">選擇服務</div>
-          <div style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 66, 0.1)); border: 3px solid #ffaa00; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(255, 170, 0, 0.2);">
-            <div style="color: #ffaa66; font-weight: 800; font-size: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">🎁 優惠套餐 - 一次解決！</div>
-            <div class="service-grid" id="packageGrid"></div>
+            <div class="section-title" style="margin-top: 30px;">選擇服務</div>
+            <div style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 66, 0.1)); border: 3px solid #ffaa00; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(255, 170, 0, 0.2);">
+              <div style="color: #ffaa66; font-weight: 800; font-size: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">🎁 優惠套餐 - 一次解決！</div>
+              <div class="service-grid" id="packageGrid"></div>
+            </div>
+            <div class="service-grid" id="serviceGrid"></div>
+            <div style="background: linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(236, 72, 153, 0.1)); border: 2px solid rgba(255, 140, 66, 0.4); border-radius: 12px; padding: 16px; margin-top: 16px; display: none;" id="bikeAddonsNote">
+              <div style="color: #ffaa66; font-weight: 700; font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">💡 機車加購項目提醒</div>
+              <div style="color: #ccc; font-size: 12px; line-height: 1.6;">機車的加購項目金額會依實際車況在後續洽詢時做詳細確認，歡迎詢問！</div>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(255, 170, 102, 0.12), rgba(255, 170, 102, 0.05)); border: 2px solid rgba(255, 170, 102, 0.35); border-radius: 12px; padding: 16px; margin-top: 16px; display: none;" id="priceDisplay">
+              <div style="color: #ffaa66; font-weight: 700; font-size: 13px; margin-bottom: 8px;">📊 預估金額</div>
+              <div style="color: #ff8c42; font-weight: 800; font-size: 18px; margin-bottom: 12px;" id="priceRange">$0 ~ $0</div>
+              <div style="color: #ccc; font-size: 12px; line-height: 1.6; margin-bottom: 8px;" id="priceNote"></div>
+              <div style="color: #ff8c42; font-size: 11px; font-weight: 600; border-top: 1px solid rgba(255, 170, 102, 0.3); padding-top: 8px; line-height: 1.6;" id="priceEstimateWarning"></div>
+            </div>
+            <div class="button-group"><button class="btn btn-secondary" id="backFrom3">← 上一步</button> <button class="btn btn-primary" id="submitBtn">確認預約 ✓</button></div>
           </div>
-          <div class="service-grid" id="serviceGrid"></div>
-          <div style="background: linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(236, 72, 153, 0.1)); border: 2px solid rgba(255, 140, 66, 0.4); border-radius: 12px; padding: 16px; margin-top: 16px; display: none;" id="bikeAddonsNote">
-            <div style="color: #ffaa66; font-weight: 700; font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">💡 機車加購項目提醒</div>
-            <div style="color: #ccc; font-size: 12px; line-height: 1.6;">機車的加購項目金額會依實際車況在後續洽詢時做詳細確認，歡迎詢問！</div>
-          </div>
-          <div style="background: linear-gradient(135deg, rgba(255, 170, 102, 0.12), rgba(255, 170, 102, 0.05)); border: 2px solid rgba(255, 170, 102, 0.35); border-radius: 12px; padding: 16px; margin-top: 16px; display: none;" id="priceDisplay">
-            <div style="color: #ffaa66; font-weight: 700; font-size: 13px; margin-bottom: 8px;">📊 預估金額</div>
-            <div style="color: #ff8c42; font-weight: 800; font-size: 18px; margin-bottom: 12px;" id="priceRange">$0 ~ $0</div>
-            <div style="color: #ccc; font-size: 12px; line-height: 1.6; margin-bottom: 8px;" id="priceNote"></div>
-            <div style="color: #ff8c42; font-size: 11px; font-weight: 600; border-top: 1px solid rgba(255, 170, 102, 0.3); padding-top: 8px; line-height: 1.6;" id="priceEstimateWarning"></div>
-          </div>
-          <div class="button-group"><button class="btn btn-secondary" id="backFrom3">← 上一步</button> <button class="btn btn-primary" id="submitBtn">確認預約 ✓</button></div>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   </div>
 
   <div class="modal-overlay" id="priceModal">
     <div class="modal">
-      <div class="modal-header">
-        <h2>💰 服務費用</h2><button class="modal-close" id="closePriceBtn">×</button>
-      </div>
+      <div class="modal-header"><h2>💰 服務費用</h2><button class="modal-close" id="closePriceBtn">×</button></div>
       <div id="priceContent"></div>
     </div>
   </div>
@@ -982,16 +752,31 @@
   <div class="modal-overlay" id="lineModal">
     <div class="line-modal">
       <div class="line-modal-header">✅ 預約已送出</div>
-      <div class="line-info-text">
-        我們已收到您的預約資訊，<br>
-        請留意後續訊息通知，<br>
-        將會有真人與您洽詢服務時間與地點，謝謝。
-      </div>
+      <div class="line-info-text">我們已收到您的預約資訊，<br>請留意後續訊息通知，<br>將會有真人與您洽詢服務時間與地點，謝謝。</div>
       <div class="line-button-group"><button class="line-btn line-btn-primary" id="closeLineBtn">我知道了</button></div>
     </div>
   </div>
 
   <script>
+    let lastScrollY = 0;
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('.header');
+      const currentY = window.scrollY || 0;
+      if (!header) return;
+      if (currentY > 16) {
+        header.style.boxShadow = '0 10px 30px rgba(0,0,0,.34)';
+        header.style.background = 'linear-gradient(135deg, rgba(8,8,8,.92), rgba(18,18,18,.94))';
+      } else {
+        header.style.boxShadow = '0 6px 24px rgba(0,0,0,.25)';
+        header.style.background = 'linear-gradient(135deg, rgba(8,8,8,.84), rgba(18,18,18,.88))';
+      }
+      if (currentY > lastScrollY && currentY > 80) {
+        header.style.transform = 'translateY(-3px)';
+      } else {
+        header.style.transform = 'translateY(0)';
+      }
+      lastScrollY = currentY;
+    });
     let currentStep = 1;
     let selectedDate = null;
     let selectedTime = null;
@@ -1007,56 +792,50 @@
     ];
 
     const servicePrices = {
-      'pkg1': [800, 1000], 'pkg2': [1600, 2000], 'pkg3': [4000, 6000],
-      's1': [400, 600], 's2': [1000, 1300], 's3': [500, 800], 's4': [1500, 3000],
-      's6': [600, 600], 's7': [800, 800], 's5': [1000, 1200], 's8': [4000, 6000],
-      's9': [8000, 10000], 's10': [12000, 15000], 's11': [2200, 3000], 's12': [4500, 6000],
-      's13': [6500, 9000], 's14': [300, 800], 's15': [800, 800], 's16': [500, 500],
-      's17': [800, 1500], 's18': [2000, 3500], 's19': [300, 500], 's20': [2000, 3000],
-      's21': [400, 600], 's22': [600, 900], 's23': [200, 300], 's24': [600, 900]
+      pkg1:[800,1000], pkg2:[1600,2000], pkg3:[4000,6000], s1:[400,600], s2:[1000,1300], s3:[500,800], s4:[1500,3000], s6:[600,600], s7:[800,800], s5:[1000,1200], s8:[4000,6000], s9:[8000,10000], s10:[12000,15000], s11:[2200,3000], s12:[4500,6000], s13:[6500,9000], s14:[300,800], s15:[800,800], s16:[500,500], s17:[800,1500], s18:[2000,3500], s19:[300,500], s20:[2000,3000], s21:[400,600], s22:[600,900], s23:[200,300], s24:[600,900]
     };
 
     const packages = [
-      { id: 'pkg1', value: 'A套餐 - 基礎保養：泡沫洗車＋封體維護劑 ($800-1,000)', label: '📦 A套餐 - 基礎保養', details: '泡沫洗車＋封體維護劑', price: '$800-1,000' },
-      { id: 'pkg2', value: 'B套餐 - 熱門款：精緻洗車＋基礎內裝＋頂級棕櫚蠟/奢華棕櫚蠟 ($1,600-2,000)', label: '📦 B套餐 - 熱門款 🔥', details: '精緻洗車＋基礎內裝＋蠟品保護', price: '$1,600-2,000' },
-      { id: 'pkg3', value: 'C套餐 - 升級款：小美容＋深層內裝清潔＋前檔除油膜+鍍膜 ($4,000-6,000)', label: '📦 C套餐 - 升級款', details: '小美容＋深層內裝＋前檔除油膜+鍍膜', price: '$4,000-6,000' }
+      { id:'pkg1', value:'A套餐 - 基礎保養：泡沫洗車＋封體維護劑 ($800-1,000)', label:'📦 A套餐 - 基礎保養', details:'泡沫洗車＋封體維護劑', price:'$800-1,000' },
+      { id:'pkg2', value:'B套餐 - 熱門款：精緻洗車＋基礎內裝＋頂級棕櫚蠟/奢華棕櫚蠟 ($1,600-2,000)', label:'📦 B套餐 - 熱門款 🔥', details:'精緻洗車＋基礎內裝＋蠟品保護', price:'$1,600-2,000' },
+      { id:'pkg3', value:'C套餐 - 升級款：小美容＋深層內裝清潔＋前檔除油膜+鍍膜 ($4,000-6,000)', label:'📦 C套餐 - 升級款', details:'小美容＋深層內裝＋前檔除油膜+鍍膜', price:'$4,000-6,000' }
     ];
 
     const services = [
-      { id: 's1', value: '泡沫洗車 ($400-600)', label: '🚗 泡沫洗車', details: '外觀清洗 • 輪框清潔 • 擦乾玻璃' },
-      { id: 's2', value: '精緻洗車 ($1,000-1,300)', label: '🚗 精緻洗車 ★主推', details: '細節刷洗 • 鐵粉去除 • 吸塵內裝 • 全套護理' },
-      { id: 's3', value: '基礎內裝 ($500-800)', label: '🧽 基礎內裝', details: '全車吸塵 • 內裝擦拭 • 皮革保養' },
-      { id: 's4', value: '深層內裝 ($1,500-3,000)', label: '🧽 深層內裝', details: '深層清潔 • 皮椅護理 • 異味去除' },
-      { id: 's6', value: '封體維護劑 ($600)', label: '✨ 封體維護劑', details: '漆面保護 • 光澤增強 • 防污性能' },
-      { id: 's7', value: '美白清潔蠟 ($800)', label: '✨ 美白清潔蠟', details: '清潔美白 • 深層淨化 • 防污保護' },
-      { id: 's5', value: '頂級棕櫚蠟 ($1,000-1,200)', label: '✨ 頂級棕櫚蠟 ⭐', details: '高級配方 • 持久保護 • 光澤耐用' },
-      { id: 's8', value: '基礎鍍膜 保固6個月 ($4,000-6,000)', label: '💎 基礎鍍膜', details: '保固6個月 • 輕度拋光 • 單層鍍膜 • 日常保護' },
-      { id: 's9', value: '精緻鍍膜 保固1年 ($8,000-10,000)', label: '💎 精緻鍍膜', details: '保固1年 • 多段拋光 • 去細紋 • 強效潑水' },
-      { id: 's10', value: '頂級鍍膜 保固2年 ($12,000-15,000)', label: '💎 頂級鍍膜', details: '保固2年 • 多階段拋光 • 鏡面修復 • 完美漆面' },
-      { id: 's11', value: '小美容 ($2,200-3,000)', label: '✨ 小美容 - 基礎維護', details: '單段拋光 • 細紋修復 • 不含內裝' },
-      { id: 's12', value: '大美容光澤修復 ($4,500-6,000)', label: '💎 大美容光澤修復', details: '含基礎內裝 • 多段拋光 • 光澤大幅提升' },
-      { id: 's13', value: '大美容鏡面修復 ($6,500-9,000)', label: '💎 大美容鏡面修復', details: '含基礎內裝 • 多階拋光 • 完美鏡面' },
-      { id: 's14', value: '頭燈拋光 ($300-800)', label: '🛠 頭燈拋光', details: '霧化透明化 • 光線穿透性恢復' },
-      { id: 's15', value: '引擎室清潔 ($800)', label: '🛠 引擎室清潔', details: '深層清潔 • 油漬去除 • 整潔如新' },
-      { id: 's16', value: '臭氧除臭 ($500)', label: '🛠 臭氧除臭', details: '根除異味 • 深層殺菌 • 清新空間' },
-      { id: 's17', value: '前檔玻璃鍍膜 ($800-1,500)', label: '🛠 前檔玻璃鍍膜', details: '除油膜 • 防潑水 • 視線清晰' },
-      { id: 's18', value: '全車玻璃鍍膜 ($2,000-3,500)', label: '🛠 全車玻璃鍍膜', details: '全車玻璃防潑 • 除油膜 • 提升安全' },
-      { id: 's19', value: '輪圈快鍍 ($300-500)', label: '🛠 輪圈快鍍', details: '快速施工 • 防潑水 • 簡易保護' },
-      { id: 's20', value: '輪圈鍍膜 ($2,000-3,000)', label: '🛠 輪圈鍍膜', details: '完整鍍膜 • 長效保護 • 亮澤耐用' },
-      { id: 's23', value: '機車一般洗車 ($200-300)', label: '🛵 一般洗車', details: '基礎外觀清洗 • 輪框清潔 • 快速烘乾' },
-      { id: 's21', value: '機車精緻洗車 ($400-600)', label: '🛵 精緻洗車 🔥主推', details: '細節刷洗 • 柏油去除 • 快鍍保護' },
-      { id: 's24', value: '機車精緻洗+打蠟 ($600-900)', label: '🛵 機車精緻洗+打蠟 ⭐ CP值最高', details: '精緻洗車全套＋棕櫚蠟保護＋漆面光澤提升' }
+      { id:'s1', value:'泡沫洗車 ($400-600)', label:'🚗 泡沫洗車', details:'外觀清洗 • 輪框清潔 • 擦乾玻璃' },
+      { id:'s2', value:'精緻洗車 ($1,000-1,300)', label:'🚗 精緻洗車 ★主推', details:'細節刷洗 • 鐵粉去除 • 吸塵內裝 • 全套護理' },
+      { id:'s3', value:'基礎內裝 ($500-800)', label:'🧽 基礎內裝', details:'全車吸塵 • 內裝擦拭 • 皮革保養' },
+      { id:'s4', value:'深層內裝 ($1,500-3,000)', label:'🧽 深層內裝', details:'深層清潔 • 皮椅護理 • 異味去除' },
+      { id:'s6', value:'封體維護劑 ($600)', label:'✨ 封體維護劑', details:'漆面保護 • 光澤增強 • 防污性能' },
+      { id:'s7', value:'美白清潔蠟 ($800)', label:'✨ 美白清潔蠟', details:'清潔美白 • 深層淨化 • 防污保護' },
+      { id:'s5', value:'頂級棕櫚蠟 ($1,000-1,200)', label:'✨ 頂級棕櫚蠟 ⭐', details:'高級配方 • 持久保護 • 光澤耐用' },
+      { id:'s8', value:'基礎鍍膜 保固6個月 ($4,000-6,000)', label:'💎 基礎鍍膜', details:'保固6個月 • 輕度拋光 • 單層鍍膜 • 日常保護' },
+      { id:'s9', value:'精緻鍍膜 保固1年 ($8,000-10,000)', label:'💎 精緻鍍膜', details:'保固1年 • 多段拋光 • 去細紋 • 強效潑水' },
+      { id:'s10', value:'頂級鍍膜 保固2年 ($12,000-15,000)', label:'💎 頂級鍍膜', details:'保固2年 • 多階段拋光 • 鏡面修復 • 完美漆面' },
+      { id:'s11', value:'小美容 ($2,200-3,000)', label:'✨ 小美容 - 基礎維護', details:'單段拋光 • 細紋修復 • 不含內裝' },
+      { id:'s12', value:'大美容光澤修復 ($4,500-6,000)', label:'💎 大美容光澤修復', details:'含基礎內裝 • 多段拋光 • 光澤大幅提升' },
+      { id:'s13', value:'大美容鏡面修復 ($6,500-9,000)', label:'💎 大美容鏡面修復', details:'含基礎內裝 • 多階拋光 • 完美鏡面' },
+      { id:'s14', value:'頭燈拋光 ($300-800)', label:'🛠 頭燈拋光', details:'霧化透明化 • 光線穿透性恢復' },
+      { id:'s15', value:'引擎室清潔 ($800)', label:'🛠 引擎室清潔', details:'深層清潔 • 油漬去除 • 整潔如新' },
+      { id:'s16', value:'臭氧除臭 ($500)', label:'🛠 臭氧除臭', details:'根除異味 • 深層殺菌 • 清新空間' },
+      { id:'s17', value:'前檔玻璃鍍膜 ($800-1,500)', label:'🛠 前檔玻璃鍍膜', details:'除油膜 • 防潑水 • 視線清晰' },
+      { id:'s18', value:'全車玻璃鍍膜 ($2,000-3,500)', label:'🛠 全車玻璃鍍膜', details:'全車玻璃防潑 • 除油膜 • 提升安全' },
+      { id:'s19', value:'輪圈快鍍 ($300-500)', label:'🛠 輪圈快鍍', details:'快速施工 • 防潑水 • 簡易保護' },
+      { id:'s20', value:'輪圈鍍膜 ($2,000-3,000)', label:'🛠 輪圈鍍膜', details:'完整鍍膜 • 長效保護 • 亮澤耐用' },
+      { id:'s23', value:'機車一般洗車 ($200-300)', label:'🛵 一般洗車', details:'基礎外觀清洗 • 輪框清潔 • 快速烘乾' },
+      { id:'s21', value:'機車精緻洗車 ($400-600)', label:'🛵 精緻洗車 🔥主推', details:'細節刷洗 • 柏油去除 • 快鍍保護' },
+      { id:'s24', value:'機車精緻洗+打蠟 ($600-900)', label:'🛵 機車精緻洗+打蠟 ⭐ CP值最高', details:'精緻洗車全套＋棕櫚蠟保護＋漆面光澤提升' }
     ];
 
-    const mainServiceIds = new Set(['pkg1', 'pkg2', 'pkg3', 's1', 's2', 's11', 's12', 's13', 's8', 's9', 's10', 's21', 's22', 's23', 's24']);
-    const interiorIds = new Set(['s3', 's4']);
-    const waxIds = new Set(['s5', 's6', 's7']);
-    const addonIds = new Set(['s14', 's15', 's16', 's17', 's18', 's19', 's20']);
-    const packageIds = new Set(['pkg1', 'pkg2', 'pkg3']);
-    const wheelCoatingIds = new Set(['s19', 's20']);
-    const glassCoatingIds = new Set(['s17', 's18']);
-    const coatingMainIds = new Set(['s8', 's9', 's10']);
-    const bikeServiceIds = new Set(['s21', 's22', 's23', 's24']);
+    const mainServiceIds = new Set(['pkg1','pkg2','pkg3','s1','s2','s11','s12','s13','s8','s9','s10','s21','s22','s23','s24']);
+    const interiorIds = new Set(['s3','s4']);
+    const waxIds = new Set(['s5','s6','s7']);
+    const addonIds = new Set(['s14','s15','s16','s17','s18','s19','s20']);
+    const packageIds = new Set(['pkg1','pkg2','pkg3']);
+    const wheelCoatingIds = new Set(['s19','s20']);
+    const glassCoatingIds = new Set(['s17','s18']);
+    const coatingMainIds = new Set(['s8','s9','s10']);
+    const bikeServiceIds = new Set(['s21','s22','s23','s24']);
 
     function validateBookingToken() {
       const url = new URL(window.location.href);
@@ -1085,66 +864,38 @@
         if (e.target.closest('.date-card:not(.disabled)')) {
           const card = e.target.closest('.date-card');
           const dateText = card.dataset.date;
-          if (dateText) {
-            selectedDate = dateText;
-            selectedTime = null;
-            document.querySelectorAll('.date-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            generateTimeGrid();
-          }
-        }
-      });
-
-      document.addEventListener('click', (e) => {
-        if (e.target.id === 'prevMonth') {
-          currentMonth.setMonth(currentMonth.getMonth() - 1);
-          generateDateGrid();
-        }
-        if (e.target.id === 'nextMonth') {
-          currentMonth.setMonth(currentMonth.getMonth() + 1);
-          generateDateGrid();
-        }
-      });
-
-      document.addEventListener('click', (e) => {
-        if (e.target.id === 'nextFromStep1') {
-          if (!selectedDate) {
-            showToast('❌ 請選擇日期');
-            return;
-          }
-          goToStep(2);
+          if (!dateText) return;
+          selectedDate = dateText;
+          selectedTime = null;
+          document.querySelectorAll('.date-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
           generateTimeGrid();
         }
-        if (e.target.id === 'nextFromStep2') {
-          if (!selectedTime) {
-            showToast('❌ 請選擇時段');
-            return;
-          }
-          goToStep(3);
-        }
-        if (e.target.id === 'backFrom2') {
-          goToStep(1);
-        }
-        if (e.target.id === 'backFrom3') {
-          goToStep(2);
-        }
-        if (e.target.id === 'submitBtn') {
-          submitBooking();
-        }
       });
 
-      document.addEventListener('click', (e) => {
-        if (e.target.id === 'priceBtn') {
-          document.getElementById('priceModal').classList.add('active');
-        }
-        if (e.target.id === 'closePriceBtn') {
-          document.getElementById('priceModal').classList.remove('active');
-        }
+      document.getElementById('prevMonth').addEventListener('click', () => {
+        currentMonth.setMonth(currentMonth.getMonth() - 1);
+        generateDateGrid();
       });
-
-      document.getElementById('closeLineBtn').addEventListener('click', () => {
-        document.getElementById('lineModal').classList.remove('active');
+      document.getElementById('nextMonth').addEventListener('click', () => {
+        currentMonth.setMonth(currentMonth.getMonth() + 1);
+        generateDateGrid();
       });
+      document.getElementById('nextFromStep1').addEventListener('click', () => {
+        if (!selectedDate) return showToast('❌ 請選擇日期');
+        goToStep(2);
+        generateTimeGrid();
+      });
+      document.getElementById('nextFromStep2').addEventListener('click', () => {
+        if (!selectedTime) return showToast('❌ 請選擇時段');
+        goToStep(3);
+      });
+      document.getElementById('backFrom2').addEventListener('click', () => goToStep(1));
+      document.getElementById('backFrom3').addEventListener('click', () => goToStep(2));
+      document.getElementById('submitBtn').addEventListener('click', submitBooking);
+      document.getElementById('priceBtn').addEventListener('click', () => document.getElementById('priceModal').classList.add('active'));
+      document.getElementById('closePriceBtn').addEventListener('click', () => document.getElementById('priceModal').classList.remove('active'));
+      document.getElementById('closeLineBtn').addEventListener('click', () => document.getElementById('lineModal').classList.remove('active'));
     }
 
     function generateDateGrid() {
@@ -1153,23 +904,20 @@
       const year = currentMonth.getFullYear();
       const month = currentMonth.getMonth();
       document.getElementById('dateMonthLabel').textContent = `${year} 年 ${month + 1} 月`;
-
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
+      today.setHours(0,0,0,0);
       const lastDay = new Date(year, month + 1, 0);
       const futureCards = [];
       const pastCards = [];
 
       for (let dateNum = 1; dateNum <= lastDay.getDate(); dateNum++) {
         const date = new Date(year, month, dateNum);
-        date.setHours(0, 0, 0, 0);
+        date.setHours(0,0,0,0);
         const dateStr = date.toISOString().split('T')[0];
-        const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+        const dayNames = ['日','一','二','三','四','五','六'];
         const dayName = dayNames[date.getDay()];
         const isToday = date.getTime() === today.getTime();
         const isPast = date < today;
-
         const bookingsForDate = allBookings.filter(b => b.booking_date === dateStr);
         const morningBooked = bookingsForDate.some(b => b.booking_time === '10:00');
         const afternoonBooked = bookingsForDate.some(b => b.booking_time === '14:00');
@@ -1179,28 +927,24 @@
         const card = document.createElement('div');
         card.className = 'date-card';
         card.dataset.date = dateStr;
-        if (isFullyBooked || isPast) card.classList.add('disabled');
         if (selectedDate === dateStr) card.classList.add('selected');
+        if (isPast || isFullyBooked) card.classList.add('disabled');
 
         card.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-            <div style="flex: 1;">
-              <div class="date-card-title ${isToday ? 'today' : ''}">
-                ${isToday ? '今天' : `${month + 1}/${dateNum}`} (${dayName})
-              </div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+            <div style="flex:1;">
+              <div class="date-card-title ${isToday ? 'today' : ''}">${isToday ? '今天' : `${month + 1}/${dateNum}`} (${dayName})</div>
               <div class="date-card-slots">
                 <span class="time-slot-badge ${morningBooked ? 'booked' : ''}">🌅 上午</span>
                 <span class="time-slot-badge ${afternoonBooked ? 'booked' : ''}">☀️ 下午</span>
                 <span class="time-slot-badge ${eveningBooked ? 'booked' : ''}">🌆 傍晚</span>
               </div>
             </div>
-            ${isFullyBooked ? `<div style="background: #ff1a1a; color: white; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0;">預約額滿</div>` : ''}
-          </div>
-        `;
+            ${isFullyBooked ? `<div style="background:#ff1a1a;color:white;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;white-space:nowrap;">預約額滿</div>` : ''}
+          </div>`;
 
         if (isPast) pastCards.push(card); else futureCards.push(card);
       }
-
       futureCards.forEach(card => list.appendChild(card));
       pastCards.forEach(card => list.appendChild(card));
     }
@@ -1210,9 +954,8 @@
       const fullDayMsg = document.getElementById('fullDayMsg');
       grid.innerHTML = '';
       fullDayMsg.textContent = '';
-
       const bookingsForDate = selectedDate ? allBookings.filter(b => b.booking_date === selectedDate) : [];
-      const allBooked = ['10:00', '14:00', '18:00'].every(time => bookingsForDate.some(b => b.booking_time === time));
+      const allBooked = ['10:00','14:00','18:00'].every(time => bookingsForDate.some(b => b.booking_time === time));
       if (selectedDate && allBooked) fullDayMsg.textContent = '本日已額滿';
 
       timeSlots.forEach(slot => {
@@ -1220,8 +963,8 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'time-btn';
-        btn.disabled = isBooked;
         btn.textContent = slot.label;
+        btn.disabled = !!isBooked;
         if (selectedTime === slot.time) btn.classList.add('selected');
         btn.addEventListener('click', () => {
           if (btn.disabled) return;
@@ -1238,39 +981,28 @@
       const packageGrid = document.getElementById('packageGrid');
       grid.innerHTML = '';
       packageGrid.innerHTML = '';
-
-      const categoryStyle = `style="grid-column: 1 / -1; padding: 12px 0 8px 0; border-bottom: 2px solid rgba(255, 140, 66, 0.3); margin: 16px 0 12px 0; color: #ffaa66; font-weight: 800; font-size: 13px; letter-spacing: 0.5px;"`;
+      const categoryStyle = `style="grid-column: 1 / -1; padding: 12px 0 8px; border-bottom: 2px solid rgba(255, 140, 66, 0.3); margin: 16px 0 12px; color: #ffaa66; font-weight: 800; font-size: 13px; letter-spacing: 0.5px;"`;
 
       const createServiceHTML = (s) => {
         const priceMatch = s.value.match(/\(([^)]+)\)$/);
         let price = priceMatch ? priceMatch[1] : '';
         let displayPrice = price;
-
         if (s.id === 's4') {
           const isSpecialMain = selectedMainService === 's2' || selectedMainService === 's12' || selectedMainService === 's13';
           if (isSpecialMain) displayPrice = '加購 $800-2,000';
         }
-
-        return `<div><input type="checkbox" id="${s.id}" class="service-checkbox" value="${s.value}" data-service-id="${s.id}"> <label for="${s.id}" class="service-label" data-service-id="${s.id}"> <span class="service-label-text">${s.label}</span> ${s.details ? `<span class="service-label-detail">${s.details}</span>` : ''} <span class="service-label-price">${displayPrice || price}</span> </label></div>`;
+        return `<div><input type="checkbox" id="${s.id}" class="service-checkbox" value="${s.value}" data-service-id="${s.id}"><label for="${s.id}" class="service-label" data-service-id="${s.id}"><span class="service-label-text">${s.label}</span>${s.details ? `<span class="service-label-detail">${s.details}</span>` : ''}<span class="service-label-price">${displayPrice || price}</span></label></div>`;
       };
 
-      const packagesSection = `${packages.map(createServiceHTML).join('')}`;
-      const carWashServices = services.filter(s => s.id.match(/^s[12]$/));
-      const carWashSection = `<div ${categoryStyle}>🚗 汽車洗車服務</div>${carWashServices.map(createServiceHTML).join('')}`;
-      const bikeServices = services.filter(s => s.id.match(/^s2[1234]$/));
-      const bikeSection = `<div ${categoryStyle}>🛵 機車服務 <span style="color: #ffaa66; font-size: 11px; font-weight: 600; margin-left: 12px; background: rgba(255, 170, 0, 0.2); padding: 4px 8px; border-radius: 4px;">💡 加購項目金額會在後續洽詢做確認</span></div>${bikeServices.map(createServiceHTML).join('')}`;
-      const interiorServices = services.filter(s => s.id.match(/^s[34]$/));
-      const interiorSection = `<div ${categoryStyle}>🧽 內裝清潔服務</div>${interiorServices.map(createServiceHTML).join('')}`;
-      const waxServices = services.filter(s => s.id.match(/^s[567]$/));
-      const waxSection = `<div ${categoryStyle}>✨ 車漆保護蠟</div>${waxServices.map(createServiceHTML).join('')}`;
-      const coatingServices = services.filter(s => s.id.match(/^s[89]$/) || s.id === 's10');
-      const coatingSection = `<div ${categoryStyle}>💎 車體鍍膜方案</div>${coatingServices.map(createServiceHTML).join('')}`;
-      const beautyServices = services.filter(s => s.id.match(/^s1[123]$/));
-      const beautySection = `<div ${categoryStyle}>✨ 小美容＆大美容</div>${beautyServices.map(createServiceHTML).join('')}`;
-      const addonServices = services.filter(s => ['s14','s15','s16','s17','s18','s19','s20'].includes(s.id));
-      const addonSection = `<div ${categoryStyle}>🛠 加購服務</div>${addonServices.map(createServiceHTML).join('')}`;
-      grid.innerHTML = carWashSection + bikeSection + interiorSection + waxSection + coatingSection + beautySection + addonSection;
-      packageGrid.innerHTML = packagesSection;
+      packageGrid.innerHTML = packages.map(createServiceHTML).join('');
+      grid.innerHTML =
+        `<div ${categoryStyle}>🚗 汽車洗車服務</div>` + services.filter(s => s.id.match(/^s[12]$/)).map(createServiceHTML).join('') +
+        `<div ${categoryStyle}>🛵 機車服務 <span style="color:#ffaa66;font-size:11px;font-weight:600;margin-left:12px;background:rgba(255,170,0,.2);padding:4px 8px;border-radius:4px;">💡 加購項目金額會在後續洽詢做確認</span></div>` + services.filter(s => s.id.match(/^s2[1234]$/)).map(createServiceHTML).join('') +
+        `<div ${categoryStyle}>🧽 內裝清潔服務</div>` + services.filter(s => s.id.match(/^s[34]$/)).map(createServiceHTML).join('') +
+        `<div ${categoryStyle}>✨ 車漆保護蠟</div>` + services.filter(s => s.id.match(/^s[567]$/)).map(createServiceHTML).join('') +
+        `<div ${categoryStyle}>💎 車體鍍膜方案</div>` + services.filter(s => s.id.match(/^s[89]$/) || s.id === 's10').map(createServiceHTML).join('') +
+        `<div ${categoryStyle}>✨ 小美容＆大美容</div>` + services.filter(s => s.id.match(/^s1[123]$/)).map(createServiceHTML).join('') +
+        `<div ${categoryStyle}>🛠 加購服務</div>` + services.filter(s => ['s14','s15','s16','s17','s18','s19','s20'].includes(s.id)).map(createServiceHTML).join('');
 
       setupServiceSelectionLogic();
     }
@@ -1336,24 +1068,23 @@
       let allowAddons = false;
       let disabledGlassCoating = false;
       let disabledWheelCoating = false;
-      let disabledSealant = false;
       let disableAllAddons = false;
       let waxRestriction = null;
 
       if (mainServiceId === null) {
         allowInterior = true; allowWax = true; allowAddons = true;
       } else if (packageIds.has(mainServiceId)) {
-        allowInterior = false; allowWax = false; allowAddons = true; disabledSealant = true;
+        allowInterior = false; allowWax = false; allowAddons = true;
       } else if (coatingMainIds.has(mainServiceId)) {
-        allowInterior = true; allowWax = false; allowAddons = 'limited'; disabledGlassCoating = true; disabledWheelCoating = true; disabledSealant = true;
+        allowInterior = true; allowWax = false; allowAddons = 'limited'; disabledGlassCoating = true; disabledWheelCoating = true;
       } else if (mainServiceId === 's1') {
         allowInterior = true; allowWax = true; allowAddons = true;
       } else if (mainServiceId === 's2') {
-        allowInterior = 's4'; allowWax = true; allowAddons = true; disabledSealant = true; waxRestriction = 'exclude_s6';
+        allowInterior = 's4'; allowWax = true; allowAddons = true; waxRestriction = 'exclude_s6';
       } else if (mainServiceId === 's11') {
-        allowInterior = true; allowWax = false; allowAddons = true; disabledSealant = true;
+        allowInterior = true; allowWax = false; allowAddons = true;
       } else if (mainServiceId === 's12' || mainServiceId === 's13') {
-        allowInterior = 's4'; allowWax = false; allowAddons = true; disabledSealant = true;
+        allowInterior = 's4'; allowWax = false; allowAddons = true;
       } else if (mainServiceId === 's23') {
         allowInterior = false; allowWax = true; allowAddons = false; disableAllAddons = true; disabledGlassCoating = true; disabledWheelCoating = true; waxRestriction = 'all';
       } else if (mainServiceId === 's21') {
@@ -1382,17 +1113,15 @@
         } else if (addonIds.has(serviceId)) {
           if (disableAllAddons) checkbox.disabled = true;
           else if (allowAddons === true) checkbox.disabled = false;
-          else if (allowAddons === 'limited') checkbox.disabled = !['s14', 's15', 's16'].includes(serviceId);
+          else if (allowAddons === 'limited') checkbox.disabled = !['s14','s15','s16'].includes(serviceId);
           else checkbox.disabled = true;
         }
       });
     }
 
     function applyServiceStyling() {
-      const labels = document.querySelectorAll('.service-label');
-      labels.forEach(label => {
-        const serviceId = label.dataset.serviceId;
-        const checkbox = document.getElementById(serviceId);
+      document.querySelectorAll('.service-label').forEach(label => {
+        const checkbox = document.getElementById(label.dataset.serviceId);
         if (checkbox.disabled) label.classList.add('grayed-out');
         else label.classList.remove('grayed-out');
       });
@@ -1402,38 +1131,20 @@
       currentStep = step;
       document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
       document.getElementById(`step${step}`).classList.add('active');
-
-      if (step === 2) document.querySelector('.service-philosophy').style.display = 'none';
-      else if (step === 1) document.querySelector('.service-philosophy').style.display = 'grid';
+      document.querySelector('.service-philosophy').style.display = step === 1 ? 'grid' : 'none';
     }
 
     async function submitBooking() {
-      if (!bookingToken) {
-        showToast('❌ 預約連結無效，請從 LINE 重新進入');
-        return;
-      }
-
+      if (!bookingToken) return showToast('❌ 預約連結無效，請從 LINE 重新進入');
       const name = document.getElementById('name').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const lineId = document.getElementById('lineId').value.trim();
       const selectedServices = Array.from(document.querySelectorAll('.service-checkbox:checked')).map(cb => cb.value);
 
-      if (!name || !phone || !lineId) {
-        showToast('❌ 請填寫所有欄位');
-        return;
-      }
-      if (!selectedDate) {
-        showToast('❌ 請選擇日期');
-        return;
-      }
-      if (!selectedTime) {
-        showToast('❌ 請選擇時段');
-        return;
-      }
-      if (selectedServices.length === 0) {
-        showToast('❌ 請選擇服務');
-        return;
-      }
+      if (!name || !phone || !lineId) return showToast('❌ 請填寫所有欄位');
+      if (!selectedDate) return showToast('❌ 請選擇日期');
+      if (!selectedTime) return showToast('❌ 請選擇時段');
+      if (!selectedServices.length) return showToast('❌ 請選擇服務');
 
       const bookingData = {
         booking_token: bookingToken,
@@ -1453,13 +1164,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bookingData)
         });
-
         const result = await response.json();
-        if (!response.ok) {
-          showToast(`❌ ${result.message || '預約失敗'}`);
-          return;
-        }
-
+        if (!response.ok) return showToast(`❌ ${result.message || '預約失敗'}`);
         showToast('✅ 預約已送出');
         document.getElementById('lineModal').classList.add('active');
         await loadBookingsFromApi();
@@ -1485,7 +1191,7 @@
     }
 
     function loadPrices() {
-      document.getElementById('priceContent').innerHTML = '<div style="color:#ccc;line-height:1.8;font-size:14px;">費用資訊保留你原本 Canva 呈現方式，正式部署可繼續沿用完整內容。</div>';
+      document.getElementById('priceContent').innerHTML = '<div style="color:#ccc;line-height:1.9;font-size:14px;">費用說明可沿用正式版本內容，這裡先保留預覽結構。</div>';
     }
 
     function showToast(msg) {
@@ -1505,7 +1211,6 @@
         bikeAddonsNote.style.display = 'none';
         return;
       }
-
       let minPrice = 0;
       let maxPrice = 0;
       selectedServices.forEach(serviceId => {
@@ -1514,7 +1219,6 @@
           maxPrice += servicePrices[serviceId][1];
         }
       });
-
       document.getElementById('priceRange').textContent = `$${minPrice.toLocaleString()} ~ $${maxPrice.toLocaleString()}`;
       document.getElementById('priceNote').textContent = '⚠️ 依車況、車型評估，實際價格會有變動';
       document.getElementById('priceEstimateWarning').textContent = '💡 此為預估金額，實際費用依車況評估';
