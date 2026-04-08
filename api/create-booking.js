@@ -168,10 +168,8 @@ export default async function handler(req, res) {
       `日期：${booking_date || "未填寫"}`,
       `時間：${booking_time || "未填寫"}`,
       `車型：${vehicle_type || "未填寫"}`,
-      `車色：${car_color || "未填寫"}`,
-      `車牌：${vehicle_number || "未填寫"}`,
       `備註：${note || "無"}`
-    ].join("\\n");
+    ].join("\n");
 
     try {
       await sendLinePushMessage(lineMessage);
