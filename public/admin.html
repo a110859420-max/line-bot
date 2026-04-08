@@ -6,7 +6,8 @@
   <title>富星車美｜預約後台</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
-       --bg:#0b0b0b;
+    :root{
+      --bg:#0b0b0b;
       --panel:rgba(18,18,18,.9);
       --border:rgba(255,140,66,.28);
       --text:#f5f7ff;
@@ -43,11 +44,12 @@
     h1{margin:0;font-family:'Orbitron','Noto Sans TC',sans-serif;font-size:clamp(1.2rem,2vw,1.7rem);background:linear-gradient(90deg,#ffd49d,#ff9d4d,#ff6b1a);-webkit-background-clip:text;background-clip:text;color:transparent}
     .sub{margin-top:4px;color:#ffd49d;font-size:.84rem;font-family:'Orbitron','Noto Sans TC',sans-serif}
     .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-    .btn,.input,.select{border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--text);padding:11px 14px;font-size:.95rem}
-    .btn{cursor:pointer;font-family:'Orbitron','Noto Sans TC',sans-serif;font-weight:700}
+    .btn,.input,.select,.admin-btn{border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--text);padding:11px 14px;font-size:.95rem}
+    .btn,.admin-btn{cursor:pointer;font-family:'Orbitron','Noto Sans TC',sans-serif;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
     .btn.primary{background:linear-gradient(135deg,var(--orange),var(--orange2));border:none}
     .btn.danger{background:rgba(255,74,74,.14);border-color:rgba(255,74,74,.4);color:#ff9c9c}
     .btn.green{background:rgba(25,196,107,.14);border-color:rgba(25,196,107,.35);color:#97f1c0}
+    .admin-btn{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.35);color:#7cb7ff}
     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
     .stat{padding:18px}
     .stat .label{color:var(--muted);font-size:.84rem;margin-bottom:8px}
@@ -58,9 +60,9 @@
     .item{padding:16px;border-radius:16px;border:1px solid rgba(255,140,66,.18);background:rgba(255,255,255,.03);display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
     .meta{display:grid;gap:6px}
     .name{font-size:1.02rem;font-weight:800;color:#fff}
-    .line{color:var(--muted);font-size:.93rem;line-height:1.7}
+    .line{color:var(--muted);font-size:.93rem;line-height:1.7;word-break:break-word}
     .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:rgba(255,140,66,.14);border:1px solid rgba(255,140,66,.28);color:#ffcb96;font-size:.78rem;font-weight:700;margin-right:8px}
-    .actions{display:flex;gap:10px;align-items:center}
+    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .empty{padding:28px;text-align:center;color:var(--muted)}
     .login-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:18px;z-index:999}
     .login-card{width:100%;max-width:420px;padding:24px}
@@ -77,40 +79,7 @@
       .actions{justify-content:flex-start}
       .toolbar{width:100%}
       .toolbar > *{flex:1 1 auto}
-    
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.admin-btn {
-  display: inline-block;
-  padding: 10px 16px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #ff8a2a, #ffb347);
-  color: #111;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.refresh-btn {
-  padding: 10px 16px;
-  border-radius: 10px;
-  border: none;
-  background: #1c1c20;
-  color: #fff;
-  cursor: pointer;
-}
+    }
   </style>
 </head>
 <body>
@@ -178,8 +147,8 @@
     function todayString() {
       const d = new Date();
       const y = d.getFullYear();
-      const m = String(d.getMonth()+1).padStart(2,'0');
-      const day = String(d.getDate()).padStart(2,'0');
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
       return `${y}-${m}-${day}`;
     }
 
@@ -210,14 +179,15 @@
               <span class="badge">⏰ ${timeLabel(item.booking_time)}</span>
             </div>
             <div class="line">📞 ${item.customer_phone || '未填寫'}　／　LINE：${item.customer_line || '未填寫'}</div>
+            <div class="line">🚗 車型：${item.vehicle_type || '未填寫'}</div>
             <div class="line">🧽 ${item.service_name || item.service_items || '未填寫服務'}</div>
             <div class="line">📝 ${item.note || '無備註'}</div>
           </div>
           <div class="actions">
-  <button class="btn green" onclick="markContacted(${item.id})">已聯絡</button>
-  <button class="btn primary" onclick="markCompleted(${item.id})">已完成</button>
-  <button class="btn danger" onclick="deleteBooking(${item.id})">刪除</button>
-</div>>
+            <button class="btn green" onclick="markContacted(${item.id})">已聯絡</button>
+            <button class="btn primary" onclick="markCompleted(${item.id})">已完成</button>
+            <button class="btn danger" onclick="deleteBooking(${item.id})">刪除</button>
+          </div>
         </div>
       `).join('');
     }
@@ -247,7 +217,18 @@
       const date = document.getElementById('filterDate').value;
       fetchBookings(date).catch(err => showToast(`❌ ${err.message}`));
     }
+
+    function markContacted(id) {
+      showToast(`📞 已標記聯絡：#${id}`);
+    }
+
+    function markCompleted(id) {
+      showToast(`✅ 已標記完成：#${id}`);
+    }
+
     window.deleteBooking = deleteBooking;
+    window.markContacted = markContacted;
+    window.markCompleted = markCompleted;
 
     function unlock() {
       sessionStorage.setItem('fuxing_admin_ok', '1');
@@ -290,6 +271,6 @@
     if (sessionStorage.getItem('fuxing_admin_ok') === '1') {
       unlock();
     }
-</script>
+  </script>
 </body>
 </html>

@@ -5,328 +5,466 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>預約行事曆</title>
   <style>
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #070708;
+      --card: rgba(8, 10, 16, 0.88);
+      --card-2: rgba(255,255,255,0.04);
+      --line: rgba(255,255,255,0.08);
+      --text: #f5f5f5;
+      --muted: #b8b8b8;
+      --accent: #ff9a3c;
+      --accent-2: #ffb347;
+      --success: #18a15f;
+      --danger: #d75050;
     }
 
     body {
       margin: 0;
-      font-family: "Microsoft JhengHei", sans-serif;
-      background: #0b0b0d;
-      color: #fff;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(135deg, rgba(255,120,0,0.12), transparent 26%),
+        radial-gradient(circle at top left, rgba(255,140,0,0.12), transparent 25%),
+        #050506;
       min-height: 100vh;
     }
 
-    .container {
-      max-width: 1400px;
+    .page {
+      max-width: 1460px;
       margin: 0 auto;
-      padding: 24px;
+      padding: 18px;
     }
 
     .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: grid;
+      grid-template-columns: 1fr auto;
       gap: 16px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      align-items: center;
+      padding: 14px 18px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(7,11,18,.95), rgba(6,8,13,.88));
+      border: 1px solid rgba(255,255,255,.06);
+      box-shadow: 0 12px 38px rgba(0,0,0,.35);
+      margin-bottom: 16px;
     }
 
-    .title-wrap h1 {
-      margin: 0;
-      font-size: 28px;
-      color: #ff9a3c;
-    }
-
-    .title-wrap p {
-      margin: 6px 0 0;
-      color: #ccc;
-      font-size: 14px;
-    }
-
-    .nav-buttons {
+    .brand {
       display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 58px;
+      height: 58px;
+      object-fit: cover;
+      border-radius: 14px;
+      background: rgba(0,0,0,.22);
+      box-shadow: 0 0 18px rgba(255, 180, 80, .22), 0 0 36px rgba(255, 140, 66, .14);
+      flex: 0 0 auto;
+    }
+
+    .brand-title {
+      font-size: 19px;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .btn {
-      border: none;
-      background: linear-gradient(135deg, #ff8a2a, #ffb347);
-      color: #111;
-      font-weight: 700;
-      padding: 10px 16px;
-      border-radius: 12px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
+    .brand-title .accent {
+      color: var(--accent);
     }
 
-    .btn.secondary {
-      background: #1c1c20;
+    .brand-sub {
+      font-size: 12px;
+      color: #d8b07a;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .month-title {
+      min-width: 140px;
+      text-align: center;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      font-weight: 800;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
       color: #fff;
-      border: 1px solid rgba(255,255,255,.12);
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      transition: .18s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #111;
+      border: none;
+    }
+
+    .btn.success {
+      background: rgba(19, 147, 86, .18);
+      border-color: rgba(53, 201, 120, .28);
+      color: #cffff0;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 20px;
+      grid-template-columns: minmax(0, 1.5fr) minmax(360px, .95fr);
+      gap: 16px;
     }
 
-    .card {
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    .panel {
+      background: rgba(8, 10, 16, 0.88);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      overflow: hidden;
     }
 
-    .calendar-header {
+    .panel-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
       gap: 12px;
-      flex-wrap: wrap;
+      padding: 18px 18px 12px;
     }
 
-    .calendar-title {
+    .panel-title {
       font-size: 22px;
-      font-weight: 800;
-      color: #fff;
+      font-weight: 900;
+      color: var(--accent);
     }
 
-    .calendar-grid {
+    .panel-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .calendar-wrap {
+      padding: 0 18px 18px;
+    }
+
+    .weekdays,
+    .days {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
     }
 
     .weekday {
       text-align: center;
-      font-weight: 700;
-      color: #ffb36b;
-      padding: 8px 0;
+      padding: 10px 0;
+      font-size: 13px;
+      font-weight: 800;
+      color: #e5b885;
     }
 
-    .day-cell {
-      min-height: 120px;
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 14px;
+    .day {
+      min-height: 124px;
+      border-radius: 18px;
       padding: 10px;
+      background: rgba(255,255,255,.02);
+      border: 1px solid rgba(255,255,255,.06);
       cursor: pointer;
-      transition: .2s ease;
+      transition: .18s ease;
       overflow: hidden;
     }
 
-    .day-cell:hover {
+    .day:hover {
       transform: translateY(-2px);
-      border-color: rgba(255, 154, 60, .6);
+      border-color: rgba(255,154,60,.45);
     }
 
-    .day-cell.other-month {
-      opacity: .25;
+    .day.is-selected {
+      border-color: rgba(255,154,60,.85);
+      box-shadow: inset 0 0 0 1px rgba(255,154,60,.28);
+      background: rgba(255,154,60,.06);
     }
 
-    .day-cell.selected {
-      border: 1px solid #ff9a3c;
-      box-shadow: 0 0 0 1px rgba(255,154,60,.25) inset;
+    .day.is-other {
+      opacity: .28;
+      cursor: default;
     }
 
-    .day-number {
-      font-weight: 800;
+    .day-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
       margin-bottom: 8px;
-      font-size: 15px;
     }
 
-    .event-badge {
-      background: rgba(255,154,60,.16);
-      border: 1px solid rgba(255,154,60,.35);
-      color: #ffd3a6;
-      padding: 4px 8px;
+    .day-num {
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .count {
+      padding: 3px 8px;
       border-radius: 999px;
-      font-size: 12px;
-      display: inline-block;
-      margin-bottom: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffd8b4;
+      background: rgba(255,154,60,.16);
+      border: 1px solid rgba(255,154,60,.25);
     }
 
-    .event-item-mini {
-      font-size: 12px;
-      line-height: 1.4;
-      padding: 4px 6px;
+    .mini-item {
+      padding: 4px 7px;
       margin-bottom: 4px;
-      border-radius: 8px;
+      border-radius: 9px;
       background: rgba(255,255,255,.05);
+      font-size: 12px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      color: #f1f1f1;
     }
 
-    .side-title {
-      margin: 0 0 14px;
-      font-size: 20px;
-      color: #ff9a3c;
+    .detail {
+      padding: 18px;
+      height: 100%;
+      max-height: calc(100vh - 120px);
+      overflow: auto;
+    }
+
+    .detail-empty {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+      padding: 12px 4px;
     }
 
     .booking-card {
+      border: 1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 14px;
+      border-radius: 18px;
       padding: 14px;
       margin-bottom: 14px;
     }
 
-    .booking-main {
-      margin-bottom: 12px;
-      line-height: 1.7;
-      font-size: 14px;
+    .booking-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
     }
 
-    .booking-main strong {
-      color: #ffcc98;
+    .booking-name {
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(255,154,60,.14);
+      border: 1px solid rgba(255,154,60,.24);
+      font-size: 12px;
+      font-weight: 800;
+      color: #ffd3aa;
+    }
+
+    .booking-meta {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #ececec;
+      line-height: 1.55;
+    }
+
+    .muted {
+      color: var(--muted);
     }
 
     .field {
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
 
     .field label {
       display: block;
       margin-bottom: 6px;
       font-size: 13px;
-      color: #ddd;
-      font-weight: 700;
+      font-weight: 800;
+      color: #dfdfdf;
     }
 
     .field input {
       width: 100%;
-      padding: 12px;
-      border-radius: 10px;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: 12px;
       border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.25);
+      background: rgba(0,0,0,.28);
       color: #fff;
       outline: none;
     }
 
     .field input:focus {
-      border-color: #ff9a3c;
+      border-color: rgba(255,154,60,.75);
+      box-shadow: 0 0 0 3px rgba(255,154,60,.10);
     }
 
-    .save-btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .save {
+      min-width: 96px;
+      min-height: 42px;
+      padding: 0 16px;
       border-radius: 12px;
-      background: linear-gradient(135deg, #ff8a2a, #ffb347);
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: #111;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
-    }
-
-    .empty-text {
-      color: #bbb;
-      font-size: 14px;
-      line-height: 1.7;
     }
 
     .status {
       font-size: 13px;
-      margin-top: 8px;
-      color: #9ee6a0;
+      color: #9de5af;
+      min-height: 18px;
     }
 
-    @media (max-width: 1024px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 1120px) {
+      .layout { grid-template-columns: 1fr; }
+      .detail { max-height: none; }
     }
 
-    @media (max-width: 640px) {
-      .calendar-grid {
-        gap: 6px;
-      }
-
-      .day-cell {
-        min-height: 88px;
-        padding: 8px;
-      }
-
-      .event-item-mini {
-        font-size: 11px;
-      }
+    @media (max-width: 780px) {
+      .topbar { grid-template-columns: 1fr; }
+      .toolbar { justify-content: flex-start; }
+      .day { min-height: 100px; }
+      .mini-item { font-size: 11px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="page">
     <div class="topbar">
-      <div class="title-wrap">
-        <h1>預約行事曆</h1>
-        <p>查看每月預約，並補填實際時間與牽車地點</p>
+      <div class="brand">
+        <img src="/logo.png" alt="富星車美 LOGO" class="brand-logo" onerror="this.style.display='none'" />
+        <div>
+          <div class="brand-title">富星車美 <span class="accent">｜行事曆後台</span></div>
+          <div class="brand-sub">PRIVATE BOOKING CALENDAR</div>
+        </div>
       </div>
 
-      <div class="nav-buttons">
-        <a href="/admin.html" class="btn secondary">回後台列表</a>
-        <button class="btn secondary" onclick="changeMonth(-1)">上個月</button>
-        <button class="btn secondary" onclick="changeMonth(1)">下個月</button>
+      <div class="toolbar">
+        <a href="/admin.html" class="btn">回列表</a>
+        <button type="button" class="btn" onclick="changeMonth(-1)">上個月</button>
+        <div class="month-title" id="monthTitle">2026 / 04</div>
+        <button type="button" class="btn" onclick="changeMonth(1)">下個月</button>
+        <button type="button" class="btn success" onclick="goToday()">今天</button>
       </div>
     </div>
 
     <div class="layout">
-      <div class="card">
-        <div class="calendar-header">
-          <div class="calendar-title" id="calendarTitle">2026 年 4 月</div>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">月曆檢視</div>
+            <div class="panel-sub">點選日期後，可補填實際時間與牽車地點</div>
+          </div>
         </div>
 
-        <div class="calendar-grid" id="weekdayRow">
-          <div class="weekday">日</div>
-          <div class="weekday">一</div>
-          <div class="weekday">二</div>
-          <div class="weekday">三</div>
-          <div class="weekday">四</div>
-          <div class="weekday">五</div>
-          <div class="weekday">六</div>
+        <div class="calendar-wrap">
+          <div class="weekdays">
+            <div class="weekday">日</div>
+            <div class="weekday">一</div>
+            <div class="weekday">二</div>
+            <div class="weekday">三</div>
+            <div class="weekday">四</div>
+            <div class="weekday">五</div>
+            <div class="weekday">六</div>
+          </div>
+          <div class="days" id="calendarGrid"></div>
         </div>
+      </section>
 
-        <div class="calendar-grid" id="calendarGrid"></div>
-      </div>
-
-      <div class="card">
-        <h2 class="side-title" id="detailTitle">當日預約</h2>
-        <div id="bookingList" class="empty-text">請先點選左側日期</div>
-      </div>
+      <aside class="panel">
+        <div class="detail" id="detailPanel">
+          <div class="panel-title" id="detailTitle">當日預約</div>
+          <div class="panel-sub" id="detailSub">請先點選左側日期</div>
+          <div id="detailList" class="detail-empty">這邊會顯示該日所有預約，並可直接儲存實際時間與牽車地點。</div>
+        </div>
+      </aside>
     </div>
   </div>
 
   <script>
     let allBookings = [];
     let currentDate = new Date();
-    let selectedDateStr = "";
+    let selectedDateStr = '';
 
-    async function loadBookings() {
-      try {
-        const res = await fetch('/api/get-bookings');
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.message || '讀取預約失敗');
-        }
-
-        allBookings = Array.isArray(data.bookings) ? data.bookings : [];
-        renderCalendar();
-      } catch (err) {
-        document.getElementById('bookingList').innerHTML =
-          '<div class="empty-text">讀取資料失敗：' + err.message + '</div>';
-      }
+    function pad(n) {
+      return String(n).padStart(2, '0');
     }
 
     function formatDateLocal(date) {
-      const y = date.getFullYear();
-      const m = String(date.getMonth() + 1).padStart(2, '0');
-      const d = String(date.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    async function loadBookings() {
+      const res = await fetch('/api/get-bookings');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || '讀取失敗');
+      allBookings = Array.isArray(data.bookings) ? data.bookings : [];
     }
 
     function getBookingsByDate(dateStr) {
@@ -336,156 +474,175 @@
     function renderCalendar() {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
+      document.getElementById('monthTitle').textContent = `${year} / ${pad(month + 1)}`;
 
-      document.getElementById('calendarTitle').textContent = `${year} 年 ${month + 1} 月`;
-
-      const calendarGrid = document.getElementById('calendarGrid');
-      calendarGrid.innerHTML = '';
+      const grid = document.getElementById('calendarGrid');
+      grid.innerHTML = '';
 
       const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
-      const startWeekday = firstDay.getDay();
+      const firstWeekday = firstDay.getDay();
       const totalDays = lastDay.getDate();
+      const prevLastDay = new Date(year, month, 0).getDate();
 
-      const prevMonthLastDay = new Date(year, month, 0).getDate();
-
-      for (let i = 0; i < startWeekday; i++) {
-        const day = prevMonthLastDay - startWeekday + i + 1;
-        const cell = document.createElement('div');
-        cell.className = 'day-cell other-month';
-        cell.innerHTML = `<div class="day-number">${day}</div>`;
-        calendarGrid.appendChild(cell);
+      for (let i = 0; i < firstWeekday; i++) {
+        const div = document.createElement('div');
+        div.className = 'day is-other';
+        div.innerHTML = `<div class="day-top"><div class="day-num">${prevLastDay - firstWeekday + i + 1}</div></div>`;
+        grid.appendChild(div);
       }
 
       for (let day = 1; day <= totalDays; day++) {
         const dateObj = new Date(year, month, day);
         const dateStr = formatDateLocal(dateObj);
-        const bookings = getBookingsByDate(dateStr);
+        const list = getBookingsByDate(dateStr);
 
-        const cell = document.createElement('div');
-        cell.className = 'day-cell';
-        if (dateStr === selectedDateStr) {
-          cell.classList.add('selected');
-        }
+        const div = document.createElement('div');
+        div.className = 'day' + (selectedDateStr === dateStr ? ' is-selected' : '');
 
-        let innerHTML = `<div class="day-number">${day}</div>`;
-
-        if (bookings.length > 0) {
-          innerHTML += `<div class="event-badge">${bookings.length} 筆預約</div>`;
-          bookings.slice(0, 3).forEach(item => {
-            const name = item.customer_name || '未命名';
-            const slot = item.booking_time || '';
-            const actual = item.actual_time ? `｜${item.actual_time}` : '';
-            innerHTML += `<div class="event-item-mini">${name}｜${slot}${actual}</div>`;
-          });
-        }
-
-        cell.innerHTML = innerHTML;
-        cell.onclick = () => {
+        let html = `<div class="day-top"><div class="day-num">${day}</div>${list.length ? `<div class="count">${list.length} 筆</div>` : ''}</div>`;
+        list.slice(0, 3).forEach(item => {
+          const name = escapeHtml(item.customer_name || '未命名');
+          const slot = escapeHtml(item.booking_time || '');
+          const actual = item.actual_time ? `｜${escapeHtml(item.actual_time)}` : '';
+          html += `<div class="mini-item">${name}｜${slot}${actual}</div>`;
+        });
+        div.innerHTML = html;
+        div.onclick = () => {
           selectedDateStr = dateStr;
           renderCalendar();
-          renderBookingList(dateStr);
+          renderDetail(dateStr);
         };
-
-        calendarGrid.appendChild(cell);
+        grid.appendChild(div);
       }
 
-      const totalCells = startWeekday + totalDays;
-      const remain = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
-
+      const usedCells = firstWeekday + totalDays;
+      const remain = usedCells % 7 === 0 ? 0 : 7 - (usedCells % 7);
       for (let i = 1; i <= remain; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'day-cell other-month';
-        cell.innerHTML = `<div class="day-number">${i}</div>`;
-        calendarGrid.appendChild(cell);
+        const div = document.createElement('div');
+        div.className = 'day is-other';
+        div.innerHTML = `<div class="day-top"><div class="day-num">${i}</div></div>`;
+        grid.appendChild(div);
       }
     }
 
-    function renderBookingList(dateStr) {
+    function renderDetail(dateStr) {
+      document.getElementById('detailTitle').textContent = `${dateStr} 當日預約`;
+      document.getElementById('detailSub').textContent = '可直接補填實際時間與牽車地點';
       const list = getBookingsByDate(dateStr);
-      const bookingList = document.getElementById('bookingList');
-      document.getElementById('detailTitle').textContent = `${dateStr} 預約明細`;
+      const container = document.getElementById('detailList');
 
-      if (list.length === 0) {
-        bookingList.innerHTML = '<div class="empty-text">這一天沒有預約</div>';
+      if (!list.length) {
+        container.className = 'detail-empty';
+        container.innerHTML = '這一天沒有預約';
         return;
       }
 
-      bookingList.innerHTML = list.map(item => `
-        <div class="booking-card">
-          <div class="booking-main">
-            <div><strong>姓名：</strong>${item.customer_name || ''}</div>
-            <div><strong>電話：</strong>${item.customer_phone || ''}</div>
-            <div><strong>LINE ID：</strong>${item.customer_line || ''}</div>
-            <div><strong>車型：</strong>${item.vehicle_type || ''}</div>
-            <div><strong>服務：</strong>${item.service_name || ''}</div>
-            <div><strong>時段：</strong>${item.booking_time || ''}</div>
-            <div><strong>備註：</strong>${item.note || '無'}</div>
-          </div>
+      container.className = '';
+      container.innerHTML = list.map(item => {
+        const id = escapeHtml(item.id ?? item.booking_token ?? '');
+        return `
+          <div class="booking-card">
+            <div class="booking-head">
+              <div>
+                <div class="booking-name">${escapeHtml(item.customer_name || '未命名')}</div>
+                <div class="chips">
+                  <span class="chip">📅 ${escapeHtml(item.booking_date || '')}</span>
+                  <span class="chip">🕒 ${escapeHtml(item.booking_time || '')}</span>
+                </div>
+              </div>
+            </div>
 
-          <div class="field">
-            <label for="actual_time_${item.id}">實際時間</label>
-            <input type="text" id="actual_time_${item.id}" value="${item.actual_time || ''}" placeholder="例如：09:30">
-          </div>
+            <div class="booking-meta">
+              <div><strong>電話：</strong> ${escapeHtml(item.customer_phone || '')}</div>
+              <div><strong>LINE ID：</strong> ${escapeHtml(item.customer_line || '')}</div>
+              <div><strong>車型：</strong> ${escapeHtml(item.vehicle_type || '')}</div>
+              <div><strong>服務：</strong> ${escapeHtml(item.service_name || '')}</div>
+              <div><strong>備註：</strong> <span class="muted">${escapeHtml(item.note || '無')}</span></div>
+            </div>
 
-          <div class="field">
-            <label for="pickup_location_${item.id}">牽車地點</label>
-            <input type="text" id="pickup_location_${item.id}" value="${item.pickup_location || ''}" placeholder="例如：嘉義市西區XX路XX號">
-          </div>
+            <div class="field">
+              <label for="actual_time_${id}">實際時間</label>
+              <input id="actual_time_${id}" type="text" value="${escapeHtml(item.actual_time || '')}" placeholder="例如：09:30" />
+            </div>
 
-          <button class="save-btn" onclick="updateBookingDetail('${item.id}')">儲存</button>
-          <div class="status" id="status_${item.id}"></div>
-        </div>
-      `).join('');
+            <div class="field">
+              <label for="pickup_location_${id}">牽車地點</label>
+              <input id="pickup_location_${id}" type="text" value="${escapeHtml(item.pickup_location || '')}" placeholder="例如：嘉義市西區XX路XX號" />
+            </div>
+
+            <div class="card-actions">
+              <button class="save" type="button" onclick="updateBookingDetail('${id}')">儲存</button>
+              <div class="status" id="status_${id}"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     async function updateBookingDetail(id) {
-      const actualTime = document.getElementById(`actual_time_${id}`).value.trim();
-      const pickupLocation = document.getElementById(`pickup_location_${id}`).value.trim();
+      const actualInput = document.getElementById(`actual_time_${id}`);
+      const locationInput = document.getElementById(`pickup_location_${id}`);
       const statusEl = document.getElementById(`status_${id}`);
 
+      if (!actualInput || !locationInput || !statusEl) return;
       statusEl.textContent = '儲存中...';
 
       try {
         const res = await fetch('/api/update-booking-detail', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             id,
-            actual_time: actualTime,
-            pickup_location: pickupLocation
+            actual_time: actualInput.value.trim(),
+            pickup_location: locationInput.value.trim()
           })
         });
-
         const data = await res.json();
+        if (!res.ok) throw new Error(data.message || '更新失敗');
 
-        if (!res.ok) {
-          throw new Error(data.message || '更新失敗');
+        const found = allBookings.find(item => String(item.id ?? item.booking_token) === String(id));
+        if (found) {
+          found.actual_time = actualInput.value.trim();
+          found.pickup_location = locationInput.value.trim();
         }
-
         statusEl.textContent = '已儲存';
-        const target = allBookings.find(item => String(item.id) === String(id));
-        if (target) {
-          target.actual_time = actualTime;
-          target.pickup_location = pickupLocation;
-        }
         renderCalendar();
       } catch (err) {
-        statusEl.textContent = '儲存失敗：' + err.message;
+        statusEl.textContent = `儲存失敗：${err.message}`;
       }
     }
 
     function changeMonth(offset) {
       currentDate.setMonth(currentDate.getMonth() + offset);
+      selectedDateStr = '';
       renderCalendar();
       document.getElementById('detailTitle').textContent = '當日預約';
-      document.getElementById('bookingList').innerHTML = '<div class="empty-text">請先點選左側日期</div>';
-      selectedDateStr = '';
+      document.getElementById('detailSub').textContent = '請先點選左側日期';
+      document.getElementById('detailList').className = 'detail-empty';
+      document.getElementById('detailList').innerHTML = '這邊會顯示該日所有預約，並可直接儲存實際時間與牽車地點。';
     }
 
-    loadBookings();
+    function goToday() {
+      currentDate = new Date();
+      selectedDateStr = formatDateLocal(new Date());
+      renderCalendar();
+      renderDetail(selectedDateStr);
+    }
+
+    (async function init() {
+      try {
+        await loadBookings();
+        selectedDateStr = formatDateLocal(new Date());
+        renderCalendar();
+        renderDetail(selectedDateStr);
+      } catch (err) {
+        document.getElementById('detailTitle').textContent = '讀取失敗';
+        document.getElementById('detailSub').textContent = '';
+        document.getElementById('detailList').className = 'detail-empty';
+        document.getElementById('detailList').textContent = err.message;
+      }
+    })();
   </script>
 </body>
 </html>
